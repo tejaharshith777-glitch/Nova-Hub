@@ -24,7 +24,8 @@ const corsOptions = {
       !origin || 
       origin.includes('localhost') || 
       origin.includes('127.0.0.1') || 
-      origin.includes('::1')
+      origin.includes('::1') ||
+      origin.includes('vercel.app')
     ) {
       callback(null, true);
     } else if (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) {
