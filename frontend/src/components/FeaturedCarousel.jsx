@@ -1,0 +1,123 @@
+﻿import React, { useRef } from "react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+
+const FEATURED_CARDS = [
+  { id:"f1", badge:"Free", gradient:"linear-gradient(135deg,#1e3a5f,#0a2240)", accent:"#4fc3f7", emoji:"🏏", sport:"Cricket", title:"Summer Cricket Open", subtitle:"50+ slots · Stipend Rs.10,000 · CTC upto Rs.8 LPA", meta:"Eligibility: Open for all", cta:"Register FREE", spots:"6/8 Slots" },
+  { id:"f2", badge:"Online Free", gradient:"linear-gradient(135deg,#2d1b69,#1a0a3e)", accent:"#c084fc", emoji:"🎯", sport:"Valorant", title:"India Top 10 Clubs Valorant 2026", subtitle:"Can your club reach the national stage?", meta:"Club Orientations 2026", cta:"Register Now", spots:"12/16 Teams" },
+  { id:"f3", badge:"Register Now", gradient:"linear-gradient(135deg,#1a1a1a,#2d2d2d)", accent:"#e86c3f", emoji:"⚽", sport:"Football", title:"Reinvent with Accenture City Cup", subtitle:"Spend weekends exploring local turf arenas", meta:"Lead drills on weekdays", cta:"Register Submit", spots:"3/4 Teams" },
+  { id:"f4", badge:"Register Now", gradient:"linear-gradient(135deg,#0a2e1a,#163b20)", accent:"#4ade80", emoji:"🏆", sport:"Multi-Sport", title:"Rise Up With Pep Stars", subtitle:"Your gateway to a career in FMCG sector", meta:"INR 6 LPA · 5000 Micro Internships", cta:"Apply Now", spots:"28/32 Slots" },
+  { id:"f5", badge:"Free", gradient:"linear-gradient(135deg,#3b0000,#1a0000)", accent:"#f87171", emoji:"🏎️", sport:"Car Racing", title:"Veloce Grand Prix Series", subtitle:"Time-trial format. No wall riding allowed.", meta:"Prize Pool: Rs.10,000 | Entry: Rs.50", cta:"Join Race", spots:"4/4 Slots" },
+  { id:"f6", badge:"Free Entry", gradient:"linear-gradient(135deg,#003a5c,#001e3a)", accent:"#00b4d8", emoji:"🏀", sport:"Basketball", title:"Downtown Hoops Challenge", subtitle:"Groups plus knockout. Local court booking.", meta:"YMCA Court 1 · Open for all ages", cta:"Book Slot", spots:"3/8 Teams" },
+  { id:"f7", badge:"Online", gradient:"linear-gradient(135deg,#2a1800,#1a0a00)", accent:"#f97316", emoji:"🔫", sport:"BGMI", title:"BGMI Battlegrounds Pro", subtitle:"Battle royale squads. Anti-cheat enforced.", meta:"Prize Pool: Rs.15,000 | Asia East", cta:"Enroll Team", spots:"8/16 Squads" },
+  { id:"f8", badge:"GPS Tracked", gradient:"linear-gradient(135deg,#001a08,#002a10)", accent:"#22c55e", emoji:"🚴", sport:"Cycling", title:"Tour de Nova Cycling Classic", subtitle:"GPS tracking live. Helmets mandatory.", meta:"Sector 4 Velodrome · Prize: Rs.20,000", cta:"Register Rider", spots:"2/4 Riders" },
+  { id:"f9", badge:"Free Fire", gradient:"linear-gradient(135deg,#2a1800,#3a2200)", accent:"#eab308", emoji:"🔥", sport:"Free Fire", title:"Garena Free Fire Champions Cup", subtitle:"Squads of 4. Ranked match qualifier.", meta:"Prize Pool: Rs.25,000 | Season 9", cta:"Join Squad", spots:"6/16 Squads" },
+  { id:"f10", badge:"Offline", gradient:"linear-gradient(135deg,#200020,#1a0030)", accent:"#a855f7", emoji:"🏍️", sport:"Bike Racing", title:"MRF Moto GP Challenge", subtitle:"Physical race event. Safety gear mandatory.", meta:"Hyderabad Track · Entry: Rs.200", cta:"Register Bike", spots:"7/12 Riders" },
+  { id:"f11", badge:"Online", gradient:"linear-gradient(135deg,#0f1923,#1e3a5f)", accent:"#38bdf8", emoji:"🎮", sport:"COD Mobile", title:"Call of Duty Mobile Invitational", subtitle:"5v5 competitive ranked matches online.", meta:"Prize: Rs.18,000 | India Server", cta:"Enroll Now", spots:"5/8 Teams" },
+];
+
+const COMPANIES = [
+  { name:"Garena", color:"#e05c0a", emoji:"🔥" },
+  { name:"Krafton", color:"#1a1a1a", emoji:"🔫" },
+  { name:"Riot Games", color:"#d5001c", emoji:"🎯" },
+  { name:"EA Sports", color:"#003087", emoji:"⚽" },
+  { name:"Supercell", color:"#003087", emoji:"💥" },
+  { name:"Red Bull", color:"#cc1e00", emoji:"🐂" },
+  { name:"Nodwin", color:"#7c3aed", emoji:"🎮" },
+  { name:"ESL Gaming", color:"#f5a623", emoji:"🏆" },
+  { name:"MRF Tyres", color:"#c41e3a", emoji:"🏎️" },
+  { name:"JK Racing", color:"#1e3a5f", emoji:"🏁" },
+  { name:"Yamaha", color:"#003087", emoji:"🏍️" },
+  { name:"TVS Racing", color:"#1a1a1a", emoji:"🚴" },
+];
+
+const FeatureCard = ({ card }) => (
+  <div className="relative flex-shrink-0 w-64 rounded-2xl overflow-hidden group cursor-pointer border border-white/10 hover:border-white/25 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl" style={{ background: card.gradient, minHeight: 344 }}>
+    <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full opacity-25 blur-3xl pointer-events-none group-hover:opacity-40 transition-opacity" style={{ background: card.accent }} />
+    <div className="flex items-center justify-between px-5 pt-5 pb-2">
+      <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border" style={{ color: card.accent, borderColor: card.accent+"50", background: card.accent+"18" }}>{card.badge}</span>
+      <button className="w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"><Heart className="w-3.5 h-3.5 text-white/60" strokeWidth={2} /></button>
+    </div>
+    <div className="flex items-center justify-center py-6 relative">
+      <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-xl border border-white/10 group-hover:scale-110 transition-transform duration-300" style={{ background: card.accent+"20" }}>{card.emoji}</div>
+      <span className="absolute bottom-1 right-5 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: card.accent+"25", color: card.accent }}>{card.sport}</span>
+    </div>
+    <div className="px-5 pb-2">
+      <h3 className="text-white font-black text-sm leading-snug mb-2 line-clamp-2">{card.title}</h3>
+      <p className="text-white/55 text-[11px] leading-relaxed mb-1.5">{card.subtitle}</p>
+      <p className="text-[10px] font-black" style={{ color: card.accent }}>{card.meta}</p>
+    </div>
+    <div className="px-5 pb-5 pt-3 flex items-center justify-between border-t border-white/10 mt-3">
+      <span className="text-[10px] text-white/40">{card.spots}</span>
+      <button className="text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg hover:scale-105 hover:brightness-110 transition-all" style={{ background: card.accent, color:"#fff" }}>{card.cta}</button>
+    </div>
+  </div>
+);
+
+export const FeaturedCarousel = () => {
+  const trackRef = useRef(null);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragScrollLeft = useRef(0);
+
+  const scrollBy = (dir) => { if (trackRef.current) trackRef.current.scrollBy({ left: dir * 288, behavior:"smooth" }); };
+  const onMouseDown = (e) => { isDragging.current = true; dragStartX.current = e.pageX - trackRef.current.offsetLeft; dragScrollLeft.current = trackRef.current.scrollLeft; if (trackRef.current) trackRef.current.style.cursor = "grabbing"; };
+  const onMouseMove = (e) => { if (!isDragging.current) return; e.preventDefault(); const x = e.pageX - trackRef.current.offsetLeft; trackRef.current.scrollLeft = dragScrollLeft.current - (x - dragStartX.current); };
+  const stopDrag = () => { isDragging.current = false; if (trackRef.current) trackRef.current.style.cursor = "grab"; };
+
+  return (
+    <section className="py-20 relative z-10 overflow-hidden border-t border-[#1a1a1a]/10">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 mb-10">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
+              <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />Featured Tournaments
+            </span>
+            <h2 className="text-4xl md:text-5xl font-black italic text-[#1a1a1a] leading-tight font-display">
+              <span className="text-[#e86c3f]">Featured</span> on Nova Hub
+            </h2>
+            <p className="text-xs text-[#1a1a1a]/55 mt-3 max-w-md leading-relaxed font-mono">
+              Handpicked tournaments across sports and esports. Register before slots fill up!
+            </p>
+          </div>
+          <div className="flex gap-3 flex-shrink-0">
+            <button onClick={() => scrollBy(-1)} aria-label="Previous" className="w-11 h-11 rounded-full bg-white border-[3px] border-[#1a1a1a] flex items-center justify-center shadow-[3px_3px_0px_rgba(26,26,26,1)] hover:shadow-[1px_1px_0px_rgba(26,26,26,1)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all"><ChevronLeft className="w-5 h-5 text-[#1a1a1a]" strokeWidth={2.5} /></button>
+            <button onClick={() => scrollBy(1)} aria-label="Next" className="w-11 h-11 rounded-full bg-[#1a1a1a] border-[3px] border-[#1a1a1a] flex items-center justify-center shadow-[3px_3px_0px_rgba(26,26,26,0.25)] hover:shadow-[1px_1px_0px_rgba(26,26,26,0.25)] hover:translate-x-0.5 hover:translate-y-0.5 transition-all"><ChevronRight className="w-5 h-5 text-white" strokeWidth={2.5} /></button>
+          </div>
+        </div>
+      </div>
+
+      <div ref={trackRef} className="flex gap-5 overflow-x-auto hide-scrollbar pl-6 md:pl-8 pr-6 pb-4 select-none" style={{ cursor:"grab", scrollSnapType:"x mandatory" }} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={stopDrag} onMouseLeave={stopDrag}>
+        {FEATURED_CARDS.map((card) => (<div key={card.id} style={{ scrollSnapAlign:"start" }}><FeatureCard card={card} /></div>))}
+        <div className="flex-shrink-0 w-2" />
+      </div>
+
+      <div className="mt-20 max-w-6xl mx-auto px-6 md:px-8">
+        <div className="text-center mb-10">
+          <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
+            <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />Partners and Publishers
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black text-[#1a1a1a] font-display">
+            <span className="text-[#e86c3f]">Trusted</span> by Gaming and Racing Brands
+          </h2>
+          <p className="text-[10px] text-[#1a1a1a]/50 mt-2 tracking-[0.2em] uppercase font-mono">
+            Publishers, esports orgs and racing brands backing Nova Hub
+          </p>
+        </div>
+        <div className="relative overflow-hidden">
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 z-10" style={{ background:"linear-gradient(to right,#c4e4e3,transparent)" }} />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 z-10" style={{ background:"linear-gradient(to left,#c4e4e3,transparent)" }} />
+          <div className="companies-ticker flex gap-6 items-center">
+            {[...COMPANIES,...COMPANIES,...COMPANIES].map((co, i) => (
+              <div key={i} className="flex-shrink-0 flex items-center gap-2.5 px-5 py-3 rounded-xl border-[2px] border-[#1a1a1a]/10 bg-white/70 hover:bg-white hover:border-[#1a1a1a]/30 transition-all hover:scale-105 cursor-pointer shadow-sm hover:shadow-md" style={{ minWidth:138 }}>
+                <span className="text-xl">{co.emoji}</span>
+                <span className="text-sm font-black tracking-tight" style={{ color: co.color }}>{co.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FeaturedCarousel;

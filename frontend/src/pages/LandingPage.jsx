@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Trophy, Sparkles, Pin, Compass, Info, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import FeaturedCarousel from '../components/FeaturedCarousel';
 
 const mockSportsList = [
   { id: '1', title: 'Summer Cricket Cup', type: 'Cricket', slots: '6/8 Slots Taken', fee: '₹1,500', venue: 'Nehru Ground Pitch A', bg: '#fef08a' },
@@ -107,14 +108,17 @@ export const LandingPage = ({ onOpenAuth, user }) => {
          ========================================== */}
       <section className="py-24 max-w-6xl mx-auto px-8 relative z-10">
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-4xl md:text-5xl font-display italic font-bold text-[#1a1a1a] mb-4">
-            A glimpse of our tournaments
+          <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
+            <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />Our Tournaments
+          </span>
+          <h2 className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-4 leading-tight">
+            A glimpse of our <span className="text-[#e86c3f]">tournaments</span>
           </h2>
           <div className="flex gap-3 mb-4">
-            <span className="px-3 py-1 bg-[#1a1a1a] text-white text-[10px] font-bold uppercase tracking-widest rounded-full">🏟️ Local Sports</span>
-            <span className="px-3 py-1 bg-purple-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">🎮 Online Esports</span>
+            <span className="px-3 py-1 bg-[#1a1a1a] text-white text-[10px] font-black uppercase tracking-widest rounded-full">🏟️ Local Sports</span>
+            <span className="px-3 py-1 bg-purple-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full">🎮 Online Esports</span>
           </div>
-          <p className="text-[10px] md:text-xs font-mono text-[#1a1a1a]/70 leading-relaxed uppercase tracking-widest">
+          <p className="text-[11px] font-mono text-[#1a1a1a]/70 leading-relaxed uppercase tracking-widest">
             From weekend cricket to global Valorant showdowns — we run brackets for every arena, physical or digital.
           </p>
         </div>
@@ -387,10 +391,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
 
         <div className="mb-12 max-w-2xl pt-12 border-t border-[#1a1a1a]/10">
-          <h2 className="text-3xl md:text-4xl font-display italic font-bold text-[#1a1a1a] mb-6">
-            Leagues we help you build...
+          <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
+            <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />What We Build
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
+            Leagues we help you <span className="text-[#e86c3f]">build...</span>
           </h2>
-          <p className="text-[10px] md:text-xs font-mono text-[#1a1a1a]/70 leading-relaxed uppercase tracking-widest">
+          <p className="text-[11px] font-mono text-[#1a1a1a]/70 leading-relaxed uppercase tracking-widest">
             From zero to kickoff, we design digital systems that simplify complexity, and turn bold ideas into local tournaments people love - and players believe in.
           </p>
         </div>
@@ -530,10 +537,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
          ========================================== */}
       <section className="py-24 max-w-6xl mx-auto px-8 relative z-10 border-t border-[#1a1a1a]/10">
         <div className="mb-20">
-          <h2 className="text-4xl md:text-5xl font-display italic font-bold text-[#1a1a1a] mb-6">
-            Who we are (and why that matters)
+          <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
+            <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />The Team
+          </span>
+          <h2 className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
+            Who we are <span className="text-[#e86c3f]">(and why that matters)</span>
           </h2>
-          <p className="text-[10px] md:text-xs font-mono text-[#1a1a1a]/70 uppercase tracking-widest">
+          <p className="text-[11px] font-mono text-[#1a1a1a]/70 uppercase tracking-widest">
             Finally, meet the team behind the action!
           </p>
         </div>
@@ -696,14 +706,22 @@ export const LandingPage = ({ onOpenAuth, user }) => {
       </section>
 
       {/* ==========================================
+          FRAME 5.5: FEATURED CAROUSEL + GAMING BRANDS
+         ========================================== */}
+      <FeaturedCarousel />
+
+      {/* ==========================================
           FRAME 6: TESTIMONIALS
          ========================================== */}
       <section className="py-24 max-w-6xl mx-auto px-8 relative z-10 border-t border-[#1a1a1a]/10">
         <div className="mb-16">
-          <h2 className="text-4xl md:text-5xl font-display italic font-bold text-[#1a1a1a] mb-6">
-            Real talk from captains we play with...
+          <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
+            <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />Testimonials
+          </span>
+          <h2 className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
+            Real talk from <span className="text-[#e86c3f]">captains</span> we play with...
           </h2>
-          <p className="text-[10px] md:text-xs font-mono text-[#1a1a1a]/70 uppercase tracking-widest max-w-xl leading-relaxed">
+          <p className="text-[11px] font-mono text-[#1a1a1a]/70 uppercase tracking-widest max-w-xl leading-relaxed">
             Real results, real matches. Here's how past partners describe working together - from setup to winning.
           </p>
         </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,51 +9,92 @@
     background-color: #c4e4e3;
     color: #1a1a1a;
     font-family: 'Space Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Custom typography overrides */
+  /* Primary display headings */
   h1, h2, h3, h4, .serif-font {
     font-family: 'Playfair Display', serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Mono utility classes  */
+  .font-display  { font-family: 'Playfair Display', serif; }
+  .font-mono     { font-family: 'Space Mono', monospace; }
+  .font-inter    { font-family: 'Inter', sans-serif; }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-/* Hide Scrollbar */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+/* ─── Hide Scrollbar ──────────────────────────────────────────────── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Retro Carbon Grid ───────────────────────────────────────────── */
+.carbon-grid {
+  background-image:
+    linear-gradient(rgba(26,26,26,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,26,26,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
-/* Retro-Sticker Hard Shadow System */
+/* ─── Hard Shadow ─────────────────────────────────────────────────── */
 .hard-shadow {
   box-shadow: 6px 6px 0px 0px #1a1a1a;
   transition: all 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-
 .hard-shadow:hover {
   box-shadow: 2px 2px 0px 0px #1a1a1a;
   transform: translate(4px, 4px);
 }
-
 .hard-shadow-active {
   box-shadow: 2px 2px 0px 0px #1a1a1a;
   transform: translate(4px, 4px);
 }
 
-/* Sticker Hover translation effects */
-.sticker-hover {
-  transition: all 0.15s ease-in-out;
-}
-.sticker-hover:hover {
-  transform: rotate(2deg) scale(1.05);
+/* ─── Sticker Hover ───────────────────────────────────────────────── */
+.sticker-hover { transition: all 0.15s ease-in-out; }
+.sticker-hover:hover { transform: rotate(2deg) scale(1.05); }
+
+/* ─── Custom Cursor ───────────────────────────────────────────────── */
+.gaming-cursor-active { cursor: none !important; }
+.gaming-cursor-active * { cursor: none !important; }
+
+/* ─── Companies Ticker (infinite scroll) ─────────────────────────── */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.3333%); }
 }
 
-/* Custom cursor visual system */
-.gaming-cursor-active {
-  cursor: none !important;
+.companies-ticker {
+  animation: ticker 28s linear infinite;
+  will-change: transform;
+  width: max-content;
 }
-.gaming-cursor-active * {
-  cursor: none !important;
+.companies-ticker:hover {
+  animation-play-state: paused;
+}
+
+/* ─── Gradient text utility ──────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #e86c3f 0%, #facc15 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Card entrance animation ────────────────────────────────────── */
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-in { animation: slideInUp 0.5s ease both; }
+
+/* ─── Responsive font scaling ────────────────────────────────────── */
+@media (max-width: 480px) {
+  html { font-size: 14px; }
 }
