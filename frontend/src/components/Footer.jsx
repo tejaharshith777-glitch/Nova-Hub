@@ -51,7 +51,7 @@ const Footer = () => {
         {/* Right Links Section */}
         <div className="w-full xl:w-[25%] flex flex-col justify-between py-4">
           <div className="flex flex-row justify-between font-mono text-sm font-bold text-[#1a1a1a]">
-            <div className="space-y-4">
+            <div class="space-y-4">
               <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">Leagues</a>
               <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">Arenas</a>
             </div>
@@ -59,7 +59,7 @@ const Footer = () => {
               <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">Discord</a>
               <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">Instagram</a>
               <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">X (Twitter)</a>
-              <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">Support</a>
+              <a href="/#contact" onClick={e => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }} className="block hover:underline decoration-2 decoration-yellow-400 interactive-target cursor-pointer">Help Desk</a>
               <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">Terms</a>
             </div>
           </div>

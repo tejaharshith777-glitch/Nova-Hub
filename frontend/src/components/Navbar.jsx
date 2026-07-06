@@ -30,6 +30,14 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
           Join Tournament
         </Link>
 
+        <a
+          href="/#contact"
+          onClick={e => { e.preventDefault(); const el = document.getElementById('contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+          className="hover:underline decoration-yellow-400 decoration-2 interactive-target cursor-pointer"
+        >
+          Help Desk
+        </a>
+
         {user && (
           <Link to="/dashboard" className="hover:underline decoration-yellow-400 decoration-2 interactive-target">
             Dashboard
@@ -119,6 +127,18 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
           >
             Join Tournament
           </Link>
+          <a
+            href="/#contact"
+            onClick={e => {
+              e.preventDefault();
+              setIsMobileOpen(false);
+              const el = document.getElementById('contact');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="hover:underline decoration-yellow-400 decoration-2 py-2 interactive-target cursor-pointer block"
+          >
+            Help Desk
+          </a>
           {user && (
             <>
               <Link 

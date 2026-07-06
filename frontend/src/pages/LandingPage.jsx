@@ -770,6 +770,164 @@ export const LandingPage = ({ onOpenAuth, user }) => {
       </section>
 
       {/* Footer now handled globally in App.jsx */}
+
+      {/* ==========================================
+          FRAME: HELP DESK / CONTACT SUPPORT
+         ========================================== */}
+      <section id="contact" className="py-28 px-8 md:px-24 relative z-10 bg-[#1a1a1a] text-white overflow-hidden">
+        {/* Background texture grid */}
+        <div className="absolute inset-0 opacity-5 carbon-grid pointer-events-none" />
+
+        {/* Floating corner badge */}
+        <div className="absolute top-8 right-8 border border-white/20 px-4 py-2 text-[9px] uppercase tracking-[0.3em] text-white/40 hidden md:block">
+          SUPPORT DESK // EST. 2026
+        </div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          {/* Section heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <span className="text-[10px] uppercase tracking-[0.3em] text-yellow-400 font-bold block mb-4">★ Help Desk</span>
+            <h2 className="text-5xl md:text-7xl font-display font-black italic leading-none text-white mb-4">
+              Reach out to<br />
+              <span className="text-yellow-200">Nova Support.</span>
+            </h2>
+            <p className="text-xs md:text-sm font-mono text-white/50 max-w-lg mt-6 leading-relaxed uppercase tracking-wider">
+              Need help with brackets, ground bookings, player check-ins, or billing? Our desk team responds within 24 hours.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+            {/* Left info column */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="lg:col-span-2 flex flex-col gap-8"
+            >
+              {[
+                { icon: '📧', label: 'Email Support', value: 'support@novahub.in', sub: 'Response within 24 hrs' },
+                { icon: '💬', label: 'Live Chat', value: 'Available in Dashboard', sub: 'Mon–Sat, 9 AM – 7 PM IST' },
+                { icon: '📞', label: 'Helpline', value: '+91 98765 43210', sub: 'Urgent tournament issues only' },
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-start gap-5 group">
+                  <div className="w-12 h-12 flex-shrink-0 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-2xl group-hover:bg-yellow-200/10 group-hover:border-yellow-200/30 transition-all">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-white/40 mb-0.5">{item.label}</p>
+                    <p className="text-sm font-bold font-mono text-white">{item.value}</p>
+                    <p className="text-[10px] font-mono text-white/30 mt-0.5">{item.sub}</p>
+                  </div>
+                </div>
+              ))}
+
+              {/* Decorative divider */}
+              <div className="h-px w-full bg-white/10 my-2" />
+
+              <p className="text-[10px] font-mono text-white/30 leading-relaxed uppercase tracking-widest">
+                Nova Hub Support is a dedicated team handling tournament disputes, access issues, and platform feedback. We take every message seriously.
+              </p>
+            </motion.div>
+
+            {/* Right form */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="lg:col-span-3"
+            >
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const btn = e.currentTarget.querySelector('button[type=submit]');
+                  if (btn) {
+                    btn.textContent = '✓ Message Sent!';
+                    btn.classList.add('bg-green-400');
+                    btn.classList.remove('bg-yellow-200', 'hover:bg-yellow-300');
+                    setTimeout(() => {
+                      btn.textContent = 'Send Message →';
+                      btn.classList.remove('bg-green-400');
+                      btn.classList.add('bg-yellow-200', 'hover:bg-yellow-300');
+                      e.currentTarget.reset();
+                    }, 2500);
+                  }
+                }}
+                className="bg-white/5 border border-white/10 rounded-[2rem] p-8 md:p-10 backdrop-blur-sm"
+              >
+                {/* Name + Email row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold block mb-2">Your Name</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Arjun Mehta"
+                      className="w-full bg-transparent border-b border-white/20 focus:border-yellow-300 py-3 text-sm font-mono text-white placeholder-white/20 outline-none transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold block mb-2">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="you@email.com"
+                      className="w-full bg-transparent border-b border-white/20 focus:border-yellow-300 py-3 text-sm font-mono text-white placeholder-white/20 outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Subject */}
+                <div className="mb-5">
+                  <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold block mb-2">Subject / Topic</label>
+                  <select
+                    className="w-full bg-[#1a1a1a] border-b border-white/20 focus:border-yellow-300 py-3 text-sm font-mono text-white/80 outline-none transition-colors appearance-none cursor-pointer"
+                  >
+                    <option value="">— Select a topic —</option>
+                    <option>Tournament Registration Issue</option>
+                    <option>Ground / Venue Booking</option>
+                    <option>Bracket or Score Error</option>
+                    <option>Login / Account Access</option>
+                    <option>Payment or Billing</option>
+                    <option>General Feedback</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+
+                {/* Message */}
+                <div className="mb-8">
+                  <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold block mb-2">Your Message</label>
+                  <textarea
+                    required
+                    rows={5}
+                    placeholder="Describe your issue or question in detail..."
+                    className="w-full bg-transparent border border-white/10 focus:border-yellow-300 rounded-xl p-4 text-sm font-mono text-white placeholder-white/20 outline-none resize-none transition-colors"
+                  />
+                </div>
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  className="w-full bg-yellow-200 hover:bg-yellow-300 text-[#1a1a1a] font-black uppercase tracking-wider text-sm py-4 rounded-xl transition-all shadow-[6px_6px_0px_rgba(255,255,255,0.08)] hover:shadow-[2px_2px_0px_rgba(255,255,255,0.08)] hover:translate-x-1 hover:translate-y-1 border-[3px] border-yellow-300"
+                >
+                  Send Message →
+                </button>
+
+                <p className="text-[9px] font-mono text-white/20 uppercase tracking-widest text-center mt-5">
+                  Your data is confidential. We will never share your information with third parties.
+                </p>
+              </form>
+            </motion.div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
