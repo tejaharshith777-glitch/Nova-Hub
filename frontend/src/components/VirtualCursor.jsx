@@ -47,7 +47,7 @@ export const VirtualCursor = () => {
         return {
           size: 44,
           bg: '#fef08a', // yellow
-          label: 'CLICK'
+          label: 'PLAY'
         };
       case 'card':
         return {
