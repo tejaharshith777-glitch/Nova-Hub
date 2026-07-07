@@ -29,7 +29,7 @@ const Chatbot = () => {
 
     // Simulate Gemini 2.5 Flash rapid response
     setTimeout(() => {
-      let aiResponse = "I can definitely help with that! Nova Hub supports both physical sports and online esports. Would you like to host a tournament or join an existing one?";
+      let aiResponse = "I can help with that! Nova Hub supports both physical sports and online esports. Would you like to host a tournament, join an existing one, or explore a specific category?";
       
       const lowerInput = newUserMsg.text.toLowerCase();
 
@@ -45,14 +45,19 @@ const Chatbot = () => {
         aiResponse = "🔥 Free Fire Masters is our flagship battle royale event! 20 squads compete on Bermuda and Kalahari maps with kill bonuses. Grandmaster accounts required. Check the Free Fire page!";
       } else if (lowerInput.includes('chess')) {
         aiResponse = "♟️ We host Online Chess Leagues in Blitz format (5+2 increment)! 32-player Swiss system over 7 rounds. Accounts verified via chess.com. ELO-based seeding for top players!";
-      } else if (lowerInput.includes('cricket') || lowerInput.includes('football') || lowerInput.includes('basketball') || lowerInput.includes('badminton')) {
+      } else if (lowerInput.includes('cricket') || lowerInput.includes('football') || lowerInput.includes('basketball') || lowerInput.includes('badminton') || lowerInput.includes('hoops') || lowerInput.includes('tennis')) {
         aiResponse = "🏆 We fully support that sport! Check out the dedicated tournament page for live match formats, live scores, and past winners. You can also register your team directly from there!";
+      } else if (lowerInput.includes('racing') || lowerInput.includes('car') || lowerInput.includes('bike') || lowerInput.includes('cycle') || lowerInput.includes('moto')) {
+        aiResponse = "🏁 We have multiple racing events! Check out Veloce GP Series for Car Racing, Moto GP Pro Tour for Bikes, and Tour de Nova for Cycling on our homepage.";
       } else if (lowerInput.includes('esports') || lowerInput.includes('online') || lowerInput.includes('game')) {
-        aiResponse = "🎮 Nova Hub supports 4 major online games: Valorant (5v5 FPS), BGMI (Battle Royale), Free Fire (Squad BR), and Chess (Blitz). Click any esports card on the homepage to explore!";
+        aiResponse = "🎮 Nova Hub supports major online games: Valorant (5v5 FPS), BGMI (Battle Royale), Free Fire (Squad BR), and Chess (Blitz). Click any esports card on the homepage to explore!";
       } else if (lowerInput.includes('prize') || lowerInput.includes('money') || lowerInput.includes('win')) {
         aiResponse = "🏆 Prize pools vary by tournament! The host sets the prize pool when creating an event. For online esports like Free Fire, cash prizes are distributed to top 3 squads. Check individual event pages for details!";
       } else if (lowerInput.includes('register') || lowerInput.includes('sign up') || lowerInput.includes('account')) {
         aiResponse = "To register, click 'Sign In' in the top navbar and create an account. Once logged in, you can join tournaments as a participant or switch to host mode to create your own events!";
+      } else {
+        // Fallback that actually addresses their question better
+        aiResponse = "I'm not exactly sure about that, but Nova Hub is your platform for all things sports and esports! You can check out the featured tournaments on the homepage or head to the dashboard to find exactly what you need.";
       }
 
       setMessages(prev => [...prev, { id: Date.now() + 1, text: aiResponse, sender: 'ai' }]);

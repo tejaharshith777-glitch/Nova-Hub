@@ -1,5 +1,6 @@
-﻿import React, { useRef } from "react";
+import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const FEATURED_CARDS = [
   { id:"f1", badge:"Free", gradient:"linear-gradient(135deg,#1e3a5f,#0a2240)", accent:"#4fc3f7", emoji:"🏏", sport:"Cricket", title:"Summer Cricket Open", subtitle:"50+ slots · Stipend Rs.10,000 · CTC upto Rs.8 LPA", meta:"Eligibility: Open for all", cta:"Register FREE", spots:"6/8 Slots" },
@@ -30,7 +31,21 @@ const COMPANIES = [
   { name:"TVS Racing", color:"#1a1a1a", emoji:"🚴" },
 ];
 
-const FeatureCard = ({ card }) => (
+const ROUTE_MAP = {
+  f1: "cricket",
+  f2: "valorant",
+  f3: "football",
+  f4: "multi",
+  f5: "car-racing",
+  f6: "hoops",
+  f7: "bgmi",
+  f8: "cycle-racing",
+  f9: "freefire",
+  f10: "bike-racing",
+  f11: "codm"
+};
+
+const FeatureCard = ({ card, navigate }) => (
   <div className="relative flex-shrink-0 w-64 rounded-2xl overflow-hidden group cursor-pointer border border-white/10 hover:border-white/25 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl" style={{ background: card.gradient, minHeight: 344 }}>
     <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full opacity-25 blur-3xl pointer-events-none group-hover:opacity-40 transition-opacity" style={{ background: card.accent }} />
     <div className="flex items-center justify-between px-5 pt-5 pb-2">
@@ -48,13 +63,20 @@ const FeatureCard = ({ card }) => (
     </div>
     <div className="px-5 pb-5 pt-3 flex items-center justify-between border-t border-white/10 mt-3">
       <span className="text-[10px] text-white/40">{card.spots}</span>
-      <button className="text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg hover:scale-105 hover:brightness-110 transition-all" style={{ background: card.accent, color:"#fff" }}>{card.cta}</button>
+      <button 
+        onClick={() => navigate(`/tournament/${ROUTE_MAP[card.id] || card.id}`)}
+        className="text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg hover:scale-105 hover:brightness-110 transition-all z-10 relative" 
+        style={{ background: card.accent, color:"#fff" }}
+      >
+        {card.cta}
+      </button>
     </div>
   </div>
 );
 
 export const FeaturedCarousel = () => {
   const trackRef = useRef(null);
+  const navigate = useNavigate();
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
   const dragScrollLeft = useRef(0);
@@ -87,7 +109,7 @@ export const FeaturedCarousel = () => {
       </div>
 
       <div ref={trackRef} className="flex gap-5 overflow-x-auto hide-scrollbar pl-6 md:pl-8 pr-6 pb-4 select-none" style={{ cursor:"grab", scrollSnapType:"x mandatory" }} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={stopDrag} onMouseLeave={stopDrag}>
-        {FEATURED_CARDS.map((card) => (<div key={card.id} style={{ scrollSnapAlign:"start" }}><FeatureCard card={card} /></div>))}
+        {FEATURED_CARDS.map((card) => (<div key={card.id} style={{ scrollSnapAlign:"start" }}><FeatureCard card={card} navigate={navigate} /></div>))}
         <div className="flex-shrink-0 w-2" />
       </div>
 
