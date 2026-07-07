@@ -4,19 +4,17 @@ import HostForm from '../components/HostForm';
 import JoinEventPage from '../components/JoinEventPage';
 import { Trophy, Zap, Users, CalendarDays, TrendingUp, Activity } from 'lucide-react';
 
-const participantStats = [
-  { label: 'Matches Played', value: '12', icon: Activity, color: 'bg-[#bde3fb]' },
-  { label: 'Win Rate', value: '67%', icon: TrendingUp, color: 'bg-[#baffc9]' },
-  { label: 'Trophies Won', value: '3', icon: Trophy, color: 'bg-[#fcebb6]' },
-  { label: 'Teams Joined', value: '5', icon: Users, color: 'bg-[#fce4fb]' },
-];
-
-const hostStats = [
-  { label: 'Tournaments Hosted', value: '4', icon: Trophy, color: 'bg-[#fcebb6]' },
-  { label: 'Registered Teams', value: '28', icon: Users, color: 'bg-[#bde3fb]' },
-  { label: 'Active Brackets', value: '3', icon: Activity, color: 'bg-[#fce4fb]' },
-  { label: 'Referee Payouts', value: '₹8,500', icon: Zap, color: 'bg-[#baffc9]' },
-];
+// Simple deterministic PRNG to generate unique, consistent stats per user
+const seedRandom = (str) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return (index) => {
+    const x = Math.sin(hash + index) * 10000;
+    return x - Math.floor(x);
+  };
+};
 
 const mockParticipantTournaments = [
   { name: 'Summer Cricket Cup', sport: '🏏', status: 'LIVE', match: 'QF Match 1', time: 'Today 4PM', id: 'cricket' },
@@ -52,8 +50,41 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   const isHost = user?.role === 'host';
   const isParticipant = user?.role === 'participant';
 
+  // Seed stats and list uniquely for each user
+  const username = user?.username || 'Player';
+  const getRand = seedRandom(username);
+
+  // Participant stats
+  const participantMatches = Math.floor(getRand(1) * 20) + 5;
+  const participantWinRate = Math.floor(getRand(2) * 40) + 40;
+  const participantTrophies = Math.floor(getRand(3) * 6) + 1;
+  const participantTeams = Math.floor(getRand(4) * 8) + 2;
+
+  const participantStats = [
+    { label: 'Matches Played', value: String(participantMatches), icon: Activity, color: 'bg-[#bde3fb]' },
+    { label: 'Win Rate', value: `${participantWinRate}%`, icon: TrendingUp, color: 'bg-[#baffc9]' },
+    { label: 'Trophies Won', value: String(participantTrophies), icon: Trophy, color: 'bg-[#fcebb6]' },
+    { label: 'Teams Joined', value: String(participantTeams), icon: Users, color: 'bg-[#fce4fb]' },
+  ];
+
+  // Host stats
+  const hostHosted = Math.floor(getRand(5) * 8) + 2;
+  const hostTeams = Math.floor(getRand(6) * 30) + 10;
+  const hostBrackets = Math.floor(getRand(7) * 4) + 1;
+  const hostPayouts = Math.floor(getRand(8) * 15) * 1000 + 3000;
+
+  const hostStats = [
+    { label: 'Tournaments Hosted', value: String(hostHosted), icon: Trophy, color: 'bg-[#fcebb6]' },
+    { label: 'Registered Teams', value: String(hostTeams), icon: Users, color: 'bg-[#bde3fb]' },
+    { label: 'Active Brackets', value: String(hostBrackets), icon: Activity, color: 'bg-[#fce4fb]' },
+    { label: 'Referee Payouts', value: `₹${hostPayouts.toLocaleString()}`, icon: Zap, color: 'bg-[#baffc9]' },
+  ];
+
   const stats = isHost ? hostStats : participantStats;
-  const tournaments = isHost ? mockHostTournaments : mockParticipantTournaments;
+
+  // Render a different slice of mock tournaments depending on user
+  const rawTournaments = isHost ? mockHostTournaments : mockParticipantTournaments;
+  const tournaments = rawTournaments.filter((_, idx) => getRand(idx + 10) > 0.25);
 
   if (currentPage === 'hostPage') return (
     <div className="min-h-screen bg-[#c4e4e3] flex flex-col items-center pt-32 pb-20 px-8 justify-start font-mono">
