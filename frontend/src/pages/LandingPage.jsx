@@ -133,7 +133,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           
           {/* Card 1 - Cricket */}
-          <div onClick={() => navigate('/tournament/cricket')} className="border border-[#1a1a1a]/20 rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-[#1a1a1a]/40 transition-colors cursor-pointer">
+          <div onClick={() => navigate('/tournament/cricket')} className="border border-green-300/30 bg-gradient-to-br from-[#112615] to-[#09140b] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-green-400/50 transition-colors cursor-pointer">
             <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
               <div className="w-56 md:w-64 h-36 md:h-40 bg-[#2d3a2b] rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.2)] border border-white/10 -rotate-[8deg] group-hover:-rotate-[12deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-12 flex flex-col p-4">
                 <div className="w-1/3 h-2 bg-white/30 rounded-full mb-3"></div>
@@ -146,13 +146,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
               </div>
             </div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-[#1a1a1a]">Summer Cricket Cup</h3>
-              <span className="text-[10px] md:text-xs font-mono text-[#1a1a1a]/60">cricket, league, local</span>
+              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Summer Cricket Cup</h3>
+              <span className="text-[10px] md:text-xs font-mono text-white/50">cricket, league, local</span>
             </div>
           </div>
 
           {/* Card 2 - Football */}
-          <div onClick={() => navigate('/tournament/football')} className="border border-[#1a1a1a]/20 rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-[#1a1a1a]/40 transition-colors cursor-pointer">
+          <div onClick={() => navigate('/tournament/football')} className="border border-emerald-300/30 bg-gradient-to-br from-[#082a17] to-[#03140a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-emerald-400/50 transition-colors cursor-pointer">
             <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
               <div className="w-56 md:w-64 h-36 md:h-40 bg-[#111111] rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.3)] border border-white/10 rotate-[5deg] group-hover:rotate-[2deg] group-hover:scale-105 transition-all duration-500 absolute top-16 left-6 flex flex-col p-4">
                 <div className="w-1/2 h-2 bg-[#3cc85a] rounded-full mb-4"></div>
@@ -163,13 +163,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
               </div>
             </div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-[#1a1a1a]">City Football Clash</h3>
-              <span className="text-[10px] md:text-xs font-mono text-[#1a1a1a]/60">soccer, knockout, fast</span>
+              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">City Football Clash</h3>
+              <span className="text-[10px] md:text-xs font-mono text-white/50">soccer, knockout, fast</span>
             </div>
           </div>
 
           {/* Card 3 - Badminton */}
-          <div onClick={() => navigate('/tournament/badminton')} className="border border-[#1a1a1a]/20 rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-[#1a1a1a]/40 transition-colors cursor-pointer">
+          <div onClick={() => navigate('/tournament/badminton')} className="border border-yellow-300/30 bg-gradient-to-br from-[#261f08] to-[#120f04] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/50 transition-colors cursor-pointer">
             <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
               <div className="w-56 md:w-64 h-36 md:h-40 bg-white rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-[#1a1a1a]/10 -rotate-[6deg] group-hover:-rotate-[10deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-12 flex flex-col p-4 items-center justify-center">
                 <div className="flex gap-4 items-end mb-4">
@@ -184,13 +184,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
               </div>
             </div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-[#1a1a1a]">State Badminton</h3>
-              <span className="text-[10px] md:text-xs font-mono text-[#1a1a1a]/60">badminton, brackets, pro</span>
+              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">State Badminton</h3>
+              <span className="text-[10px] md:text-xs font-mono text-white/50">badminton, brackets, pro</span>
             </div>
           </div>
 
           {/* Card 4 - Basketball */}
-          <div onClick={() => navigate('/tournament/hoops')} className="border border-[#1a1a1a]/20 rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-[#1a1a1a]/40 transition-colors cursor-pointer">
+          <div onClick={() => navigate('/tournament/hoops')} className="border border-cyan-300/30 bg-gradient-to-br from-[#05202e] to-[#021017] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-cyan-400/50 transition-colors cursor-pointer">
             <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
               <div className="w-56 md:w-64 h-36 md:h-40 bg-[#f4f4f5] rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-[#1a1a1a]/10 rotate-[4deg] group-hover:rotate-[0deg] group-hover:scale-105 transition-all duration-500 absolute top-16 left-6 flex flex-row p-3 gap-2">
                 <div className="w-1/3 bg-white rounded shadow-sm border border-gray-100 h-full"></div>
@@ -204,8 +204,8 @@ export const LandingPage = ({ onOpenAuth, user }) => {
               </div>
             </div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-[#1a1a1a]">Downtown Basketball</h3>
-              <span className="text-[10px] md:text-xs font-mono text-[#1a1a1a]/60">hoops, groups, local</span>
+              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Downtown Basketball</h3>
+              <span className="text-[10px] md:text-xs font-mono text-white/50">hoops, groups, local</span>
             </div>
           </div>
         </div>
