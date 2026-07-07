@@ -19,19 +19,36 @@ const Chatbot = () => {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!inputValue.trim()) return;
 
-    const newUserMsg = { id: Date.now(), text: inputValue, sender: 'user' };
+    const userMessageText = inputValue;
+    const newUserMsg = { id: Date.now(), text: userMessageText, sender: 'user' };
     setMessages(prev => [...prev, newUserMsg]);
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate Gemini 2.5 Flash rapid response
+    try {
+      const res = await fetch('http://localhost:5000/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessageText })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(prev => [...prev, { id: Date.now() + 1, text: data.response, sender: 'ai' }]);
+        setIsTyping(false);
+        return;
+      }
+    } catch (err) {
+      console.warn("Backend chat endpoint failed, running client-side simulation.");
+    }
+
+    // Client-side simulation fallback
     setTimeout(() => {
       let aiResponse = "I can help with that! Nova Hub supports both physical sports and online esports. Would you like to host a tournament, join an existing one, or explore a specific category?";
       
-      const lowerInput = newUserMsg.text.toLowerCase();
+      const lowerInput = userMessageText.toLowerCase();
 
       if (lowerInput.includes('host') || lowerInput.includes('create')) {
         aiResponse = "To host a tournament, click 'Host Event' in the dashboard. You can choose from physical sports (Cricket, Football, etc.) or online esports (Valorant, BGMI, Free Fire, Chess). Fill in the event details and launch!";
@@ -56,13 +73,21 @@ const Chatbot = () => {
       } else if (lowerInput.includes('register') || lowerInput.includes('sign up') || lowerInput.includes('account')) {
         aiResponse = "To register, click 'Sign In' in the top navbar and create an account. Once logged in, you can join tournaments as a participant or switch to host mode to create your own events!";
       } else {
-        // Fallback that actually addresses their question better
-        aiResponse = "I'm not exactly sure about that, but Nova Hub is your platform for all things sports and esports! You can check out the featured tournaments on the homepage or head to the dashboard to find exactly what you need.";
+        // dynamic smart fallback inside client
+        const words = lowerInput.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"").split(/\s+/);
+        const stopWords = ['a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'arent', 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'cant', 'cannot', 'could', 'couldnt', 'did', 'didnt', 'do', 'does', 'doesnt', 'doing', 'dont', 'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', 'hadnt', 'has', 'hasnt', 'have', 'havent', 'having', 'he', 'hed', 'hell', 'hes', 'her', 'here', 'heres', 'hers', 'herself', 'him', 'himself', 'his', 'how', 'hows', 'i', 'id', 'ill', 'im', 'ive', 'if', 'in', 'into', 'is', 'isnt', 'it', 'its', 'itself', 'lets', 'me', 'more', 'most', 'mustnt', 'my', 'myself', 'no', 'nor', 'not', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 'same', 'shant', 'she', 'shed', 'shell', 'shes', 'should', 'shouldnt', 'so', 'some', 'such', 'than', 'that', 'thats', 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', 'theres', 'these', 'they', 'theyd', 'theyll', 'theyre', 'theyve', 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 'very', 'was', 'wasnt', 'we', 'wed', 'well', 'were', 'weve', 'werent', 'what', 'whats', 'when', 'whens', 'where', 'wheres', 'which', 'while', 'who', 'whos', 'whom', 'why', 'whys', 'with', 'wont', 'would', 'wouldnt', 'you', 'youd', 'youll', 'youre', 'youve', 'your', 'yours', 'yourself', 'yourselves', 'give', 'me', 'please', 'tell', 'show', 'us', 'get'];
+        const topics = words.filter(w => !stopWords.includes(w) && w.length > 2);
+        
+        if (topics.length > 0) {
+          aiResponse = `You asked about "${topics.join(' ')}". On Nova Hub, you can host tournaments, join leagues, and manage brackets for both physical sports and online esports. Head to the homepage or dashboard to check out live events for those!`;
+        } else {
+          aiResponse = "I'm not exactly sure about that, but Nova Hub is your platform for all things sports and esports! You can check out the featured tournaments on the homepage or head to the dashboard to find exactly what you need.";
+        }
       }
 
       setMessages(prev => [...prev, { id: Date.now() + 1, text: aiResponse, sender: 'ai' }]);
       setIsTyping(false);
-    }, 800); // 2.5 Flash is fast!
+    }, 800);
   };
 
   return (
