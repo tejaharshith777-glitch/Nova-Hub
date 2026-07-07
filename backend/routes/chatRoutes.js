@@ -76,8 +76,9 @@ const getSmartFallback = (message) => {
   const stopWords = ['a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'arent', 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'cant', 'cannot', 'could', 'couldnt', 'did', 'didnt', 'do', 'does', 'doesnt', 'doing', 'dont', 'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', 'hadnt', 'has', 'hasnt', 'have', 'havent', 'having', 'he', 'hed', 'hell', 'hes', 'her', 'here', 'heres', 'hers', 'herself', 'him', 'himself', 'his', 'how', 'hows', 'i', 'id', 'ill', 'im', 'ive', 'if', 'in', 'into', 'is', 'isnt', 'it', 'its', 'itself', 'lets', 'me', 'more', 'most', 'mustnt', 'my', 'myself', 'no', 'nor', 'not', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 'same', 'shant', 'she', 'shed', 'shell', 'shes', 'should', 'shouldnt', 'so', 'some', 'such', 'than', 'that', 'thats', 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', 'theres', 'these', 'they', 'theyd', 'theyll', 'theyre', 'theyve', 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 'very', 'was', 'wasnt', 'we', 'wed', 'well', 'were', 'weve', 'werent', 'what', 'whats', 'when', 'whens', 'where', 'wheres', 'which', 'while', 'who', 'whos', 'whom', 'why', 'whys', 'with', 'wont', 'would', 'wouldnt', 'you', 'youd', 'youll', 'youre', 'youve', 'your', 'yours', 'yourself', 'yourselves', 'give', 'me', 'please', 'tell', 'show', 'us', 'get'];
   const topics = words.filter(w => !stopWords.includes(w) && w.length > 2);
 
-  if (topics.length > 0) {
-    const topicStr = topics.slice(0, 3).join(' & ');
+  if (topics.length > 0 && topics.some(t => t.length > 3)) {
+    // Only use 'Regarding...' if there is a substantial keyword
+    const topicStr = topics.slice(0, 2).join(' & ');
     return `Regarding "${topicStr}", Nova Hub is built to automate matches and scheduling. Check out the brackets, sports listings, or registration flow on your dashboard to see how to proceed!`;
   }
 
@@ -91,8 +92,6 @@ router.post('/', async (req, res) => {
     if (!message) {
       return res.status(400).json({ error: "Message is required." });
     }
-
-    let quotaWarning = "";
 
     // Try to run using Google Gemini or OpenAI if API Key is configured
     if (process.env.GEMINI_API_KEY) {
@@ -118,11 +117,7 @@ router.post('/', async (req, res) => {
             const data = await openAiRes.json();
             return res.json({ response: data.choices[0].message.content.trim() });
           } else {
-            const errText = await openAiRes.text();
-            console.error("OpenAI API returned an error:", errText);
-            if (errText.includes("insufficient_quota")) {
-              quotaWarning = "⚠️ [API Quota Exceeded] - Running on Local Backup: ";
-            }
+            console.error("OpenAI API returned an error:", await openAiRes.text());
           }
         } else {
           // Google Gemini API endpoint
@@ -144,7 +139,7 @@ Please answer their question directly, comprehensively, and dynamically. If they
 
     // Dynamic rule-based responder (so it never gives the exact same canned message)
     const reply = getSmartFallback(message);
-    res.json({ response: quotaWarning + reply });
+    res.json({ response: reply });
 
   } catch (error) {
     console.error("Chat route error:", error);
