@@ -20,7 +20,8 @@ export const EventMap = ({ physicalTournaments = [], activeCoords = {}, onSelect
   const cities = [
     { name: 'Delhi', lat: 28.6139, lon: 77.2090, bg: '#ffb3ba' },
     { name: 'Mumbai', lat: 19.0760, lon: 72.8777, bg: '#cffafe' },
-    { name: 'Bangalore', lat: 12.9784, lon: 77.5960, bg: '#baffc9' }
+    { name: 'Bangalore', lat: 12.9784, lon: 77.5960, bg: '#baffc9' },
+    { name: 'Guntur', lat: 16.3067, lon: 80.4365, bg: '#ffdfba' }
   ];
 
   const currentLat = activeCoords?.latitude;
