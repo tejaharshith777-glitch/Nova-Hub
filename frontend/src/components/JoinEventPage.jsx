@@ -221,6 +221,10 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
 
   // Load tournaments from API (fallback to local data on error or empty)
   const loadTournaments = useCallback(async () => {
+    if (!apiBaseUrl) {
+      setTournaments(localFallbackTournaments);
+      return;
+    }
     try {
       const res = await fetch(`${apiBaseUrl}/api/tournaments`, { credentials: 'include' });
       if (res.ok) {
