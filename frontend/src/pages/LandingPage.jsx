@@ -468,13 +468,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
           {/* Card 1 - College Cricket */}
           <div onClick={() => navigate('/tournament/college-cricket')} className="border border-blue-300/40 bg-gradient-to-br from-[#081b2a] to-[#0c2b42] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-blue-400/70 transition-colors cursor-pointer text-white">
-            <img 
-              src="/varsity_cricket_card.jpg" 
-              alt="Varsity Cricket Trophy" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0c2b42] via-[#0c2b42]/20 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 top-0 left-0 right-0 bottom-20 flex items-center justify-center pointer-events-none">
+              <img 
+                src="/varsity_cricket_card.jpg" 
+                alt="Varsity Cricket Trophy" 
+                className="w-[90%] h-[75%] object-contain rounded-xl border border-white/10 shadow-[0_12px_24px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover:scale-105"
+              />
+            </div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Varsity Cricket Trophy</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">cricket, college, varsity</span>
