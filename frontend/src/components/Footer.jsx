@@ -72,8 +72,8 @@ const Footer = () => {
       </div>
 
       {/* Giant Typography Wordmark at the very bottom */}
-      <div className="w-full bg-[#121212] border-t-[3px] border-[#1a1a1a] py-12 md:py-20 overflow-hidden flex items-center justify-center">
-        <h1 className="text-[14vw] font-black tracking-tighter text-[#f7f5f0] uppercase leading-none select-none font-display text-center transition-all duration-300 hover:text-yellow-400">
+      <div className="w-full bg-[#c4e4e3] border-t-[3px] border-[#1a1a1a] py-12 md:py-20 overflow-hidden flex items-center justify-center">
+        <h1 className="text-[14vw] font-black tracking-tighter text-[#1a1a1a] uppercase leading-none select-none font-display text-center transition-all duration-300 hover:text-white">
           NOVA HUB
         </h1>
       </div>
