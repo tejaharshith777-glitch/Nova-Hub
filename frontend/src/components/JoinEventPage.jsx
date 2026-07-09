@@ -443,7 +443,6 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
           });
           triggerInAppToast('Radar Enabled', 'Proximity and regional match updates are now active.');
         } else {
-          alert('Notification permission denied by browser. Falling back to in-app alerts.');
           setNotificationsOn(true);
           triggerInAppToast('In-App Alerts Active', 'Browser notifications blocked. Using on-screen alerts.');
         }
