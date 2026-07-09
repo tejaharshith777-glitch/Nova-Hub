@@ -217,13 +217,11 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           {/* Card 2 - Football */}
           <div onClick={() => navigate('/tournament/football')} className="border border-emerald-300/30 bg-gradient-to-br from-[#082a17] to-[#03140a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-emerald-400/50 transition-colors cursor-pointer">
             <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <div className="w-56 md:w-64 h-36 md:h-40 bg-[#111111] rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.3)] border border-white/10 rotate-[5deg] group-hover:rotate-[2deg] group-hover:scale-105 transition-all duration-500 absolute top-16 left-6 flex flex-col p-4">
-                <div className="w-1/2 h-2 bg-[#3cc85a] rounded-full mb-4"></div>
-                <div className="w-full flex gap-2"><div className="w-1/2 h-8 bg-white/10 rounded"></div><div className="w-1/2 h-8 bg-white/10 rounded"></div></div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#3cc85a] rounded-2xl shadow-xl border-4 border-[#c4e4e3] -rotate-[12deg] group-hover:-rotate-[16deg] group-hover:scale-110 transition-all duration-500 absolute bottom-10 right-8 md:right-20 flex flex-col items-center justify-center text-white font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">⚽</span>SOCCER
-              </div>
+              <img 
+                src="/football_card.jpg" 
+                alt="FIFA World Cup Player Album 2026" 
+                className="w-[85%] h-[60%] object-cover rounded-2xl border-2 border-white/20 rotate-[4deg] group-hover:rotate-[2deg] group-hover:scale-105 transition-all duration-500 absolute top-10 shadow-[0_15px_30px_rgba(0,0,0,0.4)]"
+              />
             </div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">City Football Clash</h3>
