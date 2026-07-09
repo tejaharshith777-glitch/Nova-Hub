@@ -28,7 +28,18 @@ const AuthQueryHandler = ({ setIsAuthOpen }) => {
   return null;
 };
 
-const API_BASE_URL = 'http://localhost:5000';
+const getApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  const hostname = window.location.hostname;
+  if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]') {
+    return 'http://localhost:5000';
+  }
+  return '';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const App = () => {
   const [user, setUser] = useState(null);
@@ -38,6 +49,18 @@ export const App = () => {
   // Check user session (backend first, fall back to localStorage)
   useEffect(() => {
     const checkSession = async () => {
+      if (!API_BASE_URL) {
+        // Skip calling backend if offline/not local
+        try {
+          const saved = localStorage.getItem('novahub_session');
+          if (saved) setUser(JSON.parse(saved));
+        } catch (e) {
+          localStorage.removeItem('novahub_session');
+        }
+        setLoading(false);
+        return;
+      }
+
       try {
         const controller = new AbortController();
         const t = setTimeout(() => controller.abort(), 3000);
@@ -68,13 +91,15 @@ export const App = () => {
   }, []);
 
   const handleLogout = async () => {
-    try {
-      await fetch(`${API_BASE_URL}/api/auth/logout`, { 
-        method: 'POST',
-        credentials: 'include'
-      });
-    } catch (err) {
-      // ignore if backend offline
+    if (API_BASE_URL) {
+      try {
+        await fetch(`${API_BASE_URL}/api/auth/logout`, { 
+          method: 'POST',
+          credentials: 'include'
+        });
+      } catch (err) {
+        // ignore if backend offline
+      }
     }
     localStorage.removeItem('novahub_session');
     setUser(null);
@@ -150,7 +175,7 @@ export const App = () => {
 
         <Footer />
 
-        <Chatbot />
+        <Chatbot apiBaseUrl={API_BASE_URL} />
 
         {/* Access Authentication Modal */}
         <AuthModal

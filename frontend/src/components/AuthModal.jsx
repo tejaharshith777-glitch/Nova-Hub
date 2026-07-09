@@ -83,32 +83,43 @@ export const AuthModal = ({ isOpen, onClose, apiBaseUrl, onAuthSuccess }) => {
 
     let userData = null;
 
-    // ── 1. Try the real backend (5-second timeout) ──────────────────────────
-    try {
-      const controller = new AbortController();
-      const timeout    = setTimeout(() => controller.abort(), 5000);
+    if (apiBaseUrl) {
+      // ── 1. Try the real backend (5-second timeout) ──────────────────────────
+      try {
+        const controller = new AbortController();
+        const timeout    = setTimeout(() => controller.abort(), 5000);
 
-      const res = await fetch(`${apiBaseUrl}${endpoint}`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
-        credentials: 'include',
-        signal:  controller.signal
-      });
-      clearTimeout(timeout);
+        const res = await fetch(`${apiBaseUrl}${endpoint}`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
+          credentials: 'include',
+          signal:  controller.signal
+        });
+        clearTimeout(timeout);
 
-      const data = await res.json();
-      if (res.ok) {
-        userData = data.user;
-        // Also persist locally so Vercel / offline sessions survive
-        saveSession(userData);
-      } else {
-        setError(data.message || 'Authentication failed. Please verify credentials.');
-        setLoading(false);
-        return;
+        const data = await res.json();
+        if (res.ok) {
+          userData = data.user;
+          // Also persist locally so Vercel / offline sessions survive
+          saveSession(userData);
+        } else {
+          setError(data.message || 'Authentication failed. Please verify credentials.');
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        // ── 2. Backend unreachable → fall back to localStorage mock auth ──────
+        try {
+          userData = mockLocalAuth(isLogin, payload);
+        } catch (mockErr) {
+          setError(mockErr.message || 'Authentication failed.');
+          setLoading(false);
+          return;
+        }
       }
-    } catch (err) {
-      // ── 2. Backend unreachable → fall back to localStorage mock auth ──────
+    } else {
+      // ── 2. Backend unreachable/offline → fall back to localStorage mock auth ──────
       try {
         userData = mockLocalAuth(isLogin, payload);
       } catch (mockErr) {
@@ -194,9 +205,11 @@ export const AuthModal = ({ isOpen, onClose, apiBaseUrl, onAuthSuccess }) => {
             {/* Username for registration */}
             {!isLogin && (
               <div>
-                <label className="text-[10px] uppercase font-bold text-[#1a1a1a]/70 block mb-2">Username</label>
+                <label htmlFor="auth-username" className="text-[10px] uppercase font-bold text-[#1a1a1a]/70 block mb-2">Username</label>
                 <div className="relative">
                   <input
+                    id="auth-username"
+                    name="username"
                     type="text"
                     required
                     minLength={3}
@@ -212,9 +225,11 @@ export const AuthModal = ({ isOpen, onClose, apiBaseUrl, onAuthSuccess }) => {
 
             {/* Email */}
             <div>
-              <label className="text-[10px] uppercase font-bold text-[#1a1a1a]/70 block mb-2">Email Address</label>
+              <label htmlFor="auth-email" className="text-[10px] uppercase font-bold text-[#1a1a1a]/70 block mb-2">Email Address</label>
               <div className="relative">
                 <input
+                  id="auth-email"
+                  name="email"
                   type="email"
                   required
                   placeholder="name@novahub.com"
@@ -228,9 +243,11 @@ export const AuthModal = ({ isOpen, onClose, apiBaseUrl, onAuthSuccess }) => {
 
             {/* Password */}
             <div>
-              <label className="text-[10px] uppercase font-bold text-[#1a1a1a]/70 block mb-2">Password</label>
+              <label htmlFor="auth-password" className="text-[10px] uppercase font-bold text-[#1a1a1a]/70 block mb-2">Password</label>
               <div className="relative">
                 <input
+                  id="auth-password"
+                  name="password"
                   type="password"
                   required
                   minLength={4}
@@ -246,9 +263,11 @@ export const AuthModal = ({ isOpen, onClose, apiBaseUrl, onAuthSuccess }) => {
             {/* Access Role (Register only) */}
             {!isLogin && (
               <div>
-                <label className="text-[10px] uppercase font-bold text-[#1a1a1a]/70 block mb-2">Select Role</label>
+                <label htmlFor="auth-role" className="text-[10px] uppercase font-bold text-[#1a1a1a]/70 block mb-2">Select Role</label>
                 <div className="relative flex">
                   <select
+                    id="auth-role"
+                    name="role"
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     className="w-full bg-white border-[3px] border-[#1a1a1a] py-3 px-3 pl-10 text-sm font-bold text-[#1a1a1a] focus:bg-yellow-50 outline-none interactive-target appearance-none rounded-xl"

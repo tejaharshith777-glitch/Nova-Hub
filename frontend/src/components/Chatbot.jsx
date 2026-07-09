@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Chatbot = () => {
+const Chatbot = ({ apiBaseUrl }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { id: 1, text: "Hi! I'm the Nova Hub Assistant (Powered by Gemini 2.5 Flash). How can I help you set up your tournament today?", sender: 'ai' }
@@ -28,20 +28,22 @@ const Chatbot = () => {
     setInputValue('');
     setIsTyping(true);
 
-    try {
-      const res = await fetch('http://localhost:5000/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessageText })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setMessages(prev => [...prev, { id: Date.now() + 1, text: data.response, sender: 'ai' }]);
-        setIsTyping(false);
-        return;
+    if (apiBaseUrl) {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: userMessageText })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setMessages(prev => [...prev, { id: Date.now() + 1, text: data.response, sender: 'ai' }]);
+          setIsTyping(false);
+          return;
+        }
+      } catch (err) {
+        console.warn("Backend chat endpoint failed, running client-side simulation.");
       }
-    } catch (err) {
-      console.warn("Backend chat endpoint failed, running client-side simulation.");
     }
 
     // Client-side simulation fallback

@@ -21,8 +21,10 @@ export const TeamRosterForm = ({ tournament }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {[1, 2, 3, 4, 5, 6].map((num) => (
             <div key={num} className="flex flex-col gap-2">
-              <label className="text-[10px] font-bold uppercase opacity-80">Player {num} Name</label>
+              <label htmlFor={`player-${num}`} className="text-[10px] font-bold uppercase opacity-80">Player {num} Name</label>
               <input
+                id={`player-${num}`}
+                name={`player-${num}`}
                 type="text"
                 placeholder="Full Name"
                 className="w-full border-b-[3px] border-[#1a1a1a] bg-transparent outline-none py-1 font-mono text-sm font-bold focus:border-white transition-colors interactive-target placeholder-[#1a1a1a]/40"
@@ -32,14 +34,14 @@ export const TeamRosterForm = ({ tournament }) => {
         </div>
 
         <div className="mt-12 space-y-4 pt-8 border-t-[3px] border-[#1a1a1a]">
-          <label className="flex items-center gap-4 cursor-pointer group">
-            <input type="checkbox" className="w-5 h-5 accent-[#1a1a1a] border-[3px] border-[#1a1a1a]" />
+          <label htmlFor="verify-age" className="flex items-center gap-4 cursor-pointer group">
+            <input id="verify-age" name="verify-age" type="checkbox" className="w-5 h-5 accent-[#1a1a1a] border-[3px] border-[#1a1a1a]" />
             <span className="text-xs font-bold uppercase opacity-80 group-hover:opacity-100 transition-opacity">
               Verify all players are within age bounds
             </span>
           </label>
-          <label className="flex items-center gap-4 cursor-pointer group">
-            <input type="checkbox" className="w-5 h-5 accent-[#1a1a1a] border-[3px] border-[#1a1a1a]" />
+          <label htmlFor="accept-guidelines" className="flex items-center gap-4 cursor-pointer group">
+            <input id="accept-guidelines" name="accept-guidelines" type="checkbox" className="w-5 h-5 accent-[#1a1a1a] border-[3px] border-[#1a1a1a]" />
             <span className="text-xs font-bold uppercase opacity-80 group-hover:opacity-100 transition-opacity">
               Accept physical ground guidelines
             </span>

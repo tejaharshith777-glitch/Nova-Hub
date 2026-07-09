@@ -82,9 +82,9 @@ export const HostForm = ({ setCurrentPage }) => {
             <h3 className="text-2xl font-black uppercase border-b-2 border-[#1a1a1a] pb-2 inline-block">1. Core Details</h3>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Event Name *</label>
+              <label htmlFor="eventName" className="text-sm font-bold uppercase w-1/3">Event Name *</label>
               <div className="w-full md:w-2/3">
-                <input name="eventName" value={form.eventName} onChange={handleChange}
+                <input name="eventName" id="eventName" value={form.eventName} onChange={handleChange}
                   type="text" placeholder="e.g., Summer Cricket Clash"
                   className={`w-full border-b-[3px] bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target placeholder-[#1a1a1a]/40 ${errors.eventName ? 'border-red-500' : 'border-black'}`}
                 />
@@ -93,8 +93,8 @@ export const HostForm = ({ setCurrentPage }) => {
             </div>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Sport Category</label>
-              <select name="sport" value={form.sport} onChange={handleChange} className="w-full md:w-2/3 border-b-[3px] border-black bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target cursor-pointer">
+              <label htmlFor="sport" className="text-sm font-bold uppercase w-1/3">Sport Category</label>
+              <select name="sport" id="sport" value={form.sport} onChange={handleChange} className="w-full md:w-2/3 border-b-[3px] border-black bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target cursor-pointer">
                 <optgroup label="⚡ Physical Sports">
                   <option>Cricket</option>
                   <option>Football</option>
@@ -117,8 +117,8 @@ export const HostForm = ({ setCurrentPage }) => {
             </div>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Tournament Format</label>
-              <select name="format" value={form.format} onChange={handleChange} className="w-full md:w-2/3 border-b-[3px] border-black bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target cursor-pointer">
+              <label htmlFor="format" className="text-sm font-bold uppercase w-1/3">Tournament Format</label>
+              <select name="format" id="format" value={form.format} onChange={handleChange} className="w-full md:w-2/3 border-b-[3px] border-black bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target cursor-pointer">
                 <option>Single Elimination (Knockout)</option>
                 <option>Double Elimination</option>
                 <option>Round Robin (League)</option>
@@ -132,9 +132,9 @@ export const HostForm = ({ setCurrentPage }) => {
             <h3 className="text-2xl font-black uppercase border-b-2 border-[#1a1a1a] pb-2 inline-block">2. Time & Location</h3>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Exact Venue / Ground *</label>
+              <label htmlFor="venue" className="text-sm font-bold uppercase w-1/3">Exact Venue / Ground *</label>
               <div className="w-full md:w-2/3">
-                <input name="venue" value={form.venue} onChange={handleChange}
+                <input name="venue" id="venue" value={form.venue} onChange={handleChange}
                   type="text" placeholder="e.g., Central Park, Pitch B"
                   className={`w-full border-b-[3px] bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target placeholder-[#1a1a1a]/40 ${errors.venue ? 'border-red-500' : 'border-black'}`}
                 />
@@ -143,9 +143,9 @@ export const HostForm = ({ setCurrentPage }) => {
             </div>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Start Date *</label>
+              <label htmlFor="startDate" className="text-sm font-bold uppercase w-1/3">Start Date *</label>
               <div className="w-full md:w-2/3">
-                <input name="startDate" value={form.startDate} onChange={handleChange}
+                <input name="startDate" id="startDate" value={form.startDate} onChange={handleChange}
                   type="date"
                   className={`w-full border-b-[3px] bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target ${errors.startDate ? 'border-red-500' : 'border-black'}`}
                 />
@@ -154,8 +154,8 @@ export const HostForm = ({ setCurrentPage }) => {
             </div>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">End Date</label>
-              <input name="endDate" value={form.endDate} onChange={handleChange}
+              <label htmlFor="endDate" className="text-sm font-bold uppercase w-1/3">End Date</label>
+              <input name="endDate" id="endDate" value={form.endDate} onChange={handleChange}
                 type="date"
                 className="w-full md:w-2/3 border-b-[3px] border-black bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target"
               />
@@ -167,9 +167,9 @@ export const HostForm = ({ setCurrentPage }) => {
             <h3 className="text-2xl font-black uppercase border-b-2 border-[#1a1a1a] pb-2 inline-block">3. Slots & Economics</h3>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Max Entry Slots (Teams) *</label>
+              <label htmlFor="slots" className="text-sm font-bold uppercase w-1/3">Max Entry Slots (Teams) *</label>
               <div className="w-full md:w-2/3">
-                <input name="slots" value={form.slots} onChange={handleChange}
+                <input name="slots" id="slots" value={form.slots} onChange={handleChange}
                   type="number" placeholder="16"
                   className={`w-full border-b-[3px] bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target placeholder-[#1a1a1a]/40 ${errors.slots ? 'border-red-500' : 'border-black'}`}
                 />
@@ -178,10 +178,10 @@ export const HostForm = ({ setCurrentPage }) => {
             </div>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Entry Fee (Per Team)</label>
+              <label htmlFor="entryFee" className="text-sm font-bold uppercase w-1/3">Entry Fee (Per Team)</label>
               <div className="w-full md:w-2/3 flex items-baseline">
                 <span className="text-lg font-bold mr-2">₹</span>
-                <input name="entryFee" value={form.entryFee} onChange={handleChange}
+                <input name="entryFee" id="entryFee" value={form.entryFee} onChange={handleChange}
                   type="number" placeholder="500"
                   className="w-full border-b-[3px] border-black bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target placeholder-[#1a1a1a]/40"
                 />
@@ -189,10 +189,10 @@ export const HostForm = ({ setCurrentPage }) => {
             </div>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Total Prize Pool</label>
+              <label htmlFor="prizePool" className="text-sm font-bold uppercase w-1/3">Total Prize Pool</label>
               <div className="w-full md:w-2/3 flex items-baseline">
                 <span className="text-lg font-bold mr-2">₹</span>
-                <input name="prizePool" value={form.prizePool} onChange={handleChange}
+                <input name="prizePool" id="prizePool" value={form.prizePool} onChange={handleChange}
                   type="number" placeholder="10000"
                   className="w-full border-b-[3px] border-black bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target placeholder-[#1a1a1a]/40"
                 />
@@ -205,9 +205,9 @@ export const HostForm = ({ setCurrentPage }) => {
             <h3 className="text-2xl font-black uppercase border-b-2 border-[#1a1a1a] pb-2 inline-block">4. Operations</h3>
 
             <div className="flex flex-col md:flex-row md:items-baseline gap-4">
-              <label className="text-sm font-bold uppercase w-1/3">Organizer Contact No. *</label>
+              <label htmlFor="contact" className="text-sm font-bold uppercase w-1/3">Organizer Contact No. *</label>
               <div className="w-full md:w-2/3">
-                <input name="contact" value={form.contact} onChange={handleChange}
+                <input name="contact" id="contact" value={form.contact} onChange={handleChange}
                   type="text" placeholder="+91 9999999999"
                   className={`w-full border-b-[3px] bg-transparent outline-none py-2 font-mono text-lg font-bold focus:border-white transition-colors interactive-target placeholder-[#1a1a1a]/40 ${errors.contact ? 'border-red-500' : 'border-black'}`}
                 />
@@ -216,8 +216,8 @@ export const HostForm = ({ setCurrentPage }) => {
             </div>
 
             <div className="flex flex-col gap-4 pt-4">
-              <label className="text-sm font-bold uppercase">Tournament Rules & Guidelines</label>
-              <textarea name="rules" value={form.rules} onChange={handleChange}
+              <label htmlFor="rules" className="text-sm font-bold uppercase">Tournament Rules & Guidelines</label>
+              <textarea name="rules" id="rules" value={form.rules} onChange={handleChange}
                 placeholder="List equipment rules, referee decisions, reporting times, etc..."
                 rows="4"
                 className="w-full border-[3px] border-[#1a1a1a] bg-white outline-none p-4 font-mono text-sm font-bold focus:bg-[#baffc9] transition-colors interactive-target shadow-[4px_4px_0px_rgba(26,26,26,1)] resize-none"

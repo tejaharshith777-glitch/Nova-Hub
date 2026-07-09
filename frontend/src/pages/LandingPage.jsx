@@ -1094,8 +1094,10 @@ export const LandingPage = ({ onOpenAuth, user }) => {
                 {/* Name + Email row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                   <div>
-                    <label className="text-[10px] uppercase tracking-widest text-[#1a1a1a]/60 font-bold block mb-2">Your Name</label>
+                    <label htmlFor="contact-name" className="text-[10px] uppercase tracking-widest text-[#1a1a1a]/60 font-bold block mb-2">Your Name</label>
                     <input
+                      id="contact-name"
+                      name="name"
                       type="text"
                       required
                       placeholder="e.g. Arjun Mehta"
@@ -1103,8 +1105,10 @@ export const LandingPage = ({ onOpenAuth, user }) => {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] uppercase tracking-widest text-[#1a1a1a]/60 font-bold block mb-2">Email Address</label>
+                    <label htmlFor="contact-email" className="text-[10px] uppercase tracking-widest text-[#1a1a1a]/60 font-bold block mb-2">Email Address</label>
                     <input
+                      id="contact-email"
+                      name="email"
                       type="email"
                       required
                       placeholder="you@email.com"
@@ -1115,8 +1119,10 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
                 {/* Subject */}
                 <div className="mb-5">
-                  <label className="text-[10px] uppercase tracking-widest text-[#1a1a1a]/60 font-bold block mb-2">Subject / Topic</label>
+                  <label htmlFor="contact-subject" className="text-[10px] uppercase tracking-widest text-[#1a1a1a]/60 font-bold block mb-2">Subject / Topic</label>
                   <select
+                    id="contact-subject"
+                    name="subject"
                     className="w-full bg-white/50 border-b-2 border-[#1a1a1a]/30 focus:border-[#1a1a1a] py-3 text-sm font-mono text-[#1a1a1a] outline-none transition-colors appearance-none cursor-pointer"
                   >
                     <option value="">— Select a topic —</option>
@@ -1132,8 +1138,10 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
                 {/* Message */}
                 <div className="mb-8">
-                  <label className="text-[10px] uppercase tracking-widest text-[#1a1a1a]/60 font-bold block mb-2">Your Message</label>
+                  <label htmlFor="contact-message" className="text-[10px] uppercase tracking-widest text-[#1a1a1a]/60 font-bold block mb-2">Your Message</label>
                   <textarea
+                    id="contact-message"
+                    name="message"
                     required
                     rows={5}
                     placeholder="Describe your issue or question in detail..."
