@@ -306,16 +306,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card 7 - Free Fire */}
           <div onClick={() => navigate('/tournament/freefire')} className="border border-yellow-300/30 bg-gradient-to-br from-[#0a1a00] to-[#1a2e00] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/50 transition-colors cursor-pointer">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, #eab308 0%, transparent 60%)' }}></div>
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <div className="w-56 md:w-64 h-36 md:h-40 bg-[#0a1a00] border border-yellow-400/20 rounded-xl -rotate-[6deg] group-hover:-rotate-[10deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-12 flex flex-col p-3 gap-2">
-                <div className="flex gap-1"><div className="w-3 h-3 bg-yellow-400 rounded-full"></div><div className="flex-1 h-3 bg-yellow-400/20 rounded-full"></div></div>
-                <div className="flex gap-1 mt-2 flex-wrap">{Array.from({length:12}).map((_,i)=><div key={i} className="w-5 h-5 bg-yellow-400/20 rounded border border-yellow-400/10 text-[7px] text-yellow-400 flex items-center justify-center">{i+1}</div>)}</div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#eab308] rounded-2xl shadow-xl border-4 border-[#0a1a00] rotate-[15deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-all duration-500 absolute bottom-12 right-6 md:right-16 flex flex-col items-center justify-center text-[#1a1a1a] font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🔥</span>FF
-              </div>
-            </div>
+            <img 
+              src="/freefire_card.jpg" 
+              alt="Free Fire Masters" 
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a2e00] via-[#1a2e00]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Free Fire Masters</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">free fire, ranked, squads</span>
@@ -324,18 +321,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card 8 - Chess */}
           <div onClick={() => navigate('/tournament/chess')} className="border border-gray-300/30 bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-gray-400/50 transition-colors cursor-pointer">
-            <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'repeating-conic-gradient(#fff 0% 25%, #888 0% 50%)', backgroundSize: '28px 28px' }}></div>
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <div className="w-56 md:w-64 h-36 md:h-40 bg-[#1a1a1a] border border-white/10 rounded-xl rotate-[4deg] group-hover:rotate-[0deg] group-hover:scale-105 transition-all duration-500 absolute top-16 left-6 flex flex-col p-3 gap-2">
-                <div className="text-[10px] text-white/50 font-bold uppercase">Rating ELO</div>
-                <div className="text-3xl font-black text-white">2847</div>
-                <div className="text-[9px] text-green-400 font-bold">↑ +12 today</div>
-                <div className="mt-auto flex gap-1 text-lg">♔ ♕ ♖ ♗</div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-2xl shadow-xl border-4 border-[#1a1a1a] -rotate-[10deg] group-hover:-rotate-[15deg] group-hover:scale-110 transition-all duration-500 absolute bottom-10 right-8 md:right-20 flex flex-col items-center justify-center text-[#1a1a1a] font-black text-sm tracking-wider">
-                <span className="text-4xl mb-1">♟️</span>CHESS
-              </div>
-            </div>
+            <img 
+              src="/chess_card.png" 
+              alt="Online Chess League" 
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2d2d2d] via-[#2d2d2d]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Online Chess League</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">chess, elo, online blitz</span>
@@ -364,27 +356,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card R1 - Car Racing */}
           <div onClick={() => navigate('/tournament/car-racing')} className="border border-red-300/40 bg-gradient-to-br from-[#1a0000] to-[#2a0a0a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-red-400/70 transition-colors cursor-pointer">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 60% 30%, #ef4444 0%, transparent 60%)' }}></div>
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              {/* Dashboard mockup */}
-              <div className="w-52 md:w-60 h-32 md:h-36 bg-[#1a0000] border border-red-500/30 rounded-xl -rotate-[6deg] group-hover:-rotate-[10deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-8 flex flex-col p-3 gap-2">
-                <div className="flex justify-between text-[9px] text-red-400 font-bold">
-                  <span>🏆 LAP 3 / 5</span><span>TOP SPEED</span>
-                </div>
-                <div className="w-full h-1.5 bg-red-900 rounded-full overflow-hidden">
-                  <div className="w-3/4 h-full bg-red-500 rounded-full"></div>
-                </div>
-                <div className="text-2xl font-black text-red-300 mt-1">287 km/h</div>
-                <div className="mt-auto flex gap-1">
-                  {['P1','P2','P3','P4'].map((p,i) => (
-                    <div key={i} className="flex-1 h-5 bg-red-500/20 border border-red-500/20 rounded text-[7px] text-red-400 flex items-center justify-center font-bold">{p}</div>
-                  ))}
-                </div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#ef4444] rounded-2xl shadow-xl border-4 border-[#1a0000] rotate-[10deg] group-hover:rotate-[15deg] group-hover:scale-110 transition-all duration-500 absolute bottom-12 right-4 md:right-8 flex flex-col items-center justify-center text-white font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🚗</span>CAR
-              </div>
-            </div>
+            <img 
+              src="/veloce_card.png" 
+              alt="Veloce GP Series" 
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2a0a0a] via-[#2a0a0a]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Veloce GP Series</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">racing, car, time-trial</span>
@@ -393,25 +371,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card R2 - Bike Racing */}
           <div onClick={() => navigate('/tournament/bike-racing')} className="border border-orange-300/40 bg-gradient-to-br from-[#1a0a00] to-[#2a1400] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-orange-400/70 transition-colors cursor-pointer">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 40% 70%, #f97316 0%, transparent 60%)' }}></div>
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              {/* Speedometer mockup */}
-              <div className="w-52 md:w-60 h-32 md:h-36 bg-[#1a0a00] border border-orange-500/30 rounded-xl rotate-[5deg] group-hover:rotate-[2deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-8 flex flex-col p-3 gap-2">
-                <div className="flex justify-between text-[9px] text-orange-400 font-bold">
-                  <span>🏍️ MOTO GP</span><span>ROUND 2/4</span>
-                </div>
-                <div className="w-full h-1.5 bg-orange-900 rounded-full overflow-hidden">
-                  <div className="w-1/2 h-full bg-orange-500 rounded-full"></div>
-                </div>
-                <div className="text-2xl font-black text-orange-300 mt-1">195 km/h</div>
-                <div className="flex gap-2 text-[8px] text-orange-400 font-bold mt-auto">
-                  <span>🔥 LEANING ANGLE: 58°</span>
-                </div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#f97316] rounded-2xl shadow-xl border-4 border-[#1a0a00] -rotate-[12deg] group-hover:-rotate-[16deg] group-hover:scale-110 transition-all duration-500 absolute bottom-12 right-4 md:right-8 flex flex-col items-center justify-center text-white font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🏍️</span>MOTO
-              </div>
-            </div>
+            <img 
+              src="/motogp_card.png" 
+              alt="Moto GP Pro Tour" 
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2a1400] via-[#2a1400]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Moto GP Pro Tour</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">racing, bike, online</span>
@@ -420,23 +386,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card R3 - Cycle Racing */}
           <div onClick={() => navigate('/tournament/cycle-racing')} className="border border-green-300/40 bg-gradient-to-br from-[#001a08] to-[#002a10] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-green-400/70 transition-colors cursor-pointer">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 70% 50%, #22c55e 0%, transparent 60%)' }}></div>
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              {/* GPS / velodrome mockup */}
-              <div className="w-52 md:w-60 h-32 md:h-36 bg-[#001a08] border border-green-500/30 rounded-xl -rotate-[5deg] group-hover:-rotate-[8deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-8 flex flex-col p-3 gap-2">
-                <div className="text-[9px] text-green-400 font-bold uppercase">🌿 GPS TRACKING LIVE</div>
-                <div className="w-full h-1.5 bg-green-900 rounded-full overflow-hidden">
-                  <div className="w-2/3 h-full bg-green-500 rounded-full"></div>
-                </div>
-                <div className="text-2xl font-black text-green-300 mt-1">54.2 km/h</div>
-                <div className="flex justify-between text-[8px] text-green-400 font-bold mt-auto">
-                  <span>⛑️ HELMET OK</span><span>KM 18/35</span>
-                </div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#22c55e] rounded-2xl shadow-xl border-4 border-[#001a08] rotate-[15deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-all duration-500 absolute bottom-12 right-4 md:right-8 flex flex-col items-center justify-center text-[#1a1a1a] font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🚴</span>CYCLE
-              </div>
-            </div>
+            <img 
+              src="/cycle_card.jpg" 
+              alt="Tour de Nova Classic" 
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#002a10] via-[#002a10]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Tour de Nova Classic</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">cycle, gps, velodrome</span>
