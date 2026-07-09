@@ -296,6 +296,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
             <label htmlFor="teamName" className="text-[10px] font-bold uppercase opacity-80">Clan Team Name *</label>
             <input
               id="teamName"
+              name="teamName"
               type="text"
               required
               placeholder="e.g. Bangalore Strikers"
@@ -308,6 +309,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
             <label htmlFor="captainName" className="text-[10px] font-bold uppercase opacity-80">Captain Name *</label>
             <input
               id="captainName"
+              name="captainName"
               type="text"
               required
               placeholder="e.g. Dev R."
@@ -320,6 +322,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
             <label htmlFor="captainEmail" className="text-[10px] font-bold uppercase opacity-80">Captain Email *</label>
             <input
               id="captainEmail"
+              name="captainEmail"
               type="email"
               required
               placeholder="e.g. cap@novahub.com"
@@ -341,8 +344,10 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
                 </span>
                 
                 <div className="flex flex-col gap-1 mt-1.5">
-                  <label className="text-[9px] font-black uppercase opacity-60">Player Name</label>
+                  <label htmlFor={`member-name-${idx}`} className="text-[9px] font-black uppercase opacity-60">Player Name</label>
                   <input
+                    id={`member-name-${idx}`}
+                    name={`memberName-${idx}`}
                     type="text"
                     required
                     placeholder="Full Name"
@@ -353,10 +358,12 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
                 </div>
 
                 <div className="flex flex-col gap-1 mt-1">
-                  <label className="text-[9px] font-black uppercase opacity-60">
+                  <label htmlFor={`member-gameId-${idx}`} className="text-[9px] font-black uppercase opacity-60">
                     {isEsports ? 'Game ID / Handle' : 'Player Card ID / Roll'}
                   </label>
                   <input
+                    id={`member-gameId-${idx}`}
+                    name={`memberGameId-${idx}`}
                     type="text"
                     required
                     placeholder="e.g. Gamer#1337"
@@ -372,8 +379,10 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
 
         {/* GUIDELINES VERIFICATION */}
         <div className="mt-8 space-y-4 pt-6 border-t-[3px] border-black/10">
-          <label className="flex items-center gap-4 cursor-pointer group">
+          <label htmlFor="guidelines-checkbox" className="flex items-center gap-4 cursor-pointer group">
             <input 
+              id="guidelines-checkbox"
+              name="rulesAccepted"
               type="checkbox" 
               checked={rulesAccepted}
               onChange={(e) => setRulesAccepted(e.target.checked)}

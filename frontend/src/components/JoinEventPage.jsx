@@ -198,6 +198,8 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [platformFilter, setPlatformFilter] = useState('All');
+  const [customLocationSearch, setCustomLocationSearch] = useState('');
+  const [isSearchingLocation, setIsSearchingLocation] = useState(false);
   
   // Coordinates & Location States
   const [coords, setCoords] = useState({ latitude: null, longitude: null });
@@ -378,6 +380,41 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
       setLocationName('Nallapadu, Guntur, Andhra Pradesh (Manual Override)');
     } else if (city === 'GPS') {
       detectLocation();
+    }
+  };
+
+  const handleCustomLocationSearch = async (e) => {
+    e.preventDefault();
+    if (!customLocationSearch.trim()) return;
+    setIsSearchingLocation(true);
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(customLocationSearch)}&limit=1`;
+      const res = await fetch(url, {
+        headers: {
+          'Accept-Language': 'en',
+          'User-Agent': 'NovaHub-Location-Search/1.0'
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+          const displayName = data[0].display_name;
+          const shortName = displayName.split(',').slice(0, 2).join(',').trim();
+          setCoords({ latitude: lat, longitude: lon });
+          setLocationMethod('Typed');
+          setLocationName(`${shortName} (Manual Search)`);
+          triggerInAppToast('Radar Switched', `Centering radar matches on: ${shortName}`);
+        } else {
+          alert('Location not found. Try entering a city or district name.');
+        }
+      }
+    } catch (err) {
+      console.error('Location search failed:', err);
+      alert('Network error querying location database.');
+    } finally {
+      setIsSearchingLocation(false);
     }
   };
 
@@ -613,6 +650,8 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
             </div>
             <div className="flex items-center gap-4 mt-2">
               <input 
+                id="proximity-radius-range"
+                name="proximityRadius"
                 type="range"
                 min="10"
                 max="2000"
@@ -622,8 +661,10 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
                 onChange={(e) => setRadius(parseInt(e.target.value))}
                 className="w-full h-2 bg-white border border-[#1a1a1a] rounded-lg appearance-none cursor-pointer accent-[#1a1a1a] disabled:opacity-40"
               />
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-bold uppercase select-none whitespace-nowrap">
+              <label htmlFor="show-all-checkbox" className="flex items-center gap-2 cursor-pointer text-xs font-bold uppercase select-none whitespace-nowrap">
                 <input 
+                  id="show-all-checkbox"
+                  name="showAllPhysical"
                   type="checkbox"
                   checked={showAllPhysical}
                   onChange={(e) => setShowAllPhysical(e.target.checked)}
@@ -649,6 +690,27 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
             </span>
           </div>
         </div>
+
+        {/* Custom Location Search Form */}
+        <form onSubmit={handleCustomLocationSearch} className="w-full bg-white border-[3px] border-[#1a1a1a] p-3 rounded-xl shadow-[4px_4px_0px_rgba(26,26,26,1)] flex items-center gap-3 mt-2">
+          <MapPin className="w-5 h-5 text-red-500 flex-shrink-0" />
+          <input
+            id="location-search-input"
+            name="locationSearch"
+            type="text"
+            placeholder="Type any location (e.g. Hyderabad, Kolkata, Chennai...)"
+            value={customLocationSearch}
+            onChange={(e) => setCustomLocationSearch(e.target.value)}
+            className="w-full bg-transparent border-none outline-none font-mono text-xs font-bold placeholder-[#1a1a1a]/40 py-1"
+          />
+          <button
+            type="submit"
+            disabled={isSearchingLocation}
+            className="bg-[#fcebb6] hover:bg-yellow-200 border-2 border-black text-[10px] font-bold uppercase py-1.5 px-3.5 shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)] flex-shrink-0 whitespace-nowrap active:translate-y-0.5 active:shadow-none transition-all"
+          >
+            {isSearchingLocation ? 'Searching...' : 'Set Location'}
+          </button>
+        </form>
       </div>
 
       {/* FILTER SEARCH TIMELINE BAR & PLATFORM FILTER */}
@@ -656,6 +718,8 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
         <div className="flex-1 flex items-center gap-3">
           <Search className="w-5 h-5 text-[#1a1a1a]/60" />
           <input 
+            id="search-matches-input"
+            name="searchMatches"
             type="text" 
             placeholder="Search matches, games, regions, or physical grounds..."
             value={searchTerm}
@@ -666,6 +730,8 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
         <div className="border-t-2 md:border-t-0 md:border-l-2 border-[#1a1a1a]/15 pt-3 md:pt-0 md:pl-4 flex items-center gap-2">
           <span className="text-xs font-black uppercase whitespace-nowrap">Platform:</span>
           <select
+            id="platform-filter-select"
+            name="platformFilter"
             value={platformFilter}
             onChange={(e) => setPlatformFilter(e.target.value)}
             className="bg-transparent border-b-[2px] border-black outline-none font-mono text-xs font-bold interactive-target cursor-pointer"
