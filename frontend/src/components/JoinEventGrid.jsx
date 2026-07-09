@@ -8,8 +8,8 @@ export const JoinEventGrid = ({ tournaments = [], user, onOpenRegistration }) =>
   const [sportFilter, setSportFilter] = useState('All');
 
   const filtered = tournaments.filter(t => {
-    // Filter physical sports category only
-    if (t.category !== 'sports') return false;
+    // Filter physical sports and racing categories
+    if (t.category !== 'sports' && t.category !== 'racing') return false;
 
     const matchesSearch = t.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           t.gameName.toLowerCase().includes(searchTerm.toLowerCase());

@@ -56,6 +56,72 @@ const localFallbackTournaments = [
     registeredTeams: []
   },
   {
+    _id: 'mock-t-guntur-cycle',
+    title: 'Guntur Cycling Championship',
+    category: 'racing',
+    gameName: 'Cycle Racing',
+    rules: 'Bring your own helmets. Safety gear is mandatory.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Nallapadu Road Velodrome, Guntur', 
+      pinCode: '522005', 
+      stadiumHall: 'Track A', 
+      latitude: 16.3067, 
+      longitude: 80.4365 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 15000,
+    entryFee: 100,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-guntur-bike',
+    title: 'Guntur Bike GP',
+    category: 'racing',
+    gameName: 'Bike Racing',
+    rules: 'Pro bike licenses required. Proper protective suits mandatory.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Nallapadu Road Circuit, Guntur', 
+      pinCode: '522005', 
+      stadiumHall: 'Grid 1', 
+      latitude: 16.3067, 
+      longitude: 80.4365 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 25000,
+    entryFee: 200,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-guntur-car',
+    title: 'Guntur Car Racing Cup',
+    category: 'racing',
+    gameName: 'Car Racing',
+    rules: 'Roll cage and harness required. Racing driver licenses checked.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Guntur Speedway, Nallapadu, Guntur', 
+      pinCode: '522005', 
+      stadiumHall: 'Main Oval', 
+      latitude: 16.3067, 
+      longitude: 80.4365 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 50000,
+    entryFee: 500,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
     _id: 'mock-t-3',
     title: 'Bangalore Cricket Cup',
     category: 'sports',
@@ -100,6 +166,50 @@ const localFallbackTournaments = [
     registeredTeams: []
   },
   {
+    _id: 'mock-t-blr-bike',
+    title: 'Bangalore Bike Thrills',
+    category: 'racing',
+    gameName: 'Bike Racing',
+    rules: '150cc and above. Full leather suits required.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Kanakapura Dirt Track, Bangalore', 
+      pinCode: '560062', 
+      stadiumHall: 'Arena Entrance 2', 
+      latitude: 12.9784, 
+      longitude: 77.5960 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 30000,
+    entryFee: 150,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-blr-car',
+    title: 'Bangalore Car Showdown',
+    category: 'racing',
+    gameName: 'Car Racing',
+    rules: 'Street legal tuner class. Safe tracking enabled.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Nice Road Circuit, Bangalore', 
+      pinCode: '560001', 
+      stadiumHall: 'Toll plaza A', 
+      latitude: 12.9784, 
+      longitude: 77.5960 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 40000,
+    entryFee: 250,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
     _id: 'mock-t-7',
     title: 'Mumbai Football Arena Derby',
     category: 'sports',
@@ -122,6 +232,72 @@ const localFallbackTournaments = [
     registeredTeams: []
   },
   {
+    _id: 'mock-t-mumbai-cycle',
+    title: 'Mumbai Cycling Derby',
+    category: 'racing',
+    gameName: 'Cycle Racing',
+    rules: 'Helmets and chest protectors mandatory. Clean lines.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Marine Drive Cycling Track, Mumbai', 
+      pinCode: '400021', 
+      stadiumHall: 'Gate 2', 
+      latitude: 19.0760, 
+      longitude: 72.8777 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 25000,
+    entryFee: 120,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-mumbai-bike',
+    title: 'Mumbai Bike Showdown',
+    category: 'racing',
+    gameName: 'Bike Racing',
+    rules: 'Professional category. Strict compliance with emissions.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Mumbai Karting & Motor Track, Mumbai', 
+      pinCode: '400053', 
+      stadiumHall: 'Bike Pit A', 
+      latitude: 19.0760, 
+      longitude: 72.8777 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 35000,
+    entryFee: 200,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-mumbai-car',
+    title: 'Mumbai Car Racing League',
+    category: 'racing',
+    gameName: 'Car Racing',
+    rules: 'Closed road circuit. Medical check mandatory.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Aarey Speedway, Goregaon, Mumbai', 
+      pinCode: '400065', 
+      stadiumHall: 'Main Paddock', 
+      latitude: 19.0760, 
+      longitude: 72.8777 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 60000,
+    entryFee: 400,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
     _id: 'mock-t-8',
     title: 'Delhi Basketball Championship',
     category: 'sports',
@@ -140,6 +316,72 @@ const localFallbackTournaments = [
     teamSize: 5,
     prizePool: 30000,
     entryFee: 200,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-delhi-cycle',
+    title: 'Delhi Cycling Criterium',
+    category: 'racing',
+    gameName: 'Cycle Racing',
+    rules: 'Road race setup. Helmets and active lights mandatory.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'India Gate outer ring track, Delhi', 
+      pinCode: '110001', 
+      stadiumHall: 'Checkpoint Alpha', 
+      latitude: 28.6139, 
+      longitude: 77.2090 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 22000,
+    entryFee: 100,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-delhi-bike',
+    title: 'Delhi Bike GP',
+    category: 'racing',
+    gameName: 'Bike Racing',
+    rules: 'FIM superbike guidelines. Medical team on site.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Buddh International Circuit, Greater Noida', 
+      pinCode: '201310', 
+      stadiumHall: 'Pitlane 14', 
+      latitude: 28.6139, 
+      longitude: 77.2090 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 45000,
+    entryFee: 220,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-delhi-car',
+    title: 'Delhi Car Grand Prix',
+    category: 'racing',
+    gameName: 'Car Racing',
+    rules: 'Formula street class cars. High speed tracking enabled.',
+    venueType: 'offline',
+    venueDetails: { 
+      physicalAddress: 'Buddh International Circuit, Greater Noida', 
+      pinCode: '201310', 
+      stadiumHall: 'Garage 7', 
+      latitude: 28.6139, 
+      longitude: 77.2090 
+    },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 80000,
+    entryFee: 500,
     status: 'open',
     registeredTeams: []
   },

@@ -38,6 +38,13 @@ export const HostForm = ({ setCurrentPage, apiBaseUrl, user }) => {
     'Clash Royale'
   ].includes(form.sport);
 
+  // Determine if selected sport is a physical/offline racing sport
+  const isRacing = [
+    'Cycle Racing',
+    'Bike Racing',
+    'Car Racing'
+  ].includes(form.sport);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
@@ -95,7 +102,7 @@ export const HostForm = ({ setCurrentPage, apiBaseUrl, user }) => {
 
     const payload = {
       title: form.eventName,
-      category: isEsports ? 'esports' : 'sports',
+      category: isEsports ? 'esports' : isRacing ? 'racing' : 'sports',
       gameName: form.sport,
       rules: form.rules,
       venueType: isEsports ? 'online' : 'offline',
@@ -113,7 +120,7 @@ export const HostForm = ({ setCurrentPage, apiBaseUrl, user }) => {
               form.format === 'Double Elimination' ? 'double-elimination' :
               form.format === 'Round Robin (League)' ? 'round-robin' : 'battle-royale-matrix',
       maxTeams: parseInt(form.slots),
-      teamSize: form.sport === 'Cricket' ? 11 : form.sport === 'Football' ? 11 : form.sport === 'Basketball' ? 5 : form.sport === 'Badminton' ? 2 : 5,
+      teamSize: isRacing ? 1 : (form.sport === 'Cricket' ? 11 : form.sport === 'Football' ? 11 : form.sport === 'Basketball' ? 5 : form.sport === 'Badminton' ? 2 : 5),
       prizePool: parseFloat(form.prizePool) || 0,
       entryFee: parseFloat(form.entryFee) || 0,
       prizeDistribution: {
@@ -240,6 +247,11 @@ export const HostForm = ({ setCurrentPage, apiBaseUrl, user }) => {
                   <option>Tennis</option>
                   <option>Volleyball</option>
                   <option>Kabaddi</option>
+                </optgroup>
+                <optgroup label="🏎️ Racing Sports">
+                  <option>Cycle Racing</option>
+                  <option>Bike Racing</option>
+                  <option>Car Racing</option>
                 </optgroup>
                 <optgroup label="🎮 Online / Esports">
                   <option>Valorant</option>

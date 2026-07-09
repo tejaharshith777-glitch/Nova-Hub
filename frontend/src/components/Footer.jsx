@@ -31,17 +31,17 @@ const Footer = () => {
           <div className="w-full md:w-[40%] mt-12 md:mt-0 flex justify-center md:justify-end relative z-10">
             {/* ASCII / Emoji Art character resembling the computer with sunglasses */}
             <div className="relative group cursor-pointer">
-              <div className="text-[140px] md:text-[200px] leading-none drop-shadow-2xl transition-transform duration-300 group-hover:scale-105">
+              <div className="text-[140px] md:text-[200px] leading-none drop-shadow-2xl transition-transform duration-300 group-hover:scale-105 animate-float-monitor">
                 🖥️
               </div>
-              <div className="absolute top-1/4 left-[15%] text-7xl md:text-8xl rotate-12 drop-shadow-xl transition-transform duration-300 group-hover:rotate-[20deg] group-hover:scale-110">
+              <div className="absolute top-1/4 left-[15%] text-7xl md:text-8xl rotate-12 drop-shadow-xl transition-transform duration-300 group-hover:rotate-[20deg] group-hover:scale-110 animate-wiggle-sunglasses">
                 😎
               </div>
-              <div className="absolute -top-4 -right-4 text-6xl md:text-8xl -rotate-12 drop-shadow-xl transition-transform duration-300 group-hover:-rotate-[20deg] group-hover:-translate-y-2">
+              <div className="absolute -top-4 -right-4 text-6xl md:text-8xl -rotate-12 drop-shadow-xl transition-transform duration-300 group-hover:-rotate-[20deg] group-hover:-translate-y-2 animate-float-cocktail">
                 🍸
               </div>
               {/* Arm / Hands simulation */}
-              <div className="absolute -bottom-4 -left-8 text-6xl rotate-45 drop-shadow-lg">
+              <div className="absolute -bottom-4 -left-8 text-6xl rotate-45 drop-shadow-lg animate-wave-hand">
                 👋
               </div>
             </div>

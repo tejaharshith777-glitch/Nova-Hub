@@ -102,3 +102,60 @@
 @media (max-width: 480px) {
   html { font-size: 14px; }
 }
+
+/* ─── Footer Emoji Animations ────────────────────────────────────── */
+@keyframes floatMonitor {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+@keyframes wiggleSunglasses {
+  0%, 100% {
+    transform: rotate(12deg) translateY(0) scale(1);
+  }
+  50% {
+    transform: rotate(16deg) translateY(-2px) scale(1.05);
+  }
+}
+
+@keyframes floatCocktail {
+  0%, 100% {
+    transform: rotate(-12deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-18deg) translateY(-5px);
+  }
+}
+
+@keyframes waveHand {
+  0%, 100% {
+    transform: rotate(45deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+}
+
+.animate-float-monitor {
+  animation: floatMonitor 4s ease-in-out infinite;
+}
+
+.animate-wiggle-sunglasses {
+  animation: wiggleSunglasses 3s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.animate-float-cocktail {
+  animation: floatCocktail 3.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.animate-wave-hand {
+  animation: waveHand 1.5s ease-in-out infinite;
+  transform-origin: bottom right;
+}
+
