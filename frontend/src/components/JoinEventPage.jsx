@@ -251,18 +251,33 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
           console.warn('Geolocation access failed/denied, falling back to IP detection.', error);
           setLocationName('GPS denied. Querying IP location...');
           try {
-            const ipRes = await fetch('https://ipapi.co/json/');
+            // Query IPStack with user provided key
+            const ipRes = await fetch('http://api.ipstack.com/check?access_key=16b60da831def3a03750350c4db9b742');
             if (ipRes.ok) {
               const ipData = await ipRes.json();
               if (ipData.latitude && ipData.longitude) {
                 setCoords({ latitude: ipData.latitude, longitude: ipData.longitude });
-                setLocationMethod('IP');
-                setLocationName(`${ipData.city || 'Unknown City'}, ${ipData.region || 'India'} (IP Fallback)`);
+                setLocationMethod('IP (ipstack)');
+                setLocationName(`${ipData.city || 'Unknown City'}, ${ipData.region_name || 'India'} (IP Fallback)`);
                 return;
               }
             }
-          } catch (ipErr) {
-            console.error('IP location API failed:', ipErr);
+          } catch (ipstackErr) {
+            console.warn('IPStack blocked (mixed content or offline), trying HTTPS ipapi...', ipstackErr);
+            try {
+              const ipRes = await fetch('https://ipapi.co/json/');
+              if (ipRes.ok) {
+                const ipData = await ipRes.json();
+                if (ipData.latitude && ipData.longitude) {
+                  setCoords({ latitude: ipData.latitude, longitude: ipData.longitude });
+                  setLocationMethod('IP');
+                  setLocationName(`${ipData.city || 'Unknown City'}, ${ipData.region || 'India'} (IP Fallback)`);
+                  return;
+                }
+              }
+            } catch (ipapiErr) {
+              console.error('All IP location lookups failed:', ipapiErr);
+            }
           }
           // Default Fallback: Bangalore coordinates
           setCoords({ latitude: 12.9784, longitude: 77.5960 });
