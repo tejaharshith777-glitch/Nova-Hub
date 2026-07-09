@@ -197,17 +197,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           
           {/* Card 1 - Cricket */}
           <div onClick={() => navigate('/tournament/cricket')} className="border border-green-300/30 bg-gradient-to-br from-[#112615] to-[#09140b] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-green-400/50 transition-colors cursor-pointer">
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <div className="w-56 md:w-64 h-36 md:h-40 bg-[#2d3a2b] rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.2)] border border-white/10 -rotate-[8deg] group-hover:-rotate-[12deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-12 flex flex-col p-4">
-                <div className="w-1/3 h-2 bg-white/30 rounded-full mb-3"></div>
-                <div className="w-full h-1 bg-white/10 rounded-full mb-1.5"></div>
-                <div className="w-4/5 h-1 bg-white/10 rounded-full mb-4"></div>
-                <div className="w-full h-16 bg-white/5 rounded-lg mt-auto border border-white/10 flex items-center justify-center"><span className="text-2xl opacity-50">🏆</span></div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#e86c3f] rounded-2xl shadow-xl border-4 border-[#c4e4e3] rotate-[10deg] group-hover:rotate-[15deg] group-hover:scale-110 transition-all duration-500 absolute bottom-12 right-6 md:right-16 flex flex-col items-center justify-center text-white font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🏏</span>CRICKET
-              </div>
-            </div>
+            <img 
+              src="/cricket_card.jpg" 
+              alt="Summer Cricket Cup" 
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#09140b] via-[#09140b]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Summer Cricket Cup</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">cricket, league, local</span>
@@ -231,19 +227,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card 3 - Badminton */}
           <div onClick={() => navigate('/tournament/badminton')} className="border border-yellow-300/30 bg-gradient-to-br from-[#261f08] to-[#120f04] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/50 transition-colors cursor-pointer">
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <div className="w-56 md:w-64 h-36 md:h-40 bg-white rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-[#1a1a1a]/10 -rotate-[6deg] group-hover:-rotate-[10deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-12 flex flex-col p-4 items-center justify-center">
-                <div className="flex gap-4 items-end mb-4">
-                  <div className="w-8 h-12 bg-gray-200 rounded-sm"></div>
-                  <div className="w-8 h-16 bg-gray-300 rounded-sm"></div>
-                  <div className="w-8 h-20 bg-[#ffb800] rounded-sm"></div>
-                </div>
-                <div className="w-1/2 h-1 bg-gray-200 rounded-full"></div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#ffb800] rounded-2xl shadow-xl border-4 border-[#c4e4e3] rotate-[15deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-all duration-500 absolute bottom-12 right-6 md:right-16 flex flex-col items-center justify-center text-[#1a1a1a] font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🏸</span>BADMIN
-              </div>
-            </div>
+            <img 
+              src="/badminton_card.png" 
+              alt="State Badminton" 
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#120f04] via-[#120f04]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">State Badminton</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">badminton, brackets, pro</span>
@@ -252,18 +242,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card 4 - Basketball */}
           <div onClick={() => navigate('/tournament/hoops')} className="border border-cyan-300/30 bg-gradient-to-br from-[#05202e] to-[#021017] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-cyan-400/50 transition-colors cursor-pointer">
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <div className="w-56 md:w-64 h-36 md:h-40 bg-[#f4f4f5] rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-[#1a1a1a]/10 rotate-[4deg] group-hover:rotate-[0deg] group-hover:scale-105 transition-all duration-500 absolute top-16 left-6 flex flex-row p-3 gap-2">
-                <div className="w-1/3 bg-white rounded shadow-sm border border-gray-100 h-full"></div>
-                <div className="w-2/3 bg-white rounded shadow-sm border border-gray-100 h-full flex flex-col p-2 gap-2">
-                  <div className="w-full h-8 bg-gray-100 rounded-sm rounded-tr-3xl"></div>
-                  <div className="w-full h-full bg-[#00b4d8]/20 rounded-sm"></div>
-                </div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#00b4d8] rounded-2xl shadow-xl border-4 border-[#c4e4e3] -rotate-[10deg] group-hover:-rotate-[15deg] group-hover:scale-110 transition-all duration-500 absolute bottom-10 right-8 md:right-20 flex flex-col items-center justify-center text-white font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🏀</span>HOOPS
-              </div>
-            </div>
+            <img 
+              src="/basketball_card.png" 
+              alt="Downtown Basketball" 
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#021017] via-[#021017]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Downtown Basketball</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">hoops, groups, local</span>
@@ -291,17 +276,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card 5 - Valorant */}
           <div onClick={() => navigate('/tournament/valorant')} className="border border-purple-300/50 bg-gradient-to-br from-[#0f0f1a] to-[#1a0a2a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-purple-400/70 transition-colors cursor-pointer">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 70% 30%, #ff4655 0%, transparent 60%)' }}></div>
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <div className="w-56 md:w-64 h-36 md:h-40 bg-[#0f0f1a] border border-[#ff4655]/30 rounded-xl -rotate-[8deg] group-hover:-rotate-[12deg] group-hover:scale-105 transition-all duration-500 absolute top-12 left-4 md:left-12 flex flex-col p-4 gap-2">
-                <div className="w-1/2 h-1.5 bg-[#ff4655]/60 rounded-full"></div>
-                <div className="flex gap-1 mt-2"><div className="w-6 h-6 bg-[#ff4655]/30 rounded border border-[#ff4655]/20"></div><div className="w-6 h-6 bg-blue-500/30 rounded border border-blue-500/20"></div><div className="w-6 h-6 bg-green-500/30 rounded border border-green-500/20"></div></div>
-                <div className="mt-auto w-full h-10 bg-[#ff4655]/10 rounded border border-[#ff4655]/20 flex items-center justify-center text-[#ff4655] text-xs font-bold">RADIANT</div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#ff4655] rounded-2xl shadow-xl border-4 border-[#0f0f1a] rotate-[10deg] group-hover:rotate-[15deg] group-hover:scale-110 transition-all duration-500 absolute bottom-12 right-6 md:right-16 flex flex-col items-center justify-center text-white font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🎯</span>VALO
-              </div>
-            </div>
+            <img 
+              src="/valorant_card.png" 
+              alt="Valorant Showdown" 
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a0a2a] via-[#1a0a2a]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Valorant Showdown</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">esports, 5v5, online</span>
@@ -310,17 +291,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card 6 - BGMI */}
           <div onClick={() => navigate('/tournament/bgmi')} className="border border-orange-300/30 bg-gradient-to-br from-[#1a1008] to-[#2a1800] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-orange-400/50 transition-colors cursor-pointer">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 30% 70%, #f97316 0%, transparent 60%)' }}></div>
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <div className="w-56 md:w-64 h-36 md:h-40 bg-[#1a1008] border border-orange-500/20 rounded-xl rotate-[5deg] group-hover:rotate-[2deg] group-hover:scale-105 transition-all duration-500 absolute top-16 left-6 flex flex-col p-3 gap-2">
-                <div className="w-full h-2 bg-orange-500/40 rounded-full"></div>
-                <div className="flex gap-2 mt-1"><div className="w-10 h-8 bg-orange-400/20 rounded text-[8px] text-orange-300 flex items-center justify-center font-bold">ZONE</div><div className="flex-1 h-8 bg-orange-400/10 rounded"></div></div>
-                <div className="flex justify-between text-[9px] text-orange-400 font-bold mt-auto"><span>🏆 #1</span><span>100 players</span></div>
-              </div>
-              <div className="w-24 h-24 md:w-28 md:h-28 bg-[#f97316] rounded-2xl shadow-xl border-4 border-[#1a1008] -rotate-[12deg] group-hover:-rotate-[16deg] group-hover:scale-110 transition-all duration-500 absolute bottom-10 right-8 md:right-20 flex flex-col items-center justify-center text-white font-black text-sm tracking-wider">
-                <span className="text-3xl mb-1">🔫</span>BGMI
-              </div>
-            </div>
+            <img 
+              src="/pubg_card.png" 
+              alt="BGMI Battlegrounds" 
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2a1800] via-[#2a1800]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">BGMI Battlegrounds</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">battle royale, squads, online</span>
