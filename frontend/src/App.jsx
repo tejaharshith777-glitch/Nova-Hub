@@ -10,6 +10,7 @@ import VirtualCursor from './components/VirtualCursor';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
+import TournamentRadar from './components/TournamentRadar';
 
 // Detect query parameters inside router to auto-open Sign Up / Sign In modal
 const AuthQueryHandler = ({ setIsAuthOpen }) => {
@@ -162,6 +163,7 @@ export const App = () => {
               }
             />
             <Route path="/tournament/:id" element={<TournamentDetails user={user} />} />
+            <Route path="/radar" element={<TournamentRadar />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
