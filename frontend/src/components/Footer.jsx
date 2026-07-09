@@ -5,8 +5,8 @@ const Footer = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="py-24 bg-white relative z-10 border-t-[3px] border-[#1a1a1a] font-mono select-none">
-      <div className="max-w-[1400px] mx-auto px-8 flex flex-col xl:flex-row justify-between items-start xl:items-stretch gap-12">
+    <footer className="pt-24 pb-0 bg-white relative z-10 border-t-[3px] border-[#1a1a1a] font-mono select-none">
+      <div className="max-w-[1400px] mx-auto px-8 flex flex-col xl:flex-row justify-between items-start xl:items-stretch gap-12 mb-16">
         
         {/* Light Blue Banner */}
         <div className="w-full xl:w-[75%] bg-[#bde3fb] rounded-[2rem] p-10 md:p-16 flex flex-col md:flex-row justify-between items-center relative overflow-hidden shadow-[8px_8px_0px_rgba(26,26,26,1)] border-[3px] border-[#1a1a1a]">
@@ -69,6 +69,13 @@ const Footer = () => {
           </div>
         </div>
 
+      </div>
+
+      {/* Giant Typography Wordmark at the very bottom */}
+      <div className="w-full bg-[#121212] border-t-[3px] border-[#1a1a1a] py-12 md:py-20 overflow-hidden flex items-center justify-center">
+        <h1 className="text-[14vw] font-black tracking-tighter text-[#f7f5f0] uppercase leading-none select-none font-display text-center transition-all duration-300 hover:text-yellow-400">
+          NOVA HUB
+        </h1>
       </div>
     </footer>
   );
