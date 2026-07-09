@@ -200,7 +200,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             <img 
               src="/cricket_card.jpg" 
               alt="Summer Cricket Cup" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
             />
             {/* Gradient Overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#09140b] via-[#09140b]/20 to-transparent pointer-events-none" />
@@ -245,7 +245,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             <img 
               src="/basketball_card.png" 
               alt="Downtown Basketball" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
             />
             {/* Gradient Overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#021017] via-[#021017]/20 to-transparent pointer-events-none" />
@@ -279,7 +279,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             <img 
               src="/valorant_card.png" 
               alt="Valorant Showdown" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
             />
             {/* Gradient Overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#1a0a2a] via-[#1a0a2a]/20 to-transparent pointer-events-none" />
@@ -294,7 +294,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             <img 
               src="/pubg_card.png" 
               alt="BGMI Battlegrounds" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
             />
             {/* Gradient Overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#2a1800] via-[#2a1800]/20 to-transparent pointer-events-none" />
