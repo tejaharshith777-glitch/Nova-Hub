@@ -216,13 +216,13 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           {/* Card 2 - Football */}
           <div onClick={() => navigate('/tournament/football')} className="border border-emerald-300/30 bg-gradient-to-br from-[#082a17] to-[#03140a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-emerald-400/50 transition-colors cursor-pointer">
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-16 flex items-center justify-center pointer-events-none">
-              <img 
-                src="/football_card.jpg" 
-                alt="FIFA World Cup Player Album 2026" 
-                className="w-[92%] h-[62%] object-contain rounded-xl border border-white/15 transition-all duration-500 absolute top-8 shadow-[0_12px_24px_rgba(0,0,0,0.4)] group-hover:scale-105"
-              />
-            </div>
+            <img 
+              src="/football_card.jpg" 
+              alt="FIFA World Cup Player Album 2026" 
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#03140a] via-[#03140a]/20 to-transparent pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
               <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">City Football Clash</h3>
               <span className="text-[10px] md:text-xs font-mono text-white/50">soccer, knockout, fast</span>
