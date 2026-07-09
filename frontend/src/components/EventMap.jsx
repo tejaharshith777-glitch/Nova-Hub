@@ -107,7 +107,7 @@ export const EventMap = ({ physicalTournaments = [], activeCoords = {}, onSelect
               <g 
                 key={t._id || idx} 
                 className="cursor-pointer group"
-                onClick={() => onSelectCity(t.venueDetails.physicalAddress.includes('Mumbai') ? 'Mumbai' : t.venueDetails.physicalAddress.includes('Delhi') ? 'Delhi' : 'Bangalore')}
+                onClick={() => onSelectCity(t.title, { latitude: t.venueDetails.latitude, longitude: t.venueDetails.longitude })}
               >
                 <circle
                   cx={x}

@@ -33,6 +33,7 @@ const mockFeedPool = [
 
 // Local fallback demo datasets so radar works out-of-the-box offline/empty
 const localFallbackTournaments = [
+  // --- GUNTUR (16.3067, 80.4365) ---
   {
     _id: 'mock-t-0',
     title: 'Guntur Sports Arena Cricket Cup',
@@ -40,13 +41,7 @@ const localFallbackTournaments = [
     gameName: 'Cricket',
     rules: 'Bring your own kit. Matches will start at 7:00 AM on Sunday.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Guntur Sports Complex, Nallapadu, Guntur', 
-      pinCode: '522005', 
-      stadiumHall: 'Pitch A', 
-      latitude: 16.3067, 
-      longitude: 80.4365 
-    },
+    venueDetails: { physicalAddress: 'Guntur Sports Complex, Nallapadu, Guntur', pinCode: '522005', stadiumHall: 'Pitch A', latitude: 16.3067, longitude: 80.4365 },
     format: 'single-elimination',
     maxTeams: 8,
     teamSize: 11,
@@ -62,13 +57,7 @@ const localFallbackTournaments = [
     gameName: 'Cycle Racing',
     rules: 'Bring your own helmets. Safety gear is mandatory.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Nallapadu Road Velodrome, Guntur', 
-      pinCode: '522005', 
-      stadiumHall: 'Track A', 
-      latitude: 16.3067, 
-      longitude: 80.4365 
-    },
+    venueDetails: { physicalAddress: 'Nallapadu Road Velodrome, Guntur', pinCode: '522005', stadiumHall: 'Track A', latitude: 16.3067, longitude: 80.4365 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -84,13 +73,7 @@ const localFallbackTournaments = [
     gameName: 'Bike Racing',
     rules: 'Pro bike licenses required. Proper protective suits mandatory.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Nallapadu Road Circuit, Guntur', 
-      pinCode: '522005', 
-      stadiumHall: 'Grid 1', 
-      latitude: 16.3067, 
-      longitude: 80.4365 
-    },
+    venueDetails: { physicalAddress: 'Nallapadu Road Circuit, Guntur', pinCode: '522005', stadiumHall: 'Grid 1', latitude: 16.3067, longitude: 80.4365 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -106,13 +89,7 @@ const localFallbackTournaments = [
     gameName: 'Car Racing',
     rules: 'Roll cage and harness required. Racing driver licenses checked.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Guntur Speedway, Nallapadu, Guntur', 
-      pinCode: '522005', 
-      stadiumHall: 'Main Oval', 
-      latitude: 16.3067, 
-      longitude: 80.4365 
-    },
+    venueDetails: { physicalAddress: 'Guntur Speedway, Nallapadu, Guntur', pinCode: '522005', stadiumHall: 'Main Oval', latitude: 16.3067, longitude: 80.4365 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -122,19 +99,46 @@ const localFallbackTournaments = [
     registeredTeams: []
   },
   {
+    _id: 'mock-t-guntur-football',
+    title: 'Guntur Football League',
+    category: 'sports',
+    gameName: 'Football',
+    rules: 'Standard FIFA rules apply. Shin guards are mandatory.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Guntur Public Ground, Nallapadu, Guntur', pinCode: '522005', stadiumHall: 'Field 2', latitude: 16.3067, longitude: 80.4365 },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 11,
+    prizePool: 30000,
+    entryFee: 200,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-guntur-kabaddi',
+    title: 'Guntur Pro Kabaddi Shield',
+    category: 'sports',
+    gameName: 'Kabaddi',
+    rules: 'Pro Kabaddi rules. Maximum weight 85kg per participant.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Indoor Stadium, Guntur', pinCode: '522002', stadiumHall: 'Court 1', latitude: 16.3067, longitude: 80.4365 },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 7,
+    prizePool: 25000,
+    entryFee: 150,
+    status: 'open',
+    registeredTeams: []
+  },
+  // --- BANGALORE (12.9784, 77.5960) ---
+  {
     _id: 'mock-t-3',
     title: 'Bangalore Cricket Cup',
     category: 'sports',
     gameName: 'Cricket',
     rules: 'Physical address venue check-ins require carrying physical IDs.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Chinnaswamy Stadium, Bangalore', 
-      pinCode: '560001', 
-      stadiumHall: 'Net 3, West Gate', 
-      latitude: 12.9784, 
-      longitude: 77.5960 
-    },
+    venueDetails: { physicalAddress: 'Chinnaswamy Stadium, Bangalore', pinCode: '560001', stadiumHall: 'Net 3, West Gate', latitude: 12.9784, longitude: 77.5960 },
     format: 'round-robin',
     maxTeams: 4,
     teamSize: 11,
@@ -150,13 +154,7 @@ const localFallbackTournaments = [
     gameName: 'Cycle Racing',
     rules: 'GPS tracking active. Helmets and safety check mandatory.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Sector 4 Velodrome, HubCity', 
-      pinCode: '560034', 
-      stadiumHall: 'Track Gate 1', 
-      latitude: 12.9279, 
-      longitude: 77.6271 
-    },
+    venueDetails: { physicalAddress: 'Sector 4 Velodrome, HubCity', pinCode: '560034', stadiumHall: 'Track Gate 1', latitude: 12.9279, longitude: 77.6271 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -172,13 +170,7 @@ const localFallbackTournaments = [
     gameName: 'Bike Racing',
     rules: '150cc and above. Full leather suits required.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Kanakapura Dirt Track, Bangalore', 
-      pinCode: '560062', 
-      stadiumHall: 'Arena Entrance 2', 
-      latitude: 12.9784, 
-      longitude: 77.5960 
-    },
+    venueDetails: { physicalAddress: 'Kanakapura Dirt Track, Bangalore', pinCode: '560062', stadiumHall: 'Arena Entrance 2', latitude: 12.9784, longitude: 77.5960 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -194,13 +186,7 @@ const localFallbackTournaments = [
     gameName: 'Car Racing',
     rules: 'Street legal tuner class. Safe tracking enabled.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Nice Road Circuit, Bangalore', 
-      pinCode: '560001', 
-      stadiumHall: 'Toll plaza A', 
-      latitude: 12.9784, 
-      longitude: 77.5960 
-    },
+    venueDetails: { physicalAddress: 'Nice Road Circuit, Bangalore', pinCode: '560001', stadiumHall: 'Toll plaza A', latitude: 12.9784, longitude: 77.5960 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -210,19 +196,46 @@ const localFallbackTournaments = [
     registeredTeams: []
   },
   {
+    _id: 'mock-t-blr-basketball',
+    title: 'Indiranagar Basketball Open',
+    category: 'sports',
+    gameName: 'Basketball',
+    rules: '5v5 matches. FIBA scoring standard.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Indiranagar Club, Bangalore', pinCode: '560038', stadiumHall: 'Court A', latitude: 12.9784, longitude: 77.5960 },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 5,
+    prizePool: 35000,
+    entryFee: 200,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-blr-badminton',
+    title: 'Koramangala Badminton League',
+    category: 'sports',
+    gameName: 'Badminton',
+    rules: 'YONEX shuttles provided. Best of 3 sets of 21 points.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Koramangala Sports Club, Bangalore', pinCode: '560095', stadiumHall: 'Court 3', latitude: 12.9784, longitude: 77.5960 },
+    format: 'single-elimination',
+    maxTeams: 16,
+    teamSize: 2,
+    prizePool: 15000,
+    entryFee: 100,
+    status: 'open',
+    registeredTeams: []
+  },
+  // --- MUMBAI (19.0760, 72.8777) ---
+  {
     _id: 'mock-t-7',
     title: 'Mumbai Football Arena Derby',
     category: 'sports',
     gameName: 'Football',
     rules: 'Aggressive play leads to warnings. Soft studs required.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Mumbai Football Arena, Andheri, Mumbai', 
-      pinCode: '400053', 
-      stadiumHall: 'Main Pitch', 
-      latitude: 19.0760, 
-      longitude: 72.8777 
-    },
+    venueDetails: { physicalAddress: 'Mumbai Football Arena, Andheri, Mumbai', pinCode: '400053', stadiumHall: 'Main Pitch', latitude: 19.0760, longitude: 72.8777 },
     format: 'single-elimination',
     maxTeams: 8,
     teamSize: 11,
@@ -238,13 +251,7 @@ const localFallbackTournaments = [
     gameName: 'Cycle Racing',
     rules: 'Helmets and chest protectors mandatory. Clean lines.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Marine Drive Cycling Track, Mumbai', 
-      pinCode: '400021', 
-      stadiumHall: 'Gate 2', 
-      latitude: 19.0760, 
-      longitude: 72.8777 
-    },
+    venueDetails: { physicalAddress: 'Marine Drive Cycling Track, Mumbai', pinCode: '400021', stadiumHall: 'Gate 2', latitude: 19.0760, longitude: 72.8777 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -260,13 +267,7 @@ const localFallbackTournaments = [
     gameName: 'Bike Racing',
     rules: 'Professional category. Strict compliance with emissions.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Mumbai Karting & Motor Track, Mumbai', 
-      pinCode: '400053', 
-      stadiumHall: 'Bike Pit A', 
-      latitude: 19.0760, 
-      longitude: 72.8777 
-    },
+    venueDetails: { physicalAddress: 'Mumbai Karting & Motor Track, Mumbai', pinCode: '400053', stadiumHall: 'Bike Pit A', latitude: 19.0760, longitude: 72.8777 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -282,13 +283,7 @@ const localFallbackTournaments = [
     gameName: 'Car Racing',
     rules: 'Closed road circuit. Medical check mandatory.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Aarey Speedway, Goregaon, Mumbai', 
-      pinCode: '400065', 
-      stadiumHall: 'Main Paddock', 
-      latitude: 19.0760, 
-      longitude: 72.8777 
-    },
+    venueDetails: { physicalAddress: 'Aarey Speedway, Goregaon, Mumbai', pinCode: '400065', stadiumHall: 'Main Paddock', latitude: 19.0760, longitude: 72.8777 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -298,19 +293,46 @@ const localFallbackTournaments = [
     registeredTeams: []
   },
   {
+    _id: 'mock-t-mumbai-cricket',
+    title: 'Mumbai Cricket Club Showdown',
+    category: 'sports',
+    gameName: 'Cricket',
+    rules: 'White canvas shoes required. T20 format with leather ball.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Wankhede Stadium Ground B, Mumbai', pinCode: '400020', stadiumHall: 'West Net Area', latitude: 19.0760, longitude: 72.8777 },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 11,
+    prizePool: 75000,
+    entryFee: 600,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-mumbai-tennis',
+    title: 'Mumbai Open Tennis Cup',
+    category: 'sports',
+    gameName: 'Tennis',
+    rules: 'Clay court. ITF rules apply.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'CCI Club, Churchgate, Mumbai', pinCode: '400020', stadiumHall: 'Court 1', latitude: 19.0760, longitude: 72.8777 },
+    format: 'single-elimination',
+    maxTeams: 16,
+    teamSize: 2,
+    prizePool: 30000,
+    entryFee: 150,
+    status: 'open',
+    registeredTeams: []
+  },
+  // --- DELHI (28.6139, 77.2090) ---
+  {
     _id: 'mock-t-8',
     title: 'Delhi Basketball Championship',
     category: 'sports',
     gameName: 'Basketball',
     rules: 'Four quarters of 10 minutes. FIBA rules apply.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Talkatora Indoor Stadium, Delhi', 
-      pinCode: '110001', 
-      stadiumHall: 'Court A', 
-      latitude: 28.6139, 
-      longitude: 77.2090 
-    },
+    venueDetails: { physicalAddress: 'Talkatora Indoor Stadium, Delhi', pinCode: '110001', stadiumHall: 'Court A', latitude: 28.6139, longitude: 77.2090 },
     format: 'single-elimination',
     maxTeams: 8,
     teamSize: 5,
@@ -326,13 +348,7 @@ const localFallbackTournaments = [
     gameName: 'Cycle Racing',
     rules: 'Road race setup. Helmets and active lights mandatory.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'India Gate outer ring track, Delhi', 
-      pinCode: '110001', 
-      stadiumHall: 'Checkpoint Alpha', 
-      latitude: 28.6139, 
-      longitude: 77.2090 
-    },
+    venueDetails: { physicalAddress: 'India Gate outer ring track, Delhi', pinCode: '110001', stadiumHall: 'Checkpoint Alpha', latitude: 28.6139, longitude: 77.2090 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -348,13 +364,7 @@ const localFallbackTournaments = [
     gameName: 'Bike Racing',
     rules: 'FIM superbike guidelines. Medical team on site.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Buddh International Circuit, Greater Noida', 
-      pinCode: '201310', 
-      stadiumHall: 'Pitlane 14', 
-      latitude: 28.6139, 
-      longitude: 77.2090 
-    },
+    venueDetails: { physicalAddress: 'Buddh International Circuit, Greater Noida', pinCode: '201310', stadiumHall: 'Pitlane 14', latitude: 28.6139, longitude: 77.2090 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -370,13 +380,7 @@ const localFallbackTournaments = [
     gameName: 'Car Racing',
     rules: 'Formula street class cars. High speed tracking enabled.',
     venueType: 'offline',
-    venueDetails: { 
-      physicalAddress: 'Buddh International Circuit, Greater Noida', 
-      pinCode: '201310', 
-      stadiumHall: 'Garage 7', 
-      latitude: 28.6139, 
-      longitude: 77.2090 
-    },
+    venueDetails: { physicalAddress: 'Buddh International Circuit, Greater Noida', pinCode: '201310', stadiumHall: 'Garage 7', latitude: 28.6139, longitude: 77.2090 },
     format: 'single-elimination',
     maxTeams: 4,
     teamSize: 1,
@@ -385,6 +389,39 @@ const localFallbackTournaments = [
     status: 'open',
     registeredTeams: []
   },
+  {
+    _id: 'mock-t-delhi-football',
+    title: 'Delhi Football Shield',
+    category: 'sports',
+    gameName: 'Football',
+    rules: 'Professional grass pitches. 90-minute full matches.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Ambedkar Stadium, Delhi', pinCode: '110002', stadiumHall: 'Field 1', latitude: 28.6139, longitude: 77.2090 },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 11,
+    prizePool: 50000,
+    entryFee: 300,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-delhi-volleyball',
+    title: 'Connaught Place Volleyball Open',
+    category: 'sports',
+    gameName: 'Volleyball',
+    rules: 'FIVB rules. Matches decided by best-of-5 sets.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Connaught Place Sports Complex, Delhi', pinCode: '110001', stadiumHall: 'Court B', latitude: 28.6139, longitude: 77.2090 },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 6,
+    prizePool: 20000,
+    entryFee: 100,
+    status: 'open',
+    registeredTeams: []
+  },
+  // --- ONLINE ESPORTS LEAGUES (ONLINE) ---
   {
     _id: 'mock-t-1',
     title: 'Valorant Apex Invitational',
@@ -430,6 +467,118 @@ const localFallbackTournaments = [
     teamSize: 1,
     prizePool: 10000,
     entryFee: 50,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-5',
+    title: 'Moto GP Pro Tour',
+    category: 'racing',
+    gameName: 'Bike Racing',
+    rules: 'Time trial format. Safe passing rules enforce lane-discipline.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'North America', lobbyCode: 'LBY-MGP12', platform: 'Console' },
+    format: 'single-elimination',
+    maxTeams: 4,
+    teamSize: 1,
+    prizePool: 15000,
+    entryFee: 75,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-esport-apex',
+    title: 'Apex Legends Challenger Series',
+    category: 'esports',
+    gameName: 'Apex Legends',
+    rules: 'Standard ALGS Rules apply. PC only.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Asia South', lobbyCode: 'LBY-APX77', platform: 'PC' },
+    format: 'battle-royale-matrix',
+    maxTeams: 20,
+    teamSize: 3,
+    prizePool: 30000,
+    entryFee: 100,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-esport-pubg',
+    title: 'PUBG Mobile Star Challenge',
+    category: 'esports',
+    gameName: 'PUBG Mobile',
+    rules: 'Mobile only. No emulators allowed.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Asia East', lobbyCode: 'LBY-PUB11', platform: 'Mobile' },
+    format: 'battle-royale-matrix',
+    maxTeams: 16,
+    teamSize: 4,
+    prizePool: 20000,
+    entryFee: 50,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-esport-rl',
+    title: 'Rocket League Championship',
+    category: 'esports',
+    gameName: 'Rocket League',
+    rules: '3v3 Standard mode. Crossplay enabled.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Europe West', lobbyCode: 'LBY-RKL44', platform: 'Console' },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 3,
+    prizePool: 18000,
+    entryFee: 80,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-esport-cr',
+    title: 'Clash Royale Crown Cup',
+    category: 'esports',
+    gameName: 'Clash Royale',
+    rules: '1v1 tournament mode. Triple elixir final.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'North America', lobbyCode: 'LBY-CLR55', platform: 'Mobile' },
+    format: 'single-elimination',
+    maxTeams: 32,
+    teamSize: 1,
+    prizePool: 8000,
+    entryFee: 0,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-esport-fifa',
+    title: 'FIFA Virtual Arena',
+    category: 'esports',
+    gameName: 'FIFA',
+    rules: 'PS5/Xbox series X/PC. Tactical defending only.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'North America', lobbyCode: 'LBY-FFA90', platform: 'Console' },
+    format: 'single-elimination',
+    maxTeams: 16,
+    teamSize: 1,
+    prizePool: 12000,
+    entryFee: 60,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-esport-lol',
+    title: 'League of Legends Champions Cup',
+    category: 'esports',
+    gameName: 'League of Legends',
+    rules: '5v5 Tournament draft mode on Summoner\'s Rift.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Europe West', lobbyCode: 'LBY-LOL32', platform: 'PC' },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 5,
+    prizePool: 40000,
+    entryFee: 200,
     status: 'open',
     registeredTeams: []
   }
@@ -607,7 +756,13 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
   }, [notificationsOn]);
 
   // Manual city coordinates override (for testing proximity routing)
-  const handleCityOverride = (city) => {
+  const handleCityOverride = (city, customCoords = null) => {
+    if (customCoords) {
+      setCoords(customCoords);
+      setLocationMethod('Map Selection');
+      setLocationName(`${city} (Radar Centered)`);
+      return;
+    }
     if (city === 'Bangalore') {
       setCoords({ latitude: 12.9784, longitude: 77.5960 });
       setLocationMethod('Manual');
