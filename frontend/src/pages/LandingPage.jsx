@@ -220,7 +220,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
               <img 
                 src="/football_card.jpg" 
                 alt="FIFA World Cup Player Album 2026" 
-                className="w-[85%] h-[60%] object-cover rounded-2xl border-2 border-white/20 rotate-[4deg] group-hover:rotate-[2deg] group-hover:scale-105 transition-all duration-500 absolute top-10 shadow-[0_15px_30px_rgba(0,0,0,0.4)]"
+                className="w-[92%] h-[62%] object-contain rounded-xl border border-white/15 transition-all duration-500 absolute top-8 shadow-[0_12px_24px_rgba(0,0,0,0.4)] group-hover:scale-105"
               />
             </div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
