@@ -88,13 +88,13 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
   if (currentPage === 'hostPage') return (
     <div className="min-h-screen bg-[#c4e4e3] flex flex-col items-center pt-32 pb-20 px-8 justify-start font-mono">
-      <HostForm setCurrentPage={setCurrentPage} />
+      <HostForm setCurrentPage={setCurrentPage} apiBaseUrl={apiBaseUrl} user={user} />
     </div>
   );
 
   if (currentPage === 'joinPage') return (
     <div className="min-h-screen bg-[#c4e4e3] flex flex-col items-center pt-32 pb-20 px-8 justify-start font-mono">
-      <JoinEventPage setCurrentPage={setCurrentPage} />
+      <JoinEventPage setCurrentPage={setCurrentPage} apiBaseUrl={apiBaseUrl} user={user} />
     </div>
   );
 

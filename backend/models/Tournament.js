@@ -43,7 +43,9 @@ const tournamentSchema = new Schema({
     lobbyCode: { type: String, default: '' },
     physicalAddress: { type: String, default: '' },
     pinCode: { type: String, default: '' },
-    stadiumHall: { type: String, default: '' }
+    stadiumHall: { type: String, default: '' },
+    latitude: { type: Number, default: 0 },
+    longitude: { type: Number, default: 0 }
   },
   format: {
     type: String,

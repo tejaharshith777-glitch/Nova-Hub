@@ -1,39 +1,108 @@
 import React from 'react';
+import { Users, Award, MapPin, Globe } from 'lucide-react';
 
-const dummyTournaments = [
-  { id: '1', title: 'Weekend Cricket Bash', venue: 'Central Park, Pitch B', slots: '2/8 slots left', bg: '#ffffff' },
-  { id: '2', title: 'Downtown Hoops', venue: 'Downtown Indoor Court', slots: '5/16 slots left', bg: '#baffc9' },
-  { id: '3', title: 'Sunday League Football', venue: 'Greenfield Arena', slots: '1/4 slots left', bg: '#ffffff' },
-  { id: '4', title: 'Corporate Badminton', venue: 'Smash Club, Court 3', slots: '10/32 slots left', bg: '#baffc9' },
-];
+const pastelBgs = ['#ffffff', '#baffc9', '#ffdfba', '#cffafe', '#ffb3ba', '#fcebb6'];
 
-export const TournamentList = ({ onSelectEvent }) => {
+export const TournamentList = ({ tournaments = [], onSelectEvent, user }) => {
+  if (tournaments.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="w-full flex flex-col gap-6 font-mono">
-      {dummyTournaments.map((t) => (
-        <div 
-          key={t.id}
-          className="w-full flex flex-col md:flex-row justify-between items-start md:items-center p-6 md:p-8 rounded-xl border-[3px] border-[#1a1a1a] shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] hover:shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:-translate-y-1 transition-all duration-200 gap-6"
-          style={{ backgroundColor: t.bg }}
-        >
-          <div className="flex flex-col gap-3">
-            <h3 className="text-3xl md:text-4xl font-black font-display uppercase tracking-tight text-[#1a1a1a]">
-              {t.title}
-            </h3>
-            <div className="flex flex-wrap gap-4 items-center font-bold text-xs uppercase opacity-80">
-              <span className="bg-[#1a1a1a] text-white px-3 py-1 rounded-sm shadow-[2px_2px_0px_rgba(26,26,26,0.3)]">{t.venue}</span>
-              <span>{t.slots}</span>
+    <div className="w-full flex flex-col gap-6 font-mono text-[#1a1a1a]">
+      {tournaments.map((t, idx) => {
+        const registeredCount = t.registeredTeams?.length || 0;
+        const isFull = registeredCount >= t.maxTeams;
+        const isJoined = t.registeredTeams?.some(team => team.captainEmail === user?.email);
+        const cardBg = pastelBgs[idx % pastelBgs.length];
+
+        return (
+          <div 
+            key={t._id || t.id || idx}
+            className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-6 md:p-8 rounded-2xl border-[3px] border-[#1a1a1a] shadow-[6px_6px_0px_rgba(26,26,26,1)] hover:shadow-[3px_3px_0px_rgba(26,26,26,1)] hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-200 gap-6"
+            style={{ backgroundColor: cardBg }}
+          >
+            <div className="flex flex-col gap-3 flex-1">
+              <div className="flex flex-wrap gap-2 items-center">
+                <span className="bg-[#1a1a1a] text-white text-[10px] font-black uppercase px-2 py-0.5 tracking-wider">
+                  {t.gameName}
+                </span>
+                <span className="bg-white border-2 border-[#1a1a1a] text-[10px] font-bold px-2 py-0.5 shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)]">
+                  {t.format}
+                </span>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-black font-display uppercase tracking-tight text-[#1a1a1a]">
+                {t.title}
+              </h3>
+              
+              <div className="flex flex-wrap gap-4 items-center font-bold text-xs uppercase opacity-85 mt-1">
+                {t.venueType === 'offline' ? (
+                  <span className="flex items-center gap-1 bg-white border-2 border-black px-2 py-0.5">
+                    <MapPin className="w-3.5 h-3.5 text-red-500" />
+                    <span>
+                      {t.venueDetails?.physicalAddress}
+                      {t.distance !== undefined && t.distance !== null ? ` (${t.distance.toFixed(1)} km away)` : ''}
+                    </span>
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 bg-white border-2 border-black px-2 py-0.5">
+                    <Globe className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Online · {t.venueDetails?.serverRegion} Region</span>
+                  </span>
+                )}
+
+                <span className="flex items-center gap-1">
+                  <Users className="w-4 h-4" />
+                  <span>{registeredCount} / {t.maxTeams} Slots Filled</span>
+                </span>
+              </div>
+
+              {t.rules && (
+                <p className="text-xs text-[#1a1a1a]/70 italic font-semibold line-clamp-1 mt-1">
+                  "Rules: {t.rules}"
+                </p>
+              )}
+            </div>
+            
+            <div className="w-full lg:w-auto flex flex-col xs:flex-row items-stretch lg:items-end justify-between border-t-2 border-[#1a1a1a]/10 lg:border-t-0 pt-4 lg:pt-0 gap-6">
+              <div className="flex lg:flex-col justify-between gap-4 font-bold text-sm text-right">
+                <div>
+                  <span className="text-[10px] uppercase font-bold opacity-60 block">Entry Fee</span>
+                  <span>₹{t.entryFee}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold opacity-60 block">Prize Pool</span>
+                  <span className="text-yellow-600">₹{t.prizePool}</span>
+                </div>
+              </div>
+
+              {isJoined ? (
+                <button
+                  disabled
+                  className="bg-white/40 border-[3px] border-[#1a1a1a] px-8 py-3.5 rounded-xl font-black uppercase text-xs shadow-[2px_2px_0px_rgba(26,26,26,1)] cursor-not-allowed text-[#1a1a1a]/70 whitespace-nowrap"
+                >
+                  ✓ Registered
+                </button>
+              ) : isFull ? (
+                <button
+                  disabled
+                  className="bg-[#1a1a1a]/10 border-[3px] border-[#1a1a1a]/30 text-[#1a1a1a]/40 px-8 py-3.5 rounded-xl font-black uppercase text-xs cursor-not-allowed whitespace-nowrap"
+                >
+                  Slots Full
+                </button>
+              ) : (
+                <button
+                  onClick={() => onSelectEvent(t)}
+                  className="bg-white hover:bg-yellow-200 border-[3px] border-[#1a1a1a] px-8 py-3.5 rounded-xl font-black uppercase tracking-widest text-xs shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:shadow-[1px_1px_0px_rgba(26,26,26,1)] hover:translate-x-[3px] hover:translate-y-[3px] transition-all interactive-target whitespace-nowrap"
+                >
+                  Register Team
+                </button>
+              )}
             </div>
           </div>
-          
-          <button
-            onClick={() => onSelectEvent(t)}
-            className="w-full md:w-auto bg-white hover:bg-yellow-200 border-[3px] border-[#1a1a1a] px-10 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all interactive-target whitespace-nowrap"
-          >
-            Join Now
-          </button>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
