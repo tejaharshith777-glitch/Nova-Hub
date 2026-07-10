@@ -7,7 +7,7 @@ import {
   Trophy, Zap, Users, CalendarDays, TrendingUp, Activity, Radio, User, 
   Wallet, Gift, MessageSquare, Settings, Send, Check, X, Award, Shield, 
   Volume2, Trash2, Bell, ShieldAlert, Sparkles, Loader2, CreditCard, Ticket,
-  PlusCircle
+  PlusCircle, Sliders
 } from 'lucide-react';
 
 // Mock chat responses mapping
@@ -983,8 +983,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                     <form onSubmit={handleCreateClan} className="flex flex-col gap-4">
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="sm:col-span-2">
-                          <label className="text-[10px] uppercase font-black block mb-1">Clan/Team Name</label>
+                          <label htmlFor="clan-name" className="text-[10px] uppercase font-black block mb-1">Clan/Team Name</label>
                           <input
+                            id="clan-name"
+                            name="clan-name"
                             type="text"
                             placeholder="e.g. Bangalore Strikers"
                             value={createClanName}
@@ -993,8 +995,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                           />
                         </div>
                         <div>
-                          <label className="text-[10px] uppercase font-black block mb-1">Clan Tag (Max 4 chars)</label>
+                          <label htmlFor="clan-tag" className="text-[10px] uppercase font-black block mb-1">Clan Tag (Max 4 chars)</label>
                           <input
+                            id="clan-tag"
+                            name="clan-tag"
                             type="text"
                             placeholder="e.g. BST"
                             value={createClanTag}
@@ -1067,8 +1071,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                     
                     <div className="flex flex-col gap-3">
                       <div>
-                        <label className="text-[10px] uppercase font-black block mb-1">Username</label>
+                        <label htmlFor="profile-username" className="text-[10px] uppercase font-black block mb-1">Username</label>
                         <input
+                          id="profile-username"
+                          name="profile-username"
                           type="text"
                           value={profileName}
                           onChange={(e) => setProfileName(e.target.value)}
@@ -1076,8 +1082,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] uppercase font-black block mb-1">Email Address</label>
+                        <label htmlFor="profile-email" className="text-[10px] uppercase font-black block mb-1">Email Address</label>
                         <input
+                          id="profile-email"
+                          name="profile-email"
                           type="email"
                           value={profileEmail}
                           onChange={(e) => setProfileEmail(e.target.value)}
@@ -1456,12 +1464,14 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                   <div className="flex flex-col gap-3 font-bold text-xs uppercase">
                     
                     {/* Switch 1 */}
-                    <label className="flex items-center justify-between p-2.5 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer">
+                    <label htmlFor="settings-sound" className="flex items-center justify-between p-2.5 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer">
                       <div className="flex items-center gap-2">
                         <Volume2 className="w-4 h-4 text-blue-500" />
                         <span>Enable Chat Sound Effects</span>
                       </div>
                       <input
+                        id="settings-sound"
+                        name="settings-sound"
                         type="checkbox"
                         checked={settingsSound}
                         onChange={(e) => setSettingsSound(e.target.checked)}
@@ -1470,12 +1480,14 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                     </label>
 
                     {/* Switch 2 */}
-                    <label className="flex items-center justify-between p-2.5 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer">
+                    <label htmlFor="settings-alerts" className="flex items-center justify-between p-2.5 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer">
                       <div className="flex items-center gap-2">
                         <Bell className="w-4 h-4 text-yellow-500" />
                         <span>Enable Real-time Match Push Alerts</span>
                       </div>
                       <input
+                        id="settings-alerts"
+                        name="settings-alerts"
                         type="checkbox"
                         checked={settingsAlerts}
                         onChange={(e) => setSettingsAlerts(e.target.checked)}
@@ -1484,12 +1496,14 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                     </label>
 
                     {/* Switch 3 */}
-                    <label className="flex items-center justify-between p-2.5 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer">
+                    <label htmlFor="settings-anticheat" className="flex items-center justify-between p-2.5 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer">
                       <div className="flex items-center gap-2">
                         <Shield className="w-4 h-4 text-green-500" />
                         <span>Background Anti-Cheat Scan (Vanguard Integration)</span>
                       </div>
                       <input
+                        id="settings-anticheat"
+                        name="settings-anticheat"
                         type="checkbox"
                         checked={settingsAntiCheat}
                         onChange={(e) => setSettingsAntiCheat(e.target.checked)}
@@ -1538,8 +1552,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
             <form onSubmit={handleDeposit} className="flex flex-col gap-4">
               <div>
-                <label className="text-[10px] uppercase font-black block mb-1">Deposit Amount (INR)</label>
+                <label htmlFor="deposit-amount" className="text-[10px] uppercase font-black block mb-1">Deposit Amount (INR)</label>
                 <input
+                  id="deposit-amount"
+                  name="deposit-amount"
                   type="number"
                   placeholder="e.g. 500"
                   value={depositAmount}
@@ -1551,8 +1567,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
               </div>
 
               <div>
-                <label className="text-[10px] uppercase font-black block mb-1">Simulated Card Details</label>
+                <label htmlFor="deposit-card" className="text-[10px] uppercase font-black block mb-1">Simulated Card Details</label>
                 <input
+                  id="deposit-card"
+                  name="deposit-card"
                   type="text"
                   placeholder="4242 4242 4242 4242"
                   className="w-full bg-white border-2 border-black p-2 text-xs font-bold outline-none"
@@ -1585,8 +1603,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
             <form onSubmit={handleWithdraw} className="flex flex-col gap-4">
               <div>
-                <label className="text-[10px] uppercase font-black block mb-1">Withdrawal Amount (INR)</label>
+                <label htmlFor="withdraw-amount" className="text-[10px] uppercase font-black block mb-1">Withdrawal Amount (INR)</label>
                 <input
+                  id="withdraw-amount"
+                  name="withdraw-amount"
                   type="number"
                   placeholder={`Max: ₹${walletBalance}`}
                   value={withdrawAmount}
@@ -1599,8 +1619,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
               </div>
 
               <div>
-                <label className="text-[10px] uppercase font-black block mb-1">Recipient UPI ID or Bank Details</label>
+                <label htmlFor="withdraw-upi" className="text-[10px] uppercase font-black block mb-1">Recipient UPI ID or Bank Details</label>
                 <input
+                  id="withdraw-upi"
+                  name="withdraw-upi"
                   type="text"
                   placeholder="e.g. user@paytm"
                   value={withdrawUpi}
