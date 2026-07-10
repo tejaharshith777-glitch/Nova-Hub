@@ -6,7 +6,8 @@ import InteractiveLocationPicker from '../components/InteractiveLocationPicker';
 import { 
   Trophy, Zap, Users, CalendarDays, TrendingUp, Activity, Radio, User, 
   Wallet, Gift, MessageSquare, Settings, Send, Check, X, Award, Shield, 
-  Volume2, Trash2, Bell, ShieldAlert, Sparkles, Loader2, CreditCard, Ticket
+  Volume2, Trash2, Bell, ShieldAlert, Sparkles, Loader2, CreditCard, Ticket,
+  PlusCircle
 } from 'lucide-react';
 
 // Mock chat responses mapping
