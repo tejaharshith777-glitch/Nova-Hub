@@ -1071,15 +1071,15 @@ export const LandingPage = ({ onOpenAuth, user }) => {
       {/* ==========================================
           FRAME: OUR SERVICES
          ========================================== */}
-      <section id="services" className="py-28 px-4 md:px-24 bg-[#111] text-white relative z-10 overflow-hidden border-t-[3px] border-b-[3px] border-[#1a1a1a]">
+      <section id="services" className="py-28 px-4 md:px-24 bg-[#c4e4e3] text-[#1a1a1a] relative z-10 overflow-hidden border-t-[3px] border-b-[3px] border-[#1a1a1a]">
         {/* Background texture grid */}
-        <div className="absolute inset-0 opacity-10 carbon-grid pointer-events-none" />
+        <div className="absolute inset-0 opacity-20 carbon-grid pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative z-10">
           {/* Section heading */}
           <div className="text-center mb-20">
-            <span className="text-[10px] uppercase tracking-[0.35em] text-white/50 font-bold block mb-4">★ Platform Ecosystem</span>
-            <h2 className="text-5xl md:text-7xl font-playfair italic font-bold leading-none text-white">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#1a1a1a]/60 font-bold block mb-4">★ Platform Ecosystem</span>
+            <h2 className="text-5xl md:text-7xl font-playfair italic font-bold leading-none text-[#1a1a1a]">
               Our services
             </h2>
           </div>
