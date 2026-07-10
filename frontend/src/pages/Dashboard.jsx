@@ -195,6 +195,11 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   // Fetch tournaments from backend
   const fetchTournamentsList = useCallback(async () => {
     setLoadingTournaments(true);
+    if (!apiBaseUrl) {
+      setTournaments(defaultFallbackTournaments);
+      setLoadingTournaments(false);
+      return;
+    }
     try {
       const res = await fetch(`${apiBaseUrl}/api/tournaments`, { credentials: 'include' });
       if (res.ok) {
@@ -247,6 +252,12 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
   const fetchBookedTickets = useCallback(async () => {
     setLoadingTickets(true);
+    if (!apiBaseUrl) {
+      const saved = localStorage.getItem('novahub_mock_bookings');
+      setBookedTickets(saved ? JSON.parse(saved) : []);
+      setLoadingTickets(false);
+      return;
+    }
     try {
       const res = await fetch(`${apiBaseUrl}/api/bookings`, { credentials: 'include' });
       if (res.ok) {
@@ -270,6 +281,29 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
     const ticketCost = 450;
     if (walletBalance < ticketCost) {
       alert(`Insufficient funds! Booking costs ₹${ticketCost}. You currently have ₹${walletBalance}.`);
+      return;
+    }
+
+    if (!apiBaseUrl) {
+      setWalletBalance(prev => prev - ticketCost);
+      addTransaction('Debit', `Ticket Booking (Mock): ${bookingDetails.address.slice(0, 30)}...`, ticketCost);
+      
+      const mockBooking = {
+        _id: 'mock-booking-' + Date.now(),
+        address: bookingDetails.address,
+        latitude: bookingDetails.latitude,
+        longitude: bookingDetails.longitude,
+        ticketType: 'VIP Arena Pass',
+        price: ticketCost,
+        bookingDate: new Date().toISOString()
+      };
+      
+      const saved = localStorage.getItem('novahub_mock_bookings');
+      const currentList = saved ? JSON.parse(saved) : [];
+      const updatedList = [mockBooking, ...currentList];
+      localStorage.setItem('novahub_mock_bookings', JSON.stringify(updatedList));
+      setBookedTickets(updatedList);
+      alert('🎉 Booking successful (Mock Mode)! Your ticket has been simulated locally.');
       return;
     }
 
@@ -311,7 +345,12 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
         price: ticketCost,
         bookingDate: new Date().toISOString()
       };
-      setBookedTickets(prev => [mockBooking, ...prev]);
+      
+      const saved = localStorage.getItem('novahub_mock_bookings');
+      const currentList = saved ? JSON.parse(saved) : [];
+      const updatedList = [mockBooking, ...currentList];
+      localStorage.setItem('novahub_mock_bookings', JSON.stringify(updatedList));
+      setBookedTickets(updatedList);
       alert('🎉 Booking successful (Mock Mode)! Your ticket has been simulated locally.');
     }
   };
@@ -457,6 +496,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
       localStorage.removeItem('novahub_chat_logs');
       localStorage.removeItem('novahub_claimed_achievements');
       localStorage.removeItem('novahub_last_claim_time');
+      localStorage.removeItem('novahub_mock_bookings');
       
       setWalletBalance(2500);
       setTransactions([{ id: 'tx-1', type: 'Credit', desc: 'Welcome Bonus Credited', amount: 2500, date: 'July 2026' }]);
@@ -464,6 +504,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
       setClanTag('');
       setClaimedAchievements([]);
       setLastClaimTime('');
+      setBookedTickets([]);
       setChatLogs({
         admin: [
           { sender: 'contact', text: 'Hey there! Are you ready for your next tournament match?', time: '10:30 AM' },
