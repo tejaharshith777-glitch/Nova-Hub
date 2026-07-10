@@ -416,7 +416,6 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
     { id: 'all-tournaments', label: 'All Tournaments', icon: Trophy, badge: null },
     { id: 'my-tournaments', label: 'My Tournaments', icon: CalendarDays, badge: null },
     { id: 'live-tournaments', label: 'Live Tournaments', icon: Radio, badge: 'pulse' },
-    { id: 'leaderboard', label: 'Leaderboard', icon: TrendingUp, badge: null },
     { id: 'teams', label: 'Teams', icon: Users, badge: null },
     { id: 'my-profile', label: 'My Profile', icon: User, badge: null },
     { id: 'wallet', label: 'Wallet', icon: Wallet, badge: null },
@@ -617,7 +616,6 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                   {activeTab === 'all-tournaments' && <Trophy className="w-6 h-6 text-yellow-500" />}
                   {activeTab === 'my-tournaments' && <CalendarDays className="w-6 h-6 text-green-500" />}
                   {activeTab === 'live-tournaments' && <Radio className="w-6 h-6 text-red-500 animate-pulse" />}
-                  {activeTab === 'leaderboard' && <TrendingUp className="w-6 h-6 text-blue-500" />}
                   {activeTab === 'teams' && <Users className="w-6 h-6 text-purple-500" />}
                   {activeTab === 'my-profile' && <User className="w-6 h-6 text-pink-500" />}
                   {activeTab === 'wallet' && <Wallet className="w-6 h-6 text-yellow-600" />}
@@ -784,56 +782,6 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                     </div>
                   );
                 })()}
-              </div>
-            )}
-
-            {/* TAB 4: LEADERBOARD */}
-            {activeTab === 'leaderboard' && (
-              <div className="flex-1 flex flex-col gap-6">
-                <p className="text-xs font-bold opacity-75 leading-relaxed bg-yellow-50 border border-yellow-300 p-3 rounded-lg">
-                  💡 Standings show global team power indexes calculated from match brackets, placement points, and anti-cheat validations.
-                </p>
-
-                <div className="border-[3px] border-[#1a1a1a] rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(26,26,26,1)] font-mono text-xs">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-[#1a1a1a] text-white uppercase font-black text-[10px] tracking-wider border-b-[3px] border-black">
-                        <th className="p-3">Rank</th>
-                        <th className="p-3">Team / Clan</th>
-                        <th className="p-3 text-center">Matches</th>
-                        <th className="p-3 text-center">Wins</th>
-                        <th className="p-3 text-center">Kills</th>
-                        <th className="p-3 text-center">Points</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#1a1a1a]/15">
-                      {[
-                        { rank: 1, name: 'Apex Predators', tag: 'APX', played: 14, wins: 11, kills: 124, pts: 348 },
-                        { rank: 2, name: 'Team Vipers', tag: 'VPR', played: 12, wins: 9, kills: 98, pts: 278 },
-                        { rank: 3, name: 'Team Glitch', tag: 'GLT', played: 15, wins: 8, kills: 110, pts: 254 },
-                        { rank: 4, name: 'Zero Ping Esports', tag: 'ZP', played: 13, wins: 7, kills: 84, pts: 218 },
-                        { rank: 5, name: 'Hyper Shadows', tag: 'HSD', played: 11, wins: 5, kills: 64, pts: 154 },
-                        { rank: 6, name: 'Fatal Error', tag: 'ERR', played: 10, wins: 4, kills: 48, pts: 120 }
-                      ].map((team, idx) => {
-                        const medal = team.rank === 1 ? '🥇' : team.rank === 2 ? '🥈' : team.rank === 3 ? '🥉' : null;
-                        const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-gray-50';
-                        return (
-                          <tr key={team.rank} className={`${rowBg} hover:bg-yellow-50 transition-colors font-bold`}>
-                            <td className="p-3 font-black text-center">{medal || team.rank}</td>
-                            <td className="p-3">
-                              <span className="uppercase text-[#1a1a1a]">{team.name}</span>
-                              <span className="bg-gray-200 border border-black px-1 text-[9px] ml-2 font-black rounded-sm">{team.tag}</span>
-                            </td>
-                            <td className="p-3 text-center">{team.played}</td>
-                            <td className="p-3 text-center text-green-600">{team.wins}</td>
-                            <td className="p-3 text-center text-red-500">{team.kills}</td>
-                            <td className="p-3 text-center font-black">{team.pts}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
               </div>
             )}
 
