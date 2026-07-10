@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HostForm from '../components/HostForm';
 import JoinEventPage from '../components/JoinEventPage';
+import InteractiveLocationPicker from '../components/InteractiveLocationPicker';
 import { 
   Trophy, Zap, Users, CalendarDays, TrendingUp, Activity, Radio, User, 
   Wallet, Gift, MessageSquare, Settings, Send, Check, X, Award, Shield, 
-  Volume2, Trash2, Bell, ShieldAlert, Sparkles, Loader2, CreditCard
+  Volume2, Trash2, Bell, ShieldAlert, Sparkles, Loader2, CreditCard, Ticket
 } from 'lucide-react';
 
 // Mock chat responses mapping
@@ -157,6 +158,10 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   const [createClanTag, setCreateClanTag] = useState('');
   const [createRoster, setCreateRoster] = useState(['Player 2', 'Player 3', 'Player 4', 'Player 5']);
 
+  // Booked Tickets State
+  const [bookedTickets, setBookedTickets] = useState([]);
+  const [loadingTickets, setLoadingTickets] = useState(false);
+
   // Messages / Chat Console State
   const [activeChat, setActiveChat] = useState('admin'); // 'admin' | 'support' | 'referee' | 'liaison'
   const [chatInputs, setChatInputs] = useState({ admin: '', support: '', referee: '', liaison: '' });
@@ -238,6 +243,77 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   useEffect(() => {
     localStorage.setItem('novahub_claimed_achievements', JSON.stringify(claimedAchievements));
   }, [claimedAchievements]);
+
+  const fetchBookedTickets = useCallback(async () => {
+    setLoadingTickets(true);
+    try {
+      const res = await fetch(`${apiBaseUrl}/api/bookings`, { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setBookedTickets(data || []);
+      }
+    } catch (err) {
+      console.warn('Failed to retrieve booked tickets from backend.', err);
+    } finally {
+      setLoadingTickets(false);
+    }
+  }, [apiBaseUrl]);
+
+  useEffect(() => {
+    if (activeTab === 'book-tickets') {
+      fetchBookedTickets();
+    }
+  }, [activeTab, fetchBookedTickets]);
+
+  const handleConfirmBooking = async (bookingDetails) => {
+    const ticketCost = 450;
+    if (walletBalance < ticketCost) {
+      alert(`Insufficient funds! Booking costs ₹${ticketCost}. You currently have ₹${walletBalance}.`);
+      return;
+    }
+
+    try {
+      const res = await fetch(`${apiBaseUrl}/api/bookings/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          address: bookingDetails.address,
+          latitude: bookingDetails.latitude,
+          longitude: bookingDetails.longitude,
+          ticketType: 'VIP Arena Pass',
+          price: ticketCost
+        }),
+        credentials: 'include'
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setWalletBalance(prev => prev - ticketCost);
+        addTransaction('Debit', `Ticket Booking: ${bookingDetails.address.slice(0, 30)}...`, ticketCost);
+        fetchBookedTickets();
+        alert('🎉 Booking successful! Your VIP Arena Ticket is confirmed.');
+      } else {
+        const data = await res.json();
+        alert(`Booking failed: ${data.message || 'Server rejected request.'}`);
+      }
+    } catch (e) {
+      console.warn('Backend booking failed, simulating locally.', e);
+      setWalletBalance(prev => prev - ticketCost);
+      addTransaction('Debit', `Ticket Booking (Mock): ${bookingDetails.address.slice(0, 30)}...`, ticketCost);
+      
+      const mockBooking = {
+        _id: 'mock-booking-' + Date.now(),
+        address: bookingDetails.address,
+        latitude: bookingDetails.latitude,
+        longitude: bookingDetails.longitude,
+        ticketType: 'VIP Arena Pass',
+        price: ticketCost,
+        bookingDate: new Date().toISOString()
+      };
+      setBookedTickets(prev => [mockBooking, ...prev]);
+      alert('🎉 Booking successful (Mock Mode)! Your ticket has been simulated locally.');
+    }
+  };
 
   // Handle transaction logger helper
   const addTransaction = (type, desc, amount) => {
@@ -419,6 +495,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
     { id: 'teams', label: 'Teams', icon: Users, badge: null },
     { id: 'my-profile', label: 'My Profile', icon: User, badge: null },
     { id: 'wallet', label: 'Wallet', icon: Wallet, badge: null },
+    { id: 'book-tickets', label: 'Book Tickets', icon: Ticket, badge: null },
     { id: 'rewards', label: 'Rewards', icon: Gift, badge: null },
     { id: 'messages', label: 'Messages', icon: MessageSquare, badge: unreadCount },
     { id: 'settings', label: 'Settings', icon: Settings, badge: null },
@@ -619,6 +696,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                   {activeTab === 'teams' && <Users className="w-6 h-6 text-purple-500" />}
                   {activeTab === 'my-profile' && <User className="w-6 h-6 text-pink-500" />}
                   {activeTab === 'wallet' && <Wallet className="w-6 h-6 text-yellow-600" />}
+                  {activeTab === 'book-tickets' && <Ticket className="w-6 h-6 text-blue-500" />}
                   {activeTab === 'rewards' && <Gift className="w-6 h-6 text-orange-500" />}
                   {activeTab === 'messages' && <MessageSquare className="w-6 h-6 text-purple-600" />}
                   {activeTab === 'settings' && <Settings className="w-6 h-6 text-gray-500" />}
@@ -1042,6 +1120,98 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                       ))}
                     </div>
                   </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* TAB: BOOK TICKETS */}
+            {activeTab === 'book-tickets' && (
+              <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 font-mono text-[#1a1a1a]">
+                
+                {/* Left Side: Map Location Selection */}
+                <div className="flex flex-col gap-4">
+                  <h3 className="text-xs font-black uppercase tracking-widest opacity-60">Interactive Location Selector</h3>
+                  <InteractiveLocationPicker 
+                    onConfirmBooking={handleConfirmBooking} 
+                    ticketPrice={450} 
+                  />
+                </div>
+
+                {/* Right Side: List of Booked Tickets */}
+                <div className="flex flex-col gap-4">
+                  <h3 className="text-xs font-black uppercase tracking-widest opacity-60">My Booked Tickets</h3>
+                  
+                  {loadingTickets ? (
+                    <div className="flex items-center justify-center p-8 bg-gray-50 border-[3px] border-black rounded-2xl">
+                      <Loader2 className="w-6 h-6 animate-spin text-purple-600 mr-2" />
+                      <span className="text-xs font-bold uppercase">Refreshing ticket stubs...</span>
+                    </div>
+                  ) : bookedTickets.length === 0 ? (
+                    <div className="bg-yellow-50 border-[3px] border-black p-8 rounded-2xl text-center shadow-[4px_4px_0px_rgba(26,26,26,1)]">
+                      <Ticket className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+                      <h4 className="text-sm font-black uppercase">No Booked Tickets</h4>
+                      <p className="text-[10px] font-bold opacity-60 mt-1 max-w-xs mx-auto">
+                        Your admission passes will resolve here after selecting a venue location on the map.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-4 overflow-y-auto max-h-[380px] pr-1">
+                      {bookedTickets.map((ticket, idx) => (
+                        <div 
+                          key={ticket._id || idx}
+                          className="bg-[#ffb3ba] border-[3px] border-black rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-row hover:-translate-y-0.5 transition-all"
+                        >
+                          {/* Main Stub */}
+                          <div className="flex-1 p-4 flex flex-col justify-between border-r-[3px] border-dashed border-black/35 relative">
+                            {/* Dotted cut line helper */}
+                            <div className="absolute top-0 right-[-1.5px] w-3 h-3 bg-white border-b-[3px] border-l-[3px] border-black rounded-bl-full" />
+                            <div className="absolute bottom-0 right-[-1.5px] w-3 h-3 bg-white border-t-[3px] border-l-[3px] border-black rounded-tl-full" />
+                            
+                            <div>
+                              <span className="text-[9px] uppercase font-black bg-white border border-black px-1.5 py-0.2 shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                                {ticket.ticketType}
+                              </span>
+                              <h4 className="text-sm font-black uppercase mt-2.5 tracking-tight truncate max-w-[220px]">
+                                NOVA HUB SQUAD PASS
+                              </h4>
+                              <p className="text-[9px] font-bold opacity-75 mt-1.5 line-clamp-2">
+                                {ticket.address}
+                              </p>
+                            </div>
+
+                            <div className="text-[8px] opacity-50 uppercase font-black tracking-widest mt-4">
+                              Booked: {new Date(ticket.bookingDate).toLocaleString()}
+                            </div>
+                          </div>
+
+                          {/* Admit Stub */}
+                          <div className="w-[110px] bg-white p-4 flex flex-col items-center justify-between text-center select-none shrink-0">
+                            <div>
+                              <span className="text-[8px] uppercase font-black opacity-50 block">Price Paid</span>
+                              <span className="text-sm font-black block mt-0.5">₹{ticket.price}</span>
+                            </div>
+
+                            {/* Retro barcode */}
+                            <div className="w-full flex items-center justify-center gap-[1.5px] mt-2 opacity-85">
+                              {[3,1,4,2,1,5,2,3,1,4].map((width, bIdx) => (
+                                <div 
+                                  key={bIdx} 
+                                  className="bg-black h-8 shrink-0" 
+                                  style={{ width: `${width}px` }} 
+                                />
+                              ))}
+                            </div>
+                            
+                            <span className="text-[8px] font-black tracking-widest uppercase text-gray-500 mt-1">
+                              ADMIT ONE
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                 </div>
 
               </div>

@@ -10,6 +10,7 @@ import authRoutes from './routes/authRoutes.js';
 import tournamentRoutes from './routes/tournamentRoutes.js';
 import matchRoutes from './routes/matchRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tournaments', tournamentRoutes);
 app.use('/api/matches', matchRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Socket.io initialization
 const io = new Server(server, {

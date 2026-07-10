@@ -1,0 +1,246 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { MapPin, Loader2, Navigation, CheckCircle } from 'lucide-react';
+
+export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { lat: 12.9784, lng: 77.5960 }, ticketPrice = 450 }) => {
+  const mapContainerRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const markerInstanceRef = useRef(null);
+  const debounceTimeoutRef = useRef(null);
+
+  const [coords, setCoords] = useState(defaultCoords);
+  const [address, setAddress] = useState('Resolving starting coordinates...');
+  const [loadingAddress, setLoadingAddress] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [leafletLoaded, setLeafletLoaded] = useState(false);
+
+  // 1. Dynamically load Leaflet resources via CDN to avoid Vite asset resolution bugs
+  useEffect(() => {
+    if (window.L) {
+      setLeafletLoaded(true);
+      return;
+    }
+
+    // Load CSS
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';
+    link.crossOrigin = '';
+    document.head.appendChild(link);
+
+    // Load JS
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
+    script.crossOrigin = '';
+    script.async = true;
+    script.onload = () => setLeafletLoaded(true);
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup loaded script node on unmount
+      if (script.parentNode) script.parentNode.removeChild(script);
+      if (link.parentNode) link.parentNode.removeChild(link);
+    };
+  }, []);
+
+  // 2. Reverse Geocoding with 1-second debounce safety rate limiter
+  const reverseGeocode = (lat, lng) => {
+    // Clear any pending geocoding requests
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    setLoadingAddress(true);
+    setErrorMsg('');
+
+    // Wait exactly 1 second (1000ms) after user stops dragging or clicking to avoid Nominatim limits
+    debounceTimeoutRef.current = setTimeout(async () => {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`,
+          {
+            headers: {
+              'Accept-Language': 'en',
+              'User-Agent': 'Nova-Hub-Ticketing-Application/1.0'
+            }
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          // Filter to a friendly readable address or use display name
+          const resolvedStr = data.display_name || `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+          setAddress(resolvedStr);
+        } else {
+          throw new Error('Nominatim returned non-OK status');
+        }
+      } catch (err) {
+        console.warn('OSM Nominatim Reverse Geocode failed (likely rate-limited).', err);
+        setErrorMsg('Nominatim geocoder limits exceeded. Using coordinate address fallback.');
+        setAddress(`Venue (Coords: ${lat.toFixed(6)}, ${lng.toFixed(6)})`);
+      } finally {
+        setLoadingAddress(false);
+      }
+    }, 1000);
+  };
+
+  // 3. Initialize Leaflet Map
+  useEffect(() => {
+    if (!leafletLoaded || !mapContainerRef.current) return;
+
+    const L = window.L;
+
+    // Instantiate map object
+    const map = L.map(mapContainerRef.current, {
+      zoomControl: true,
+      scrollWheelZoom: true
+    }).setView([coords.lat, coords.lng], 13);
+    mapInstanceRef.current = map;
+
+    // Load OpenStreetMap Tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Setup custom icon to bypass Vite image-path compilation bugs
+    const markerIcon = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    // Create marker
+    const marker = L.marker([coords.lat, coords.lng], {
+      draggable: true,
+      icon: markerIcon
+    }).addTo(map);
+    markerInstanceRef.current = marker;
+
+    // Initial Geocode on mount
+    reverseGeocode(coords.lat, coords.lng);
+
+    // Marker Dragend event
+    marker.on('dragend', () => {
+      const position = marker.getLatLng();
+      const newCoords = { lat: position.lat, lng: position.lng };
+      setCoords(newCoords);
+      reverseGeocode(position.lat, position.lng);
+    });
+
+    // Map click event (moves marker and geocodes)
+    map.on('click', (e) => {
+      const { lat, lng } = e.latlng;
+      marker.setLatLng([lat, lng]);
+      const newCoords = { lat, lng };
+      setCoords(newCoords);
+      reverseGeocode(lat, lng);
+    });
+
+    // Clean up map instance on unmount
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+      map.remove();
+    };
+  }, [leafletLoaded]);
+
+  const handleBookingSubmit = () => {
+    if (loadingAddress) {
+      alert('Resolving location address, please wait a moment...');
+      return;
+    }
+    if (onConfirmBooking) {
+      onConfirmBooking({
+        address,
+        latitude: coords.lat,
+        longitude: coords.lng
+      });
+    }
+  };
+
+  return (
+    <div className="w-full flex flex-col gap-4 font-mono text-[#1a1a1a]">
+      {/* Map Container */}
+      <div className="w-full relative h-[380px] bg-gray-100 border-[3px] border-[#1a1a1a] rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(26,26,26,0.15)]">
+        
+        {/* Leaflet canvas div */}
+        <div ref={mapContainerRef} className="w-full h-full z-10" />
+
+        {/* Loading Overlay */}
+        {!leafletLoaded && (
+          <div className="absolute inset-0 bg-yellow-50/90 z-20 flex flex-col items-center justify-center gap-2">
+            <Loader2 className="w-8 h-8 animate-spin text-[#1a1a1a]" />
+            <span className="text-xs uppercase font-black tracking-wider">Mounting OpenStreetMap Canvas...</span>
+          </div>
+        )}
+
+        {/* ─── Modern SaaS Glassmorphism Card Overlay ─── */}
+        {leafletLoaded && (
+          <div className="absolute bottom-4 left-4 right-4 z-20 bg-white/70 backdrop-blur-md border-2 border-white/20 p-4 rounded-xl shadow-xl flex flex-col gap-3 max-h-[140px] justify-between">
+            <div className="flex items-start gap-2.5 min-h-0">
+              <div className="bg-[#1a1a1a] text-white p-1.5 rounded-lg flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4 text-yellow-300" />
+              </div>
+              <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+                <span className="text-[9px] uppercase font-black text-gray-500 block tracking-widest">
+                  {loadingAddress ? 'Resolving street coordinates...' : 'Selected Venue Address'}
+                </span>
+                
+                {loadingAddress ? (
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <Loader2 className="w-3 h-3 animate-spin text-purple-600" />
+                    <span className="text-[10px] italic font-bold">Nominatim Geocoder checking coordinates...</span>
+                  </div>
+                ) : (
+                  <p className="text-[10px] font-black leading-tight mt-0.5 break-words">
+                    {address}
+                  </p>
+                )}
+
+                {errorMsg && (
+                  <span className="text-[8px] text-red-500 font-bold block mt-1 uppercase">
+                    ⚠ {errorMsg}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between border-t border-black/10 pt-2 shrink-0">
+              <div className="text-left">
+                <span className="text-[8px] uppercase font-black text-gray-400 block">Total cost</span>
+                <span className="text-xs font-black">₹{ticketPrice}</span>
+              </div>
+
+              <button
+                onClick={handleBookingSubmit}
+                disabled={loadingAddress}
+                className={`
+                  border-2 border-black px-4 py-1.5 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all flex items-center gap-1.5
+                  ${loadingAddress 
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none' 
+                    : 'bg-[#baffc9] hover:bg-[#a3f0b2] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]'
+                  }
+                `}
+              >
+                <CheckCircle className="w-3.5 h-3.5" />
+                <span>Confirm & Book Ticket</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+      </div>
+      
+      <div className="text-[9px] opacity-60 uppercase font-black tracking-widest text-center mt-1">
+        💡 Hint: Drag the blue marker pin or click anywhere on the map grid to update geocoding targets.
+      </div>
+    </div>
+  );
+};
+
+export default InteractiveLocationPicker;
