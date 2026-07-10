@@ -33,7 +33,8 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         { id: 'team', name: 'THE TEAM' },
         { id: 'case-study', name: 'CASE STUDY' },
         { id: 'testimonials', name: 'REVIEWS' },
-        { id: 'contact', name: 'CONTACT DESK' }
+        { id: 'contact', name: 'CONTACT DESK' },
+        { id: 'services', name: 'OUR SERVICES' }
       ];
 
       let current = 'WELCOME';
@@ -1063,6 +1064,140 @@ export const LandingPage = ({ onOpenAuth, user }) => {
                 </p>
               </form>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================
+          FRAME: OUR SERVICES
+         ========================================== */}
+      <section id="services" className="py-28 px-4 md:px-24 bg-[#111] text-white relative z-10 overflow-hidden border-t-[3px] border-b-[3px] border-[#1a1a1a]">
+        {/* Background texture grid */}
+        <div className="absolute inset-0 opacity-10 carbon-grid pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          {/* Section heading */}
+          <div className="text-center mb-20">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-white/50 font-bold block mb-4">★ Platform Ecosystem</span>
+            <h2 className="text-5xl md:text-7xl font-playfair italic font-bold leading-none text-white">
+              Our services
+            </h2>
+          </div>
+
+          <div className="relative flex flex-col gap-20 md:gap-24 max-w-5xl mx-auto pb-12">
+            {/* Card 1 */}
+            <div className="sticky top-24 md:top-32 w-full min-h-[420px] md:min-h-[460px] bg-[#d1fa50] text-[#1a1a1a] rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center transition-all hover:scale-[1.01] overflow-hidden">
+              <div className="flex-1 flex flex-col items-start text-left gap-4 md:gap-6 relative z-10">
+                <span className="text-[10px] font-mono uppercase tracking-widest bg-white border-2 border-[#1a1a1a] px-3 py-1 shadow-[2px_2px_0px_rgba(26,26,26,1)] font-bold">
+                  Service 01
+                </span>
+                <h3 className="text-3xl md:text-5xl font-playfair font-bold leading-tight">
+                  League Operations
+                </h3>
+                <p className="text-xs md:text-sm font-mono font-bold leading-relaxed text-[#1a1a1a]/85 max-w-lg">
+                  Let's build a professional league for your brand or community.
+                </p>
+                <p className="text-xs md:text-sm font-mono leading-relaxed text-[#1a1a1a]/70 max-w-lg">
+                  We handle the complete lifecycle: bracket generation, round robins, automated score sheets, and real-time standing updates. We'll help you build an event that's visually polished, matches fair play guidelines, and feels authentic to your players.
+                </p>
+                <button className="bg-[#1a1a1a] text-white font-mono font-bold uppercase tracking-wider text-xs pl-5 pr-2 py-2 border-[3px] border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_rgba(0,0,0,0.15)] flex items-center justify-between gap-4 group">
+                  <span>Discover our approach</span>
+                  <span className="bg-[#d1fa50] text-[#1a1a1a] w-8 h-8 rounded flex items-center justify-center font-black text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </button>
+              </div>
+              
+              <div className="flex-shrink-0 w-full md:w-[260px] h-[320px] md:h-[360px] bg-white border-[3px] border-[#1a1a1a] rounded-2xl p-2.5 shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col relative overflow-hidden group z-10">
+                <div className="absolute top-2 right-2 bg-yellow-200 border-2 border-[#1a1a1a] px-2 py-0.5 text-[8px] font-mono font-bold uppercase z-10 shadow-[1px_1px_0px_rgba(26,26,26,1)]">
+                  ACTIVE LEAGUE
+                </div>
+                <div className="w-full h-full overflow-hidden rounded-lg border border-[#1a1a1a]/15 relative bg-[#1a1a1a]">
+                  <img src="/varsity_cricket_card.jpg" alt="League Operations" className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
+                    <p className="text-[9px] font-mono uppercase tracking-widest text-yellow-300 font-bold mb-1">★ CRICKET CUP</p>
+                    <p className="text-xs font-bold leading-tight">Inter-Collegiate Season 2</p>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-[#1a1a1a]/5 pointer-events-none select-none z-0">
+                01
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="sticky top-28 md:top-36 w-full min-h-[420px] md:min-h-[460px] bg-white text-[#1a1a1a] rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center transition-all hover:scale-[1.01] overflow-hidden">
+              <div className="flex-1 flex flex-col items-start text-left gap-4 md:gap-6 relative z-10">
+                <span className="text-xs font-mono uppercase tracking-widest bg-yellow-200 border-2 border-[#1a1a1a] px-3 py-1 shadow-[2px_2px_0px_rgba(26,26,26,1)] font-bold">
+                  Service 02
+                </span>
+                <h3 className="text-3xl md:text-5xl font-playfair font-bold leading-tight">
+                  Venue Booking & Sync
+                </h3>
+                <p className="text-xs md:text-sm font-mono font-bold leading-relaxed text-[#1a1a1a]/85 max-w-lg">
+                  Real-time venue synchronization for physical grounds & esports arenas.
+                </p>
+                <p className="text-xs md:text-sm font-mono leading-relaxed text-[#1a1a1a]/70 max-w-lg">
+                  Venue booking modules sync directly with match timings. Host dashboards manage slots, coordinate referee updates, and issue security check-in passes automatically, preventing scheduling conflicts.
+                </p>
+                <button className="bg-[#1a1a1a] text-white font-mono font-bold uppercase tracking-wider text-xs pl-5 pr-2 py-2 border-[3px] border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_rgba(0,0,0,0.15)] flex items-center justify-between gap-4 group">
+                  <span>Discover our approach</span>
+                  <span className="bg-[#d1fa50] text-[#1a1a1a] w-8 h-8 rounded flex items-center justify-center font-black text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </button>
+              </div>
+              
+              <div className="flex-shrink-0 w-full md:w-[260px] h-[320px] md:h-[360px] bg-white border-[3px] border-[#1a1a1a] rounded-2xl p-2.5 shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col relative overflow-hidden group z-10">
+                <div className="absolute top-2 right-2 bg-green-200 border-2 border-[#1a1a1a] px-2 py-0.5 text-[8px] font-mono font-bold uppercase z-10 shadow-[1px_1px_0px_rgba(26,26,26,1)]">
+                  GROUND SECURED
+                </div>
+                <div className="w-full h-full overflow-hidden rounded-lg border border-[#1a1a1a]/15 relative bg-[#1a1a1a]">
+                  <img src="/football_card.jpg" alt="Venue Management" className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
+                    <p className="text-[9px] font-mono uppercase tracking-widest text-green-300 font-bold mb-1">★ MAP COORDINATES</p>
+                    <p className="text-xs font-bold leading-tight">YMCA Ground Pitch B</p>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-[#1a1a1a]/5 pointer-events-none select-none z-0">
+                02
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="sticky top-32 md:top-40 w-full min-h-[420px] md:min-h-[460px] bg-[#2ca684] text-white rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center transition-all hover:scale-[1.01] overflow-hidden">
+              <div className="flex-1 flex flex-col items-start text-left gap-4 md:gap-6 relative z-10">
+                <span className="text-xs font-mono uppercase tracking-widest bg-[#1a1a1a] text-white border-2 border-white/20 px-3 py-1 shadow-[2px_2px_0px_rgba(0,0,0,0.15)] font-bold">
+                  Service 03
+                </span>
+                <h3 className="text-3xl md:text-5xl font-playfair font-bold leading-tight">
+                  Broadcast & Media
+                </h3>
+                <p className="text-xs md:text-sm font-mono font-bold leading-relaxed text-white/90 max-w-lg">
+                  We'll help your matches reach a massive local and global audience.
+                </p>
+                <p className="text-xs md:text-sm font-mono leading-relaxed text-white/75 max-w-lg">
+                  If your local turf games lack standard coverage, our media teams step in. We configure high-fidelity streams, overlays, overlay feeds, referee audio, and automated highlights to Twitch & YouTube.
+                </p>
+                <button className="bg-white text-[#1a1a1a] font-mono font-bold uppercase tracking-wider text-xs pl-5 pr-2 py-2 border-[3px] border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_rgba(0,0,0,0.15)] flex items-center justify-between gap-4 group">
+                  <span>Get in touch</span>
+                  <span className="bg-[#1a1a1a] text-white w-8 h-8 rounded flex items-center justify-center font-black text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </button>
+              </div>
+              
+              <div className="flex-shrink-0 w-full md:w-[260px] h-[320px] md:h-[360px] bg-white border-[3px] border-[#1a1a1a] rounded-2xl p-2.5 shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col relative overflow-hidden group z-10">
+                <div className="absolute top-2 right-2 bg-red-500 text-white border-2 border-[#1a1a1a] px-2 py-0.5 text-[8px] font-mono font-bold uppercase z-10 shadow-[1px_1px_0px_rgba(26,26,26,1)]">
+                  LIVE STREAM
+                </div>
+                <div className="w-full h-full overflow-hidden rounded-lg border border-[#1a1a1a]/15 relative bg-[#1a1a1a]">
+                  <img src="/college_esports_card.png" alt="Broadcast & Media" className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
+                    <p className="text-[9px] font-mono uppercase tracking-widest text-red-400 font-bold mb-1">★ LIVE FEED</p>
+                    <p className="text-xs font-bold leading-tight">Vite Esports Showcase</p>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-white/5 pointer-events-none select-none z-0">
+                03
+              </div>
+            </div>
           </div>
         </div>
       </section>

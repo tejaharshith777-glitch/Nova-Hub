@@ -27,6 +27,7 @@
   }
   .font-mono     { font-family: 'Space Mono', monospace; }
   .font-inter    { font-family: 'Inter', sans-serif; }
+  .font-playfair { font-family: 'Playfair Display', serif; }
 
   /* Smooth scrolling */
   html {
