@@ -87,14 +87,14 @@ mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 2000 })
         if (count === 0) {
           console.log('Database empty. Seeding physical and esports tournaments...');
           const { tournamentsDb } = await import('./routes/mockStore.js');
-          const { User } = await import('./models/schemas.js');
+          const { default: User } = await import('./models/User.js');
 
           let host = await User.findOne({ role: 'host' });
           if (!host) {
             host = new User({
               username: 'system_host',
               email: 'host@novahub.com',
-              passwordHash: '$2a$10$abcdefghijklmnopqrstuv', // placeholder
+              password: '$2a$10$abcdefghijklmnopqrstuv', // placeholder
               role: 'host'
             });
             await host.save();

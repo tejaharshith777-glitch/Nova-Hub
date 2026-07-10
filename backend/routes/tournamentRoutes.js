@@ -20,8 +20,8 @@ const generateMatchesMock = (tournament) => {
       tournamentId: tournament._id,
       roundNumber: 1,
       matchIndex: i,
-      team1Id: team1._id || team1.registrationToken,
-      team2Id: team2._id || team2.registrationToken,
+      team1Id: team1 ? (team1._id || team1.registrationToken) : null,
+      team2Id: team2 ? (team2._id || team2.registrationToken) : null,
       scores: { team1Kills: 0, team2Kills: 0, team1Placement: 0, team2Placement: 0 },
       status: 'scheduled',
       winnerId: null
@@ -60,8 +60,8 @@ const generateMatchesMongoose = async (tournament) => {
       tournamentId: tournament._id,
       roundNumber: 1,
       matchIndex: i,
-      team1Id: team1._id.toString(),
-      team2Id: team2._id.toString(),
+      team1Id: team1 ? (team1._id ? team1._id.toString() : null) : null,
+      team2Id: team2 ? (team2._id ? team2._id.toString() : null) : null,
       scores: { team1Kills: 0, team2Kills: 0, team1Placement: 0, team2Placement: 0 },
       status: 'scheduled',
       winnerId: null

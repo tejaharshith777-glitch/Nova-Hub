@@ -26,6 +26,10 @@ const userSchema = new Schema({
     type: String,
     enum: ['host', 'participant'],
     default: 'participant'
+  },
+  activeTeam: {
+    type: String,
+    default: ''
   }
 }, { timestamps: true });
 

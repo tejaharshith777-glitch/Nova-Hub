@@ -24,7 +24,7 @@ export const authenticateToken = async (req, res, next) => {
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { username, email, password, role } = req.body;
+    const { username, email, password, role, activeTeam } = req.body;
 
     // MOCK DB FALLBACK
     if (process.env.USE_MOCK_DB === 'true') {
@@ -41,7 +41,8 @@ router.post('/register', async (req, res) => {
         username,
         email,
         password: passwordHash,
-        role: role || 'participant'
+        role: role || 'participant',
+        activeTeam: activeTeam || ''
       };
 
       usersDb.push(newUser);
@@ -61,7 +62,7 @@ router.post('/register', async (req, res) => {
 
       return res.status(201).json({
         message: 'Registration successful (MOCK DB MODE)',
-        user: { id: newUser._id, username: newUser.username, role: newUser.role }
+        user: { id: newUser._id, username: newUser.username, role: newUser.role, activeTeam: newUser.activeTeam }
       });
     }
 
@@ -78,7 +79,8 @@ router.post('/register', async (req, res) => {
       username,
       email,
       password: passwordHash,
-      role: role || 'participant'
+      role: role || 'participant',
+      activeTeam: activeTeam || ''
     });
 
     await newUser.save();
@@ -98,7 +100,7 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({
       message: 'Registration successful',
-      user: { id: newUser._id, username: newUser.username, role: newUser.role }
+      user: { id: newUser._id, username: newUser.username, role: newUser.role, activeTeam: newUser.activeTeam }
     });
   } catch (err) {
     res.status(500).json({ message: 'Registration server error', error: err.message });
@@ -146,7 +148,7 @@ router.post('/login', async (req, res) => {
 
       return res.status(200).json({
         message: 'Login successful (MOCK DB MODE)',
-        user: { id: user._id, username: user.username, role: user.role }
+        user: { id: user._id, username: user.username, role: user.role, activeTeam: user.activeTeam || '' }
       });
     }
 
@@ -172,7 +174,7 @@ router.post('/login', async (req, res) => {
 
     res.status(200).json({
       message: 'Login successful',
-      user: { id: user._id, username: user.username, role: user.role }
+      user: { id: user._id, username: user.username, role: user.role, activeTeam: user.activeTeam || '' }
     });
   } catch (err) {
     res.status(500).json({ message: 'Login server error', error: err.message });
