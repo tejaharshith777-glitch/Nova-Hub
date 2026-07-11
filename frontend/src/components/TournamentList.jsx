@@ -1,7 +1,7 @@
 import React from 'react';
 import { Users, Award, MapPin, Globe } from 'lucide-react';
 
-const pastelBgs = ['#ffffff', '#baffc9', '#ffdfba', '#cffafe', '#ffb3ba', '#fcebb6'];
+const pastelBgClasses = ['bg-white', 'bg-[#baffc9]', 'bg-[#ffdfba]', 'bg-[#cffafe]', 'bg-[#ffb3ba]', 'bg-[#fcebb6]'];
 
 export const TournamentList = ({ tournaments = [], onSelectEvent, user }) => {
   if (tournaments.length === 0) {
@@ -14,13 +14,12 @@ export const TournamentList = ({ tournaments = [], onSelectEvent, user }) => {
         const registeredCount = t.registeredTeams?.length || 0;
         const isFull = registeredCount >= t.maxTeams;
         const isJoined = t.registeredTeams?.some(team => team.captainEmail === user?.email);
-        const cardBg = pastelBgs[idx % pastelBgs.length];
+        const cardBgClass = pastelBgClasses[idx % pastelBgClasses.length];
 
         return (
           <div 
             key={t._id || t.id || idx}
-            className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-6 md:p-8 rounded-2xl border-[3px] border-[#1a1a1a] shadow-[6px_6px_0px_rgba(26,26,26,1)] hover:shadow-[3px_3px_0px_rgba(26,26,26,1)] hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-200 gap-6"
-            style={{ backgroundColor: cardBg }}
+            className={`w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-6 md:p-8 rounded-2xl border-[3px] border-[#1a1a1a] shadow-[6px_6px_0px_rgba(26,26,26,1)] hover:shadow-[3px_3px_0px_rgba(26,26,26,1)] hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-200 gap-6 ${cardBgClass}`}
           >
             <div className="flex flex-col gap-3 flex-1">
               <div className="flex flex-wrap gap-2 items-center">

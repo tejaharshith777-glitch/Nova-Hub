@@ -224,6 +224,19 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
     fetchTournamentsList();
   }, [fetchTournamentsList]);
 
+  // Sync page view and active tab dynamically when URL search parameter (tabParam) changes
+  useEffect(() => {
+    if (tabParam === 'host') {
+      setCurrentPage('hostPage');
+    } else {
+      setCurrentPage('dashboard');
+      if (tabParam === 'join') {
+        setActiveTab('all-tournaments');
+      }
+    }
+  }, [tabParam]);
+
+
   // Sync wallet balance to localstorage
   useEffect(() => {
     localStorage.setItem('novahub_wallet_balance', walletBalance);

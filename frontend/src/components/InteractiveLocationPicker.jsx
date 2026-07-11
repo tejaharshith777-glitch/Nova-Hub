@@ -12,6 +12,8 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
   const [loadingAddress, setLoadingAddress] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [leafletLoaded, setLeafletLoaded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
   // 1. Dynamically load Leaflet resources via CDN to avoid Vite asset resolution bugs
   useEffect(() => {
@@ -83,6 +85,58 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
         setLoadingAddress(false);
       }
     }, 1000);
+  };
+
+  const handleSearchSubmit = async () => {
+    if (!searchQuery.trim()) {
+      alert('Please enter a city or address to search.');
+      return;
+    }
+    
+    setIsSearching(true);
+    setErrorMsg('');
+    
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`,
+        {
+          headers: {
+            'Accept-Language': 'en',
+            'User-Agent': 'Nova-Hub-Ticketing-Application/1.0'
+          }
+        }
+      );
+      
+      if (response.ok) {
+        const results = await response.json();
+        if (results && results.length > 0) {
+          const topResult = results[0];
+          const lat = parseFloat(topResult.lat);
+          const lon = parseFloat(topResult.lon);
+          const resolvedName = topResult.display_name;
+          
+          const newCoords = { lat, lng: lon };
+          setCoords(newCoords);
+          setAddress(resolvedName);
+          
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.setView([lat, lon], 13);
+          }
+          if (markerInstanceRef.current) {
+            markerInstanceRef.current.setLatLng([lat, lon]);
+          }
+        } else {
+          alert('Could not find that location. Please try a different query.');
+        }
+      } else {
+        throw new Error('Nominatim returned non-OK status');
+      }
+    } catch (err) {
+      console.warn('OSM Nominatim Search failed.', err);
+      alert('Failed to contact location database. Check your connection.');
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   // 3. Initialize Leaflet Map
@@ -165,6 +219,38 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
 
   return (
     <div className="w-full flex flex-col gap-4 font-mono text-[#1a1a1a]">
+      {/* City/Address Search Bar */}
+      <div className="w-full bg-[#fcebb6] border-[3px] border-[#1a1a1a] p-4 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,0.15)] flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
+        <div className="flex-1">
+          <label htmlFor="search-address-input" className="text-[10px] uppercase font-black text-gray-500 block mb-1">
+            Search City or Venue Address
+          </label>
+          <input 
+            id="search-address-input"
+            type="text"
+            placeholder="e.g. Guntur, Bangalore, Connaught Place..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearchSubmit();
+              }
+            }}
+            className="w-full bg-white border-2 border-black p-2.5 text-xs font-bold outline-none uppercase"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={handleSearchSubmit}
+          disabled={isSearching}
+          className="bg-yellow-200 hover:bg-yellow-300 border-2 border-black px-6 py-2.5 font-bold uppercase text-xs shadow-[2.5px_2.5px_0px_rgba(26,26,26,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)] transition-all flex items-center justify-center gap-1.5 shrink-0"
+        >
+          {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Navigation className="w-3.5 h-3.5" />}
+          <span>Search Location</span>
+        </button>
+      </div>
+
       {/* Map Container */}
       <div className="w-full relative h-[380px] bg-gray-100 border-[3px] border-[#1a1a1a] rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(26,26,26,0.15)]">
         

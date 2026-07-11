@@ -269,4 +269,31 @@
   border-right-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+/* Custom neubrutalist background color overrides for dark mode */
+.dark [class*="bg-[#fcebb6]"] {
+  background-color: #221d0a !important;
+  border-color: rgba(252, 235, 182, 0.15) !important;
+}
+.dark [class*="bg-[#ffb3ba]"] {
+  background-color: #2b1215 !important;
+  border-color: rgba(255, 179, 186, 0.15) !important;
+}
+.dark [class*="bg-[#bde3fb]"] {
+  background-color: #0b1a29 !important;
+  border-color: rgba(189, 227, 251, 0.15) !important;
+}
+.dark [class*="bg-[#fce4fb]"] {
+  background-color: #271026 !important;
+  border-color: rgba(252, 228, 251, 0.15) !important;
+}
+.dark [class*="bg-[#baffc9]"] {
+  background-color: #0c2414 !important;
+  border-color: rgba(186, 255, 201, 0.15) !important;
+}
+.dark [class*="bg-[#ffdfba]"] {
+  background-color: #1f1406 !important;
+  border-color: rgba(255, 223, 186, 0.15) !important;
+}
+
+
 
