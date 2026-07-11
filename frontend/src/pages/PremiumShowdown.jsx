@@ -159,6 +159,7 @@ export const PremiumShowdown = () => {
   const magneticButtonRef = useRef(null);
   const horizontalScrollRef = useRef(null);
   const sectionPinRef = useRef(null);
+  const dashboardSectionRef = useRef(null);
 
   // Selector states
   const [selectedCity, setSelectedCity] = useState('bengaluru');
@@ -197,6 +198,31 @@ export const PremiumShowdown = () => {
 
     return () => {
       lenis.destroy();
+    };
+  }, []);
+
+  // 2. Fade in Dashboard on scroll (GSAP)
+  useEffect(() => {
+    const dashboard = dashboardSectionRef.current;
+    if (!dashboard) return;
+
+    const anim = gsap.fromTo(dashboard, 
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: dashboard,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse',
+        }
+      }
+    );
+
+    return () => {
+      anim.scrollTrigger?.kill();
     };
   }, []);
 
@@ -342,9 +368,39 @@ export const PremiumShowdown = () => {
       {/* Cyber Overlay Background Grid */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[linear-gradient(rgba(18,18,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(18,18,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px]" />
       
-      {/* Hero Section Container */}
-      {/* Nova Hub Interactive LAN Dashboard Section */}
-      <section className="relative z-10 min-h-screen pt-28 px-6 md:px-12 lg:px-20 flex flex-col justify-start">
+      {/* SECTION 1: SYSTEM CALIBRATION GATE (Center 3D Trophy Showcase) */}
+      <section className="relative z-10 min-h-[90vh] flex flex-col items-center justify-center text-center px-6">
+        {/* target HUD brackets */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-l border-t border-cyan-500/20 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-r border-b border-purple-500/20 pointer-events-none" />
+
+        <div className="relative z-10 space-y-6 max-w-3xl">
+          <div className="inline-flex items-center gap-2 border border-cyan-500/30 px-4 py-1.5 rounded-full bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-cyan-400 font-bold uppercase animate-pulse">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> WebGL Node Link Status: Standby
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tight text-white font-display">
+            SHOWDOWN <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500">ARENA</span>
+          </h1>
+
+          <p className="text-gray-400 text-xs md:text-sm font-mono tracking-wider max-w-lg mx-auto uppercase">
+            Initialize validation sequence. Syncing offline battle nodal corridors and low-ping server metrics.
+          </p>
+
+          {/* Scroll Down Indicator */}
+          <div className="pt-16 flex flex-col items-center justify-center gap-2">
+            <span className="text-[9px] font-bold text-cyan-450 uppercase tracking-[0.25em] animate-pulse">
+              Scroll to Sync Offline Grid
+            </span>
+            <div className="w-6 h-10 border-2 border-cyan-500/30 rounded-full p-1 flex justify-center">
+              <div className="w-1.5 h-2.5 bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 2: INTERACTIVE LAN DASHBOARD (Fades in on Scroll) */}
+      <section ref={dashboardSectionRef} className="relative z-10 min-h-screen py-16 px-6 md:px-12 lg:px-20 flex flex-col justify-start">
         
         {/* Title / Subtitle Block */}
         <div className="max-w-7xl mx-auto w-full mb-8 text-left">
