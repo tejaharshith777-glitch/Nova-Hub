@@ -7,7 +7,7 @@ import TournamentDetails from './pages/TournamentDetails';
 import PremiumShowdown from './pages/PremiumShowdown';
 import NotFound from './pages/NotFound';
 import AuthModal from './components/AuthModal';
-import VirtualCursor from './components/VirtualCursor';
+// import VirtualCursor from './components/VirtualCursor';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
@@ -124,8 +124,7 @@ export const App = () => {
         {/* Helper to open auth modal when guest lands on ?auth=true */}
         <AuthQueryHandler setIsAuthOpen={setIsAuthOpen} />
 
-        {/* Retro Custom Cursor Overlay */}
-        <VirtualCursor />
+        {/* <VirtualCursor /> */}
 
         {/* Retro Header Sticky Navbar */}
         <Navbar 
