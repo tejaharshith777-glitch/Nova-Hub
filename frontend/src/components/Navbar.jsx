@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LogOut, Menu, X } from 'lucide-react';
+import { LogOut, Menu, X, User } from 'lucide-react';
 
 const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -49,20 +49,24 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
         )}
 
         {user ? (
-          <div className="flex items-center gap-3 bg-white border-[3px] border-[#1a1a1a] px-3.5 py-1 shadow-[3px_3px_0px_rgba(26,26,26,1)]">
-            <span className="text-[10px] font-bold text-gaming-dark">
-              {user.username} ({user.role})
+          <div className="flex items-center gap-3 bg-white dark:bg-slate-900 border-[3px] border-[#1a1a1a] dark:border-white/10 px-3.5 py-1.5 shadow-[3px_3px_0px_rgba(26,26,26,1)] dark:shadow-[3px_3px_0px_rgba(255,255,255,0.15)] rounded-xl transition-colors duration-300">
+            <User className="w-3.5 h-3.5 text-purple-600 dark:text-cyan-400" />
+            <span className="text-[11px] font-black uppercase tracking-wider text-[#1a1a1a] dark:text-white truncate max-w-[120px] font-sans" title={user.username}>
+              {user.username}
+            </span>
+            <span className="bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border border-purple-500/20 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full font-sans">
+              {user.role}
             </span>
             <button
               onClick={handleRoleToggle}
-              className="bg-yellow-100 hover:bg-yellow-200 border-l border-r border-[#1a1a1a] px-2 py-0.5 text-[9px] uppercase font-bold text-[#1a1a1a] interactive-target"
+              className="bg-yellow-100 dark:bg-yellow-900/30 hover:bg-yellow-200 dark:hover:bg-yellow-900/50 border-l border-r border-[#1a1a1a] dark:border-white/10 px-2 py-0.5 text-[9px] uppercase font-bold text-[#1a1a1a] dark:text-yellow-400 interactive-target"
               title="Toggle host/player mode"
             >
               Swap
             </button>
             <button
               onClick={handleLogout}
-              className="text-red-500 hover:text-red-700 font-bold transition-colors interactive-target"
+              className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-bold transition-colors interactive-target"
               title="Logout"
             >
               <LogOut className="w-3.5 h-3.5" />
