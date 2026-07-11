@@ -30,6 +30,10 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
           Join Tournament
         </Link>
 
+        <Link to="/showdown" className="hover:underline decoration-yellow-400 decoration-2 text-purple-700 hover:text-cyan-600 font-extrabold interactive-target flex items-center gap-0.5">
+          ★ Showdown Arena
+        </Link>
+
         <a
           href="/#contact"
           onClick={e => { e.preventDefault(); const el = document.getElementById('contact'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
@@ -126,6 +130,13 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
             onClick={() => setIsMobileOpen(false)}
           >
             Join Tournament
+          </Link>
+          <Link 
+            to="/showdown" 
+            className="hover:underline decoration-yellow-400 decoration-2 text-purple-700 font-extrabold py-2 interactive-target flex items-center gap-1"
+            onClick={() => setIsMobileOpen(false)}
+          >
+            ★ Showdown Arena
           </Link>
           <a
             href="/#contact"

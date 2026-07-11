@@ -4,6 +4,7 @@ import { LogOut, ArrowRight, User, ShieldAlert } from 'lucide-react';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import TournamentDetails from './pages/TournamentDetails';
+import PremiumShowdown from './pages/PremiumShowdown';
 import NotFound from './pages/NotFound';
 import AuthModal from './components/AuthModal';
 import VirtualCursor from './components/VirtualCursor';
@@ -164,6 +165,7 @@ export const App = () => {
             />
             <Route path="/tournament/:id" element={<TournamentDetails user={user} />} />
             <Route path="/radar" element={<TournamentRadar />} />
+            <Route path="/showdown" element={<PremiumShowdown />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
