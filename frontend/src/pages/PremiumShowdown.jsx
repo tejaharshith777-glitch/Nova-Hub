@@ -200,28 +200,7 @@ export const PremiumShowdown = () => {
     };
   }, []);
 
-  // 2. Cinematic Typography Reveal (GSAP)
-  useEffect(() => {
-    gsap.fromTo(
-      '.reveal-line',
-      { y: '100%', rotateX: 30, opacity: 0 },
-      {
-        y: '0%',
-        rotateX: 0,
-        opacity: 1,
-        duration: 1.4,
-        ease: 'power4.out',
-        stagger: 0.15,
-        delay: 0.2,
-      }
-    );
 
-    gsap.fromTo(
-      '.hero-fade-in',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out', delay: 1.0 }
-    );
-  }, []);
 
   // 3. Live Bracket Horizontal Scroll Pinning (GSAP)
   useEffect(() => {
@@ -252,43 +231,7 @@ export const PremiumShowdown = () => {
     };
   }, []);
 
-  // 4. Magnetic CTA Button micro-interaction (GSAP)
-  useEffect(() => {
-    const button = magneticButtonRef.current;
-    if (!button) return;
 
-    const handleMouseMove = (e) => {
-      const rect = button.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-
-      // Translate button slightly toward mouse (magnetic drag)
-      gsap.to(button, {
-        x: x * 0.35,
-        y: y * 0.35,
-        duration: 0.3,
-        ease: 'power2.out',
-      });
-    };
-
-    const handleMouseLeave = () => {
-      // Snap button back on leave
-      gsap.to(button, {
-        x: 0,
-        y: 0,
-        duration: 0.6,
-        ease: 'elastic.out(1, 0.3)',
-      });
-    };
-
-    button.addEventListener('mousemove', handleMouseMove);
-    button.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      button.removeEventListener('mousemove', handleMouseMove);
-      button.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, []);
 
   // 5. Leaflet Dark Mode Map Setup
   useEffect(() => {
