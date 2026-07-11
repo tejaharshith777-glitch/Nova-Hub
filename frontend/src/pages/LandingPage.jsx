@@ -4,6 +4,23 @@ import { ArrowRight, Trophy, Sparkles, Pin, Compass, Info, Send } from 'lucide-r
 import { useNavigate } from 'react-router-dom';
 import FeaturedCarousel from '../components/FeaturedCarousel';
 
+const ScrollParallaxHeading = ({ children, className, axis = "x", speed = 30, direction = 1 }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+
+  const transformValue = useTransform(scrollYProgress, [0, 1], [direction * -speed, direction * speed]);
+  const style = axis === "y" ? { y: transformValue } : { x: transformValue };
+
+  return (
+    <motion.h2 ref={ref} style={style} className={className}>
+      {children}
+    </motion.h2>
+  );
+};
+
 const mockSportsList = [
   { id: '1', title: 'Summer Cricket Cup', type: 'Cricket', slots: '6/8 Slots Taken', fee: '₹1,500', venue: 'Nehru Ground Pitch A', bg: '#fef08a' },
   { id: '2', title: 'City Football League', type: 'Football', slots: '12/16 Slots Taken', fee: '₹3,000', venue: 'Bangalore Stadium Hall 2', bg: '#ffedd5' },
@@ -187,9 +204,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
             <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />Our Tournaments
           </span>
-          <h2 className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-4 leading-tight">
+          <ScrollParallaxHeading axis="x" direction={1} speed={30} className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-4 leading-tight">
             A glimpse of our <span className="text-[#e86c3f]">tournaments</span>
-          </h2>
+          </ScrollParallaxHeading>
           <div className="flex gap-3 mb-4">
             <span className="px-3 py-1 bg-[#1a1a1a] text-white text-[10px] font-black uppercase tracking-widest rounded-full">🏟️ Local Sports</span>
             <span className="px-3 py-1 bg-purple-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full">🎮 Online Esports</span>
@@ -275,9 +292,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-100 border-2 border-[#1a1a1a] shadow-[2px_2px_0px_rgba(26,26,26,1)] rounded-full text-[9px] font-black uppercase tracking-wider text-purple-700 mb-3">
               🎮 Cyber Arenas
             </span>
-            <h2 className="text-3xl md:text-4xl font-inter font-black uppercase tracking-tight text-[#1a1a1a]">
+            <ScrollParallaxHeading axis="x" direction={-1} speed={30} className="text-3xl md:text-4xl font-inter font-black uppercase tracking-tight text-[#1a1a1a]">
               Online Esports <span className="text-purple-600">Showdowns</span>
-            </h2>
+            </ScrollParallaxHeading>
             <p className="text-[11px] font-mono text-[#1a1a1a]/60 mt-1 uppercase tracking-wider">
               Compete globally from your setup. Real-time bracket sync and anti-cheat tracking.
             </p>
@@ -355,9 +372,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-100 border-2 border-[#1a1a1a] shadow-[2px_2px_0px_rgba(26,26,26,1)] rounded-full text-[9px] font-black uppercase tracking-wider text-red-700 mb-3">
               🏁 Speed Tracks
             </span>
-            <h2 className="text-3xl md:text-4xl font-inter font-black uppercase tracking-tight text-[#1a1a1a]">
+            <ScrollParallaxHeading axis="x" direction={1} speed={30} className="text-3xl md:text-4xl font-inter font-black uppercase tracking-tight text-[#1a1a1a]">
               Racing <span className="text-red-600">Tournaments</span>
-            </h2>
+            </ScrollParallaxHeading>
             <p className="text-[11px] font-mono text-[#1a1a1a]/60 mt-1 uppercase tracking-wider">
               High-octane time trials, virtual circuits, and leaderboards for speed junkies.
             </p>
@@ -420,9 +437,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-200 border-2 border-[#1a1a1a] shadow-[2px_2px_0px_rgba(26,26,26,1)] rounded-full text-[9px] font-black uppercase tracking-wider text-[#1a1a1a] mb-3">
               🎒 Junior League
             </span>
-            <h2 className="text-3xl md:text-4xl font-inter font-black uppercase tracking-tight text-[#1a1a1a]">
+            <ScrollParallaxHeading axis="x" direction={-1} speed={35} className="text-3xl md:text-4xl font-inter font-black uppercase tracking-tight text-[#1a1a1a]">
               School vs School <span className="text-[#e86c3f]">Tournaments</span>
-            </h2>
+            </ScrollParallaxHeading>
             <p className="text-[11px] font-mono text-[#1a1a1a]/60 mt-1 uppercase tracking-wider">
               High-school battles representing regional bragging rights and legacy shields.
             </p>
@@ -468,9 +485,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#cffafe] border-2 border-[#1a1a1a] shadow-[2px_2px_0px_rgba(26,26,26,1)] rounded-full text-[9px] font-black uppercase tracking-wider text-blue-700 mb-3">
               🎓 Varsity Cup
             </span>
-            <h2 className="text-3xl md:text-4xl font-inter font-black uppercase tracking-tight text-[#1a1a1a]">
+            <ScrollParallaxHeading axis="x" direction={1} speed={35} className="text-3xl md:text-4xl font-inter font-black uppercase tracking-tight text-[#1a1a1a]">
               College vs College <span className="text-blue-600">Tournaments</span>
-            </h2>
+            </ScrollParallaxHeading>
             <p className="text-[11px] font-mono text-[#1a1a1a]/60 mt-1 uppercase tracking-wider">
               High-intensity collegiate showdowns, sports scholarships, and campus bragging rights.
             </p>
@@ -515,9 +532,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
             <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />What We Build
           </span>
-          <h2 className="text-3xl md:text-4xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
+          <ScrollParallaxHeading axis="y" direction={1} speed={25} className="text-3xl md:text-4xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
             Leagues we help you <span className="text-[#e86c3f]">build...</span>
-          </h2>
+          </ScrollParallaxHeading>
           <p className="text-[11px] font-mono text-[#1a1a1a]/70 leading-relaxed uppercase tracking-widest">
             From zero to kickoff, we design digital systems that simplify complexity, and turn bold ideas into local tournaments people love - and players believe in.
           </p>
@@ -609,9 +626,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left rotatable title */}
           <div className="lg:col-span-4 flex items-center justify-start lg:justify-center relative h-16 lg:h-80">
-            <h2 className="text-3xl font-extrabold font-display uppercase tracking-wider text-[#1a1a1a] lg:-rotate-90 lg:origin-center lg:absolute lg:-translate-x-8">
+            <ScrollParallaxHeading axis="y" direction={-1} speed={25} className="text-3xl font-extrabold font-display uppercase tracking-wider text-[#1a1a1a] lg:-rotate-90 lg:origin-center lg:absolute lg:-translate-x-8">
               Start your journey
-            </h2>
+            </ScrollParallaxHeading>
           </div>
 
           {/* Right overlapping cards deck */}
@@ -661,9 +678,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
             <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />The Team
           </span>
-          <h2 className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
+          <ScrollParallaxHeading axis="x" direction={-1} speed={30} className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
             Who we are <span className="text-[#e86c3f]">(and why that matters)</span>
-          </h2>
+          </ScrollParallaxHeading>
           <p className="text-[11px] font-mono text-[#1a1a1a]/70 uppercase tracking-widest">
             Finally, meet the team behind the action!
           </p>
@@ -725,9 +742,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
       <section id="case-study" className="py-24 max-w-5xl mx-auto px-8 relative z-10 border-t border-[#1a1a1a]/10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
           <div>
-            <h2 className="text-4xl md:text-[2.75rem] font-display italic font-bold text-[#1a1a1a] mb-6 max-w-2xl leading-tight">
+            <ScrollParallaxHeading axis="x" direction={1} speed={30} className="text-4xl md:text-[2.75rem] font-display italic font-bold text-[#1a1a1a] mb-6 max-w-2xl leading-tight">
               System Control: Scaling Local Tournaments with a Digital Engine
-            </h2>
+            </ScrollParallaxHeading>
             <p className="text-xs font-mono text-[#1a1a1a]/70 leading-relaxed max-w-xl">
               Translating chaotic weekend matches into production ready brackets using a reusable digital ecosystem.
             </p>
@@ -788,9 +805,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           </div>
 
           <div className="relative z-10 flex-1 flex flex-col justify-end p-8 md:p-12 text-white">
-            <h2 className="text-4xl md:text-6xl font-display font-black leading-tight mb-4">
+            <ScrollParallaxHeading axis="x" direction={-1} speed={35} className="text-4xl md:text-6xl font-display font-black leading-tight mb-4">
               Experience you can <span className="text-[#e86c3f]">rely on</span>
-            </h2>
+            </ScrollParallaxHeading>
             <p className="text-[10px] font-mono max-w-sm leading-relaxed text-white/70 mb-6 font-semibold">
               Nova Hub operates across Weekend Leagues, International Qualifiers, and Corporate Cups, with a focus on mid-market physical arenas. We provide local managers with decisive bracket generation and technical depth where it matters most.
             </p>
@@ -839,9 +856,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
             <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />Testimonials
           </span>
-          <h2 className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
+          <ScrollParallaxHeading axis="x" direction={1} speed={30} className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] mb-6 leading-tight">
             Real talk from <span className="text-[#e86c3f]">captains</span> we play with...
-          </h2>
+          </ScrollParallaxHeading>
           <p className="text-[11px] font-mono text-[#1a1a1a]/70 uppercase tracking-widest max-w-xl leading-relaxed">
             Real results, real matches. Here's how past partners describe working together - from setup to winning.
           </p>
@@ -932,10 +949,10 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             className="mb-16"
           >
             <span className="text-[10px] uppercase tracking-[0.3em] text-[#1a1a1a]/60 font-bold block mb-4">★ Help Desk</span>
-            <h2 className="text-5xl md:text-7xl font-display font-black italic leading-none text-[#1a1a1a] mb-4">
+            <ScrollParallaxHeading axis="y" direction={1} speed={25} className="text-5xl md:text-7xl font-display font-black italic leading-none text-[#1a1a1a] mb-4">
               Reach out to<br />
               <span className="underline decoration-yellow-400 decoration-[6px] underline-offset-4">Nova Support.</span>
-            </h2>
+            </ScrollParallaxHeading>
             <p className="text-xs md:text-sm font-mono text-[#1a1a1a]/60 max-w-lg mt-6 leading-relaxed uppercase tracking-wider">
               Need help with brackets, ground bookings, player check-ins, or billing? Our desk team responds within 24 hours.
             </p>
@@ -1091,9 +1108,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           {/* Section heading */}
           <div className="text-center mb-20">
             <span className="text-[10px] uppercase tracking-[0.35em] text-[#1a1a1a]/60 font-bold block mb-4">★ Platform Ecosystem</span>
-            <h2 className="text-5xl md:text-7xl font-playfair italic font-bold leading-none text-[#1a1a1a]">
+            <ScrollParallaxHeading axis="y" direction={-1} speed={25} className="text-5xl md:text-7xl font-playfair italic font-bold leading-none text-[#1a1a1a]">
               Our services
-            </h2>
+            </ScrollParallaxHeading>
           </div>
 
           <div ref={servicesContainerRef} className="relative max-w-5xl mx-auto flex flex-col pb-12">
