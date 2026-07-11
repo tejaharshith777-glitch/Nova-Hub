@@ -342,6 +342,16 @@
   border-color: rgba(254, 205, 211, 0.15) !important;
 }
 
+@keyframes scan {
+  0%, 100% {
+    top: 5%;
+  }
+  50% {
+    top: 95%;
+  }
+}
+
+
 
 
 

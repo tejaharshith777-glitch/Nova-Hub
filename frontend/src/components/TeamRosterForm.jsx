@@ -83,6 +83,51 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
       rulesAccepted
     };
 
+    if (!apiBaseUrl) {
+      // Offline mode simulation fallback
+      setTimeout(() => {
+        const mockReg = {
+          teamName,
+          captainName,
+          captainEmail,
+          roster: roster.map(m => ({ name: m.name.trim(), gameId: m.gameId.trim() })),
+          registrationToken: 'TOKEN-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
+          rulesAccepted: true
+        };
+
+        // Save in localStorage so Dashboard and JoinEventPage can load and merge it
+        const savedRegs = localStorage.getItem('novahub_mock_registrations');
+        const currentRegs = savedRegs ? JSON.parse(savedRegs) : [];
+        currentRegs.push({
+          tournamentId: tournament._id || tournament.id,
+          team: mockReg
+        });
+        localStorage.setItem('novahub_mock_registrations', JSON.stringify(currentRegs));
+
+        // Create mock success data structure matching backend API response
+        const mockSuccessData = {
+          registrationToken: mockReg.registrationToken,
+          venuePass: tournament.venueType === 'online' ? {
+            type: 'online',
+            region: tournament.venueDetails?.serverRegion || 'Asia South',
+            code: tournament.venueDetails?.lobbyCode || 'LBY-MOCK-99'
+          } : {
+            type: 'offline',
+            address: tournament.venueDetails?.physicalAddress || 'Ground Venue',
+            room: tournament.venueDetails?.stadiumHall || 'Pitch A'
+          },
+          tournament: {
+            ...tournament,
+            registeredTeams: [...(tournament.registeredTeams || []), mockReg]
+          }
+        };
+
+        setSuccessData(mockSuccessData);
+        setIsSubmitting(false);
+      }, 1000);
+      return;
+    }
+
     try {
       const res = await fetch(`${apiBaseUrl}/api/tournaments/${tournament._id}/join`, {
         method: 'POST',
@@ -114,48 +159,86 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
 
   if (showCheckout) {
     return (
-      <div className="bg-[#ffdfba] border-[3px] border-[#1a1a1a] p-10 md:p-14 rounded-[2rem] shadow-[8px_8px_0px_0px_rgba(26,26,26,1)] max-w-md mx-auto font-mono text-[#1a1a1a] relative z-20 text-center space-y-6">
-        <div className="bg-white border-2 border-black w-max mx-auto p-3 rotate-6 shadow-[2px_2px_0px_rgba(26,26,26,1)]">
-          <CreditCard className="w-8 h-8" />
+      <div className="bg-[#fce4fb] border-[3px] border-[#1a1a1a] p-10 md:p-14 rounded-[2rem] shadow-[8px_8px_0px_0px_rgba(26,26,26,1)] max-w-md mx-auto font-mono text-[#1a1a1a] relative z-20 text-center space-y-6">
+        <div className="bg-[#5f259f] border-2 border-black w-max mx-auto px-4 py-2 rotate-3 shadow-[2.5px_2.5px_0px_rgba(26,26,26,1)] text-white font-black text-sm uppercase flex items-center gap-1.5">
+          <span>PhonePe</span>
+          <span className="bg-yellow-300 text-black px-1.5 py-0.2 text-[8px] rounded font-sans">DEMO</span>
         </div>
         
         <h2 className="text-3xl font-black font-display uppercase border-b-[3px] border-black pb-4">
-          Entry Sub-Fee Payment
+          Scan & Pay Entry Fee
         </h2>
 
         <div className="bg-white border-[3px] border-black p-4 rounded-xl shadow-[4px_4px_0px_rgba(26,26,26,1)] text-left">
           <span className="text-[10px] font-black uppercase opacity-60 block">Event Entry Stake</span>
-          <p className="font-bold text-lg">{tournament.title}</p>
+          <p className="font-bold text-base truncate">{tournament.title}</p>
           <div className="flex justify-between items-baseline mt-4 border-t border-black/10 pt-2 font-black">
             <span>TOTAL FEE:</span>
-            <span className="text-xl text-yellow-600">₹{tournament.entryFee}</span>
+            <span className="text-xl text-purple-700">₹{tournament.entryFee}</span>
           </div>
         </div>
 
         {paymentProcessing ? (
-          <div className="py-6 flex flex-col items-center gap-3">
-            <Loader2 className="w-8 h-8 animate-spin text-yellow-600" />
-            <span className="text-xs font-bold uppercase">Processing secure card transaction...</span>
+          <div className="py-12 flex flex-col items-center gap-4">
+            <Loader2 className="w-10 h-10 animate-spin text-purple-700" />
+            <span className="text-xs font-bold uppercase tracking-wider text-purple-800">Verifying PhonePe Transaction...</span>
           </div>
         ) : paymentFinished ? (
-          <div className="py-6 flex flex-col items-center gap-3 text-green-600">
-            <CheckCircle className="w-8 h-8" />
-            <span className="text-xs font-bold uppercase">Payment Approved! Finalizing seed...</span>
+          <div className="py-12 flex flex-col items-center gap-4 text-green-600">
+            <CheckCircle className="w-10 h-10" />
+            <span className="text-xs font-bold uppercase tracking-wider">Payment Verified! Booking slot...</span>
           </div>
         ) : (
-          <div className="space-y-4 pt-4">
-            <button
+          <div className="space-y-6 pt-2">
+            {/* Interactive Mock QR Code */}
+            <div 
               onClick={simulatePayment}
-              className="w-full bg-[#baffc9] hover:bg-[#a6e6b5] border-[3px] border-black py-4 rounded-xl font-black uppercase tracking-wider text-xs shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(26,26,26,1)] transition-all interactive-target"
+              className="relative w-44 h-44 mx-auto bg-white border-[3px] border-black p-3 shadow-[4px_4px_0px_rgba(26,26,26,1)] overflow-hidden flex items-center justify-center group cursor-pointer"
+              title="Click QR Code to Pay"
             >
-              Simulate Sub-Fee Payment (One-Click)
-            </button>
-            <button
-              onClick={() => setShowCheckout(false)}
-              className="w-full bg-white hover:bg-gray-100 border-[3px] border-black py-3 rounded-xl font-black uppercase tracking-wider text-xs shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(26,26,26,1)] transition-all interactive-target"
-            >
-              Cancel Roster Entry
-            </button>
+              {/* Moving scanner laser line */}
+              <div className="absolute left-0 right-0 h-1 bg-purple-600 shadow-[0_0_8px_#8b5cf6] animate-[scan_2s_ease-in-out_infinite] z-10" />
+              
+              {/* Mock QR SVG */}
+              <svg className="w-full h-full text-black opacity-80 group-hover:opacity-100 transition-opacity" viewBox="0 0 100 100" fill="currentColor">
+                <path d="M0,0 h30 v30 h-30 z M5,5 v20 h20 v-20 z M10,10 h10 v10 h-10 z" />
+                <path d="M70,0 h30 v30 h-30 z M75,5 v20 h20 v-20 z M80,10 h10 v10 h-10 z" />
+                <path d="M0,70 h30 v30 h-30 z M5,75 v20 h20 v-20 z M10,80 h10 v10 h-10 z" />
+                <path d="M80,80 h10 v10 h-10 z" />
+                <rect x="40" y="5" width="5" height="15" />
+                <rect x="50" y="10" width="10" height="5" />
+                <rect x="45" y="25" width="15" height="5" />
+                <rect x="5" y="40" width="15" height="5" />
+                <rect x="25" y="45" width="5" height="15" />
+                <rect x="40" y="40" width="20" height="20" />
+                <rect x="75" y="40" width="10" height="5" />
+                <rect x="85" y="50" width="10" height="10" />
+                <rect x="5" y="60" width="5" height="5" />
+                <rect x="45" y="70" width="15" height="5" />
+                <rect x="55" y="80" width="5" height="15" />
+                <rect x="70" y="75" width="5" height="10" />
+                <rect x="85" y="75" width="5" height="5" />
+              </svg>
+            </div>
+
+            <p className="text-[10px] uppercase font-bold text-gray-500 max-w-xs mx-auto">
+              Scan QR code above with any UPI app or click it directly to trigger a demo payment simulator.
+            </p>
+
+            <div className="space-y-3 pt-2">
+              <button
+                onClick={simulatePayment}
+                className="w-full bg-[#baffc9] hover:bg-[#a6e6b5] border-[3px] border-black py-3.5 rounded-xl font-black uppercase tracking-wider text-xs shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(26,26,26,1)] transition-all interactive-target"
+              >
+                Verify & Pay (Demo)
+              </button>
+              <button
+                onClick={() => setShowCheckout(false)}
+                className="w-full bg-white hover:bg-gray-100 border-[3px] border-black py-3 rounded-xl font-black uppercase tracking-wider text-xs shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(26,26,26,1)] transition-all interactive-target"
+              >
+                Cancel Registration
+              </button>
+            </div>
           </div>
         )}
       </div>

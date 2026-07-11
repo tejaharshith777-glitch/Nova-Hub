@@ -130,6 +130,31 @@ export const HostForm = ({ setCurrentPage, apiBaseUrl, user }) => {
       }
     };
 
+    if (!apiBaseUrl) {
+      // Offline mode simulation fallback
+      setIsSubmitting(true);
+      setTimeout(() => {
+        const mockTournament = {
+          _id: 'mock-t-' + Date.now(),
+          ...payload,
+          hostId: { _id: user?.id || 'mock-host-id', username: user?.username || 'Host' },
+          status: 'open',
+          registeredTeams: [],
+          startDate: form.startDate || new Date(Date.now() + 86400000).toISOString(),
+          endDate: form.endDate || new Date(Date.now() + 172800000).toISOString()
+        };
+
+        const saved = localStorage.getItem('novahub_mock_tournaments');
+        const current = saved ? JSON.parse(saved) : [];
+        current.push(mockTournament);
+        localStorage.setItem('novahub_mock_tournaments', JSON.stringify(current));
+
+        setSubmitted(true);
+        setIsSubmitting(false);
+      }, 1000);
+      return;
+    }
+
     try {
       // Post to backend API
       const res = await fetch(`${apiBaseUrl}/api/tournaments/create`, {

@@ -196,7 +196,28 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   const fetchTournamentsList = useCallback(async () => {
     setLoadingTournaments(true);
     if (!apiBaseUrl) {
-      setTournaments(defaultFallbackTournaments);
+      const hostedSaved = localStorage.getItem('novahub_mock_tournaments');
+      const hostedTournaments = hostedSaved ? JSON.parse(hostedSaved) : [];
+      
+      const regsSaved = localStorage.getItem('novahub_mock_registrations');
+      const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+
+      // Combine fallback mock data and locally hosted events
+      const allBase = [...defaultFallbackTournaments, ...hostedTournaments];
+
+      // Merge local registration records into their matching tournament entities
+      const merged = allBase.map(t => {
+        const matchingRegs = mockRegs.filter(r => r.tournamentId === (t._id || t.id));
+        if (matchingRegs.length > 0) {
+          return {
+            ...t,
+            registeredTeams: [...(t.registeredTeams || []), ...matchingRegs.map(r => r.team)]
+          };
+        }
+        return t;
+      });
+
+      setTournaments(merged);
       setLoadingTournaments(false);
       return;
     }
@@ -845,9 +866,15 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                                 </span>
                               </div>
                               <h3 className="text-base font-black uppercase">{t.title}</h3>
-                              <span className="text-[10px] text-gray-500 block uppercase font-bold mt-1">
-                                Format: {t.format} · Slots: {t.registeredTeams?.length || 0}/{t.maxTeams}
-                              </span>
+                              <div className="flex flex-col gap-0.5 mt-1 text-[10px] text-gray-500 font-bold uppercase">
+                                <span>Format: {t.format} · Slots: {t.registeredTeams?.length || 0}/{t.maxTeams}</span>
+                                <span>
+                                  📍 Venue: {t.venueType === 'offline' ? (t.venueDetails?.physicalAddress || 'Ground Venue') : `Online (${t.venueDetails?.serverRegion || 'Global'} Server)`}
+                                </span>
+                                <span>
+                                  📅 Timings: {t.startDate ? new Date(t.startDate).toLocaleString() : 'Sunday, 10:00 AM'}
+                                </span>
+                              </div>
                             </div>
 
                             <div className="flex items-center gap-3">

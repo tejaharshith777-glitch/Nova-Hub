@@ -613,7 +613,28 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
   // Load tournaments from API (fallback to local data on error or empty)
   const loadTournaments = useCallback(async () => {
     if (!apiBaseUrl) {
-      setTournaments(localFallbackTournaments);
+      const hostedSaved = localStorage.getItem('novahub_mock_tournaments');
+      const hostedTournaments = hostedSaved ? JSON.parse(hostedSaved) : [];
+      
+      const regsSaved = localStorage.getItem('novahub_mock_registrations');
+      const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+
+      // Combine fallback mock data and locally hosted events
+      const allBase = [...localFallbackTournaments, ...hostedTournaments];
+
+      // Merge local registration records into their matching tournament entities
+      const merged = allBase.map(t => {
+        const matchingRegs = mockRegs.filter(r => r.tournamentId === (t._id || t.id));
+        if (matchingRegs.length > 0) {
+          return {
+            ...t,
+            registeredTeams: [...(t.registeredTeams || []), ...matchingRegs.map(r => r.team)]
+          };
+        }
+        return t;
+      });
+
+      setTournaments(merged);
       return;
     }
     try {
