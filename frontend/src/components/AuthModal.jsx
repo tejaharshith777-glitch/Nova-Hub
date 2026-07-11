@@ -31,7 +31,7 @@ const mockLocalAuth = (isLogin, payload) => {
       users.push(stored);
       saveUsers(users);
     }
-    const session = { id: stored.id, username: stored.username, role: stored.role };
+    const session = { id: stored.id, username: stored.username, role: stored.role, email: stored.email };
     saveSession(session);
     return session;
   } else {
@@ -48,7 +48,7 @@ const mockLocalAuth = (isLogin, payload) => {
     };
     users.push(newUser);
     saveUsers(users);
-    const session = { id: newUser.id, username: newUser.username, role: newUser.role };
+    const session = { id: newUser.id, username: newUser.username, role: newUser.role, email: newUser.email };
     saveSession(session);
     return session;
   }

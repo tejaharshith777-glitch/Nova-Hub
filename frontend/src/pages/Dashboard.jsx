@@ -95,6 +95,8 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   const queryParams = new URLSearchParams(location.search);
   const tabParam = queryParams.get('tab');
 
+  const currentUserEmail = user?.email || (user?.username ? `${user.username.toLowerCase()}@novahub.com` : 'player@novahub.com');
+
   // Page Routing State ('dashboard' | 'hostPage' | 'joinPage')
   const [currentPage, setCurrentPage] = useState(
     tabParam === 'host' ? 'hostPage' : 'dashboard'
@@ -117,7 +119,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
   // User Local Profile State (updates name/email mock)
   const [profileName, setProfileName] = useState(user?.username || 'Player');
-  const [profileEmail, setProfileEmail] = useState(user?.email || 'player@novahub.com');
+  const [profileEmail, setProfileEmail] = useState(currentUserEmail);
 
   // Wallet State (Persisted in localStorage)
   const [walletBalance, setWalletBalance] = useState(() => {
@@ -559,7 +561,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   };
 
   // Calculate achievements stats
-  const registeredCount = tournaments.filter(t => t.registeredTeams?.some(team => team.captainEmail === user?.email)).length;
+  const registeredCount = tournaments.filter(t => t.registeredTeams?.some(team => team.captainEmail === currentUserEmail)).length;
   const isClanCreated = !!activeTeam;
   const isHighRoller = walletBalance >= 5000;
 
@@ -826,7 +828,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                 {(() => {
                   const myEvents = tournaments.filter(t => {
                     const isHost = t.hostId?._id === user?.id || t.hostId === user?.id || t.hostId?.username === user?.username;
-                    const isPlayer = t.registeredTeams?.some(team => team.captainEmail === user?.email);
+                    const isPlayer = t.registeredTeams?.some(team => team.captainEmail === currentUserEmail);
                     return isHost || isPlayer;
                   });
 
@@ -952,7 +954,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
               <div className="flex-1 flex flex-col gap-8">
                 {(() => {
                   const joinedGames = tournaments.filter(t => 
-                    t.registeredTeams?.some(team => team.captainEmail === user?.email)
+                    t.registeredTeams?.some(team => team.captainEmail === currentUserEmail)
                   );
                   const hostedGames = tournaments.filter(t => 
                     t.hostId?._id === user?.id || t.hostId === user?.id || t.hostId?.username === user?.username
