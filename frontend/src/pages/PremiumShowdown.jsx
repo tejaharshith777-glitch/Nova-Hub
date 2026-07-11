@@ -334,8 +334,8 @@ export const PremiumShowdown = () => {
 
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="hero-fade-in absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+        {/* Scroll Indicator (rendered relative to avoid absolute overlaps on short viewports) */}
+        <div className="hero-fade-in mt-16 flex flex-col items-center gap-2 opacity-50 select-none">
           <span className="text-[10px] font-bold tracking-[0.3em] uppercase">Scroll to Arena</span>
           <div className="w-5 h-8 border-2 border-white rounded-full flex justify-center p-1">
             <div className="w-1 h-2 bg-white rounded-full animate-bounce"></div>
@@ -343,16 +343,86 @@ export const PremiumShowdown = () => {
         </div>
       </section>
 
+      {/* HOW TO JOIN & EVENT ROADMAP SECTION */}
+      <section className="relative z-10 py-24 px-6 md:px-24 bg-black/40 backdrop-blur-sm border-t border-b border-white/5">
+        <div className="max-w-6xl mx-auto">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            
+            {/* Left: How to Join */}
+            <div className="lg:col-span-6 flex flex-col gap-6">
+              <div>
+                <span className="text-[10px] tracking-[0.3em] uppercase text-cyan-400 font-bold block mb-1">★ Registration protocol</span>
+                <h2 className="text-3xl md:text-4xl font-black uppercase text-white">HOW TO JOIN</h2>
+              </div>
+              <p className="text-gray-400 text-xs md:text-sm font-mono leading-relaxed">
+                Follow the four-step physical coordination checklist to verify check-in status, register active rosters, and unlock tournament lobby slots.
+              </p>
+              
+              <div className="flex flex-col gap-4 mt-2">
+                {[
+                  { step: '01', title: 'SUBMIT CAPTAIN SPEC', desc: 'Captain registers team name and primary communication email coordinates.' },
+                  { step: '02', title: 'ROSTER SUBMISSION', desc: 'Input roster arrays (3-5 active players per squad) for anti-cheat verification.' },
+                  { step: '03', title: 'COMPLETE GROUND CHECK-IN', desc: 'Arrive at the Bangalore Stadium LAN desk to scan player passes.' },
+                  { step: '04', title: 'CLAIM BRACKET KEYS', desc: 'Lobby locks open automatically 2 hours prior to bracket scheduling.' }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex gap-4 p-5 bg-white/[0.01] border border-white/[0.04] rounded-2xl shadow-lg hover:border-cyan-500/20 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-950 flex items-center justify-center font-black text-cyan-400 border border-cyan-500/30 flex-shrink-0 text-sm">
+                      {item.step}
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-white">{item.title}</h4>
+                      <p className="text-xs text-gray-400 mt-1 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Timeline Roadmap */}
+            <div className="lg:col-span-6 flex flex-col gap-6">
+              <div>
+                <span className="text-[10px] tracking-[0.3em] uppercase text-purple-400 font-bold block mb-1">★ Official Timeline</span>
+                <h2 className="text-3xl md:text-4xl font-black uppercase text-white">EVENT ROADMAP</h2>
+              </div>
+              <p className="text-gray-400 text-xs md:text-sm font-mono leading-relaxed">
+                Hourly match plans and roster locks. Matches are direct local fiber configurations with zero latency brackets.
+              </p>
+              
+              <div className="flex flex-col gap-4 mt-2 relative border-l border-white/10 pl-6 ml-4">
+                {[
+                  { day: 'DAY 01 / JULY 18', event: 'KICKOFF & CHECK-INS', details: '9:00 AM IST // Physical Check-in & Key Card Allocations\n11:00 AM IST // Opening Ceremony & Quarter-final Matches' },
+                  { day: 'DAY 02 / JULY 19', event: 'THE BRACKET CLASH', details: '2:00 PM IST // Semi-final Bracket Keys Live Lobby Matches' },
+                  { day: 'DAY 03 / JULY 20', event: 'FINALS & REWARDS', details: '4:00 PM IST // Championship Showdown followed by Payouts' }
+                ].map((item, idx) => (
+                  <div key={idx} className="relative mb-4">
+                    {/* Timeline dot */}
+                    <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-purple-500 border-2 border-black shadow-[0_0_10px_#9e00ff]" />
+                    <span className="text-[10px] uppercase text-purple-400 font-black tracking-widest block mb-0.5">{item.day}</span>
+                    <h4 className="text-sm font-bold text-white uppercase tracking-wider">{item.event}</h4>
+                    <p className="text-xs text-gray-400 mt-1 leading-relaxed whitespace-pre-line font-mono">{item.details}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
       {/* Pinned Horizontal Bracket Section */}
       <section ref={sectionPinRef} id="live-bracket-section" className="relative z-10 h-screen w-screen overflow-hidden flex items-center bg-black/60 backdrop-blur-sm border-t-2 border-b-2 border-white/5">
-        <div className="absolute top-12 left-12 md:left-24 z-20">
+        {/* Adjusted top position and z-index to avoid horizontal header overlaps */}
+        <div className="absolute top-6 left-8 md:left-24 z-20">
           <span className="text-[10px] tracking-[0.3em] uppercase text-cyan-400 font-bold block mb-1">★ Live Standings</span>
           <h2 className="text-4xl font-extrabold tracking-tighter uppercase text-white">TOURNAMENT BRACKET</h2>
         </div>
 
+        {/* Increased padding-top to pt-44 to scroll bracket headers safely below absolute title */}
         <div 
           ref={horizontalScrollRef} 
-          className="flex h-full items-center gap-16 px-12 md:px-24 pt-20"
+          className="flex h-full items-center gap-16 px-12 md:px-24 pt-44 pb-12"
           style={{ willChange: 'transform' }}
         >
           {/* QUARTER FINALS */}
