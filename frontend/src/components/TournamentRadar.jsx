@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useJsApiLoader, GoogleMap, MarkerF, InfoWindowF } from '@react-google-maps/api';
 import { MapPin, Compass, Trophy, Navigation, ShieldAlert, Award, Globe, Users } from 'lucide-react';
 
-// Pastel colors list for cards
-const pastelBgs = ['#baffc9', '#ffdfba', '#cffafe', '#ffb3ba', '#fcebb6', '#fce4fb'];
+// Pastel color classes list for cards
+const pastelBgClasses = ['bg-[#baffc9]', 'bg-[#ffdfba]', 'bg-[#cffafe]', 'bg-[#ffb3ba]', 'bg-[#fcebb6]', 'bg-[#fce4fb]'];
 
 // Haversine formula calculation
 const haversineDistance = (lat1, lon1, lat2, lon2) => {
@@ -399,14 +399,13 @@ export const TournamentRadar = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTournaments.map((t, idx) => {
-            const cardBg = pastelBgs[idx % pastelBgs.length];
+            const cardBgClass = pastelBgClasses[idx % pastelBgClasses.length];
             const isFull = t.slotsFilled >= t.maxSlots;
 
             return (
               <div 
                 key={t.id}
-                style={{ backgroundColor: cardBg }}
-                className="border-[3px] border-[#1a1a1a] rounded-2xl p-5 shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)] hover:translate-x-[2.5px] hover:translate-y-[2.5px] transition-all flex flex-col justify-between gap-4 font-bold text-xs uppercase"
+                className={`border-[3px] border-[#1a1a1a] rounded-2xl p-5 shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)] hover:translate-x-[2.5px] hover:translate-y-[2.5px] transition-all flex flex-col justify-between gap-4 font-bold text-xs uppercase ${cardBgClass}`}
               >
                 <div>
                   <div className="flex justify-between items-center mb-3">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Compass, Users, Trophy, DollarSign, Award, Grid, MapPin } from 'lucide-react';
 
-const pastelBgs = ['#ffb3ba', '#ffdfba', '#ffffba', '#cffafe', '#e8f0fe', '#dcfce7'];
+const pastelBgClasses = ['bg-[#ffb3ba]', 'bg-[#ffdfba]', 'bg-[#ffffba]', 'bg-[#cffafe]', 'bg-[#e8f0fe]', 'bg-[#dcfce7]'];
 
 export const JoinEventGrid = ({ tournaments = [], user, onOpenRegistration }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -47,7 +47,7 @@ export const JoinEventGrid = ({ tournaments = [], user, onOpenRegistration }) =>
           const registeredCount = t.registeredTeams?.length || 0;
           const isFull = registeredCount >= t.maxTeams;
           const userJoined = t.registeredTeams?.some(team => team.captainEmail === user?.email);
-          const cardBg = pastelBgs[idx % pastelBgs.length];
+          const cardBgClass = pastelBgClasses[idx % pastelBgClasses.length];
 
           // Alternate slightly rotated visual layouts for editorial quirky feel
           const rotation = idx % 3 === 0 ? 'rotate-1' : idx % 3 === 1 ? '-rotate-1' : 'rotate-0';
@@ -55,8 +55,7 @@ export const JoinEventGrid = ({ tournaments = [], user, onOpenRegistration }) =>
           return (
             <div
               key={t._id}
-              className={`border-[3px] border-[#1a1a1a] p-6 rounded-2xl flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-1 hover:translate-y-1 transition-all duration-150 relative overflow-hidden group ${rotation}`}
-              style={{ backgroundColor: cardBg }}
+              className={`border-[3px] border-[#1a1a1a] p-6 rounded-2xl flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-1 hover:translate-y-1 transition-all duration-150 relative overflow-hidden group ${rotation} ${cardBgClass}`}
             >
               <div>
                 <div className="flex justify-between items-start mb-4">

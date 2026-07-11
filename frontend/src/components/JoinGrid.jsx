@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 const dummyEvents = [
-  { id: '1', title: 'Weekend Cricket Bash', bg: '#fef08a', date: 'Oct 14', slots: '2/8 slots left' },
-  { id: '2', title: 'Downtown Hoops', bg: '#cffafe', date: 'Oct 15', slots: '5/16 slots left' },
-  { id: '3', title: 'Sunday League Football', bg: '#fecdd3', date: 'Oct 20', slots: '1/4 slots left' }
+  { id: '1', title: 'Weekend Cricket Bash', bg: 'bg-[#fef08a]', date: 'Oct 14', slots: '2/8 slots left' },
+  { id: '2', title: 'Downtown Hoops', bg: 'bg-[#cffafe]', date: 'Oct 15', slots: '5/16 slots left' },
+  { id: '3', title: 'Sunday League Football', bg: 'bg-[#fecdd3]', date: 'Oct 20', slots: '1/4 slots left' }
 ];
 
 export const JoinGrid = ({ setCurrentPage }) => {
@@ -70,8 +70,7 @@ export const JoinGrid = ({ setCurrentPage }) => {
         {dummyEvents.map((t) => (
           <div
             key={t.id}
-            className="border-[3px] border-[#1a1a1a] p-8 rounded-2xl flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] hover:shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:-translate-y-1 transition-all duration-200"
-            style={{ backgroundColor: t.bg }}
+            className={`border-[3px] border-[#1a1a1a] p-8 rounded-2xl flex flex-col justify-between shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] hover:shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:-translate-y-1 transition-all duration-200 ${t.bg}`}
           >
             <div>
               <div className="flex justify-between items-center mb-6">
