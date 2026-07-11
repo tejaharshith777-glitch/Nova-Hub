@@ -96,7 +96,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         <span 
           key={c} 
           className={`w-[3px] h-[3px] md:w-[4px] md:h-[4px] rounded-sm transition-colors duration-150 ${
-            isFilled ? 'bg-[#1a1a1a] dark:bg-white' : 'bg-[#1a1a1a]/15 dark:bg-white/15'
+            isFilled ? 'bg-zinc-900 dark:bg-zinc-100' : 'bg-zinc-900/15 dark:bg-zinc-100/15'
           }`} 
         />
       );
@@ -1252,8 +1252,8 @@ export const LandingPage = ({ onOpenAuth, user }) => {
       </section>
 
       {/* Dynamic Scroll Progress Indicator */}
-      <div className="fixed bottom-4 left-4 md:bottom-6 md:left-8 z-40 bg-[#c4e4e3]/95 backdrop-blur-sm p-2.5 md:p-3.5 border-[2px] md:border-[3px] border-[#1a1a1a] shadow-[3px_3px_0px_rgba(26,26,26,1)] md:shadow-[4px_4px_0px_rgba(26,26,26,1)] rounded-xl md:rounded-2xl flex flex-col gap-1 md:gap-1.5 font-mono select-none">
-        <div className="text-[8px] md:text-[9px] font-black tracking-[0.15em] md:tracking-[0.18em] uppercase text-[#1a1a1a]/80">
+      <div className="fixed bottom-4 left-4 md:bottom-6 md:left-8 z-40 bg-[#c4e4e3]/95 dark:bg-[#090b11]/95 backdrop-blur-sm p-2.5 md:p-3.5 border-[2px] md:border-[3px] border-[#1a1a1a] dark:border-white/10 shadow-[3px_3px_0px_rgba(26,26,26,1)] dark:shadow-[3px_3px_0px_rgba(255,255,255,0.15)] md:shadow-[4px_4px_0px_rgba(26,26,26,1)] md:dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] rounded-xl md:rounded-2xl flex flex-col gap-1 md:gap-1.5 font-mono select-none">
+        <div className="text-[8px] md:text-[9px] font-black tracking-[0.15em] md:tracking-[0.18em] uppercase text-[#1a1a1a]/80 dark:text-white/85">
           {activeSection}
         </div>
         <div className="flex flex-col gap-[2px] md:gap-[3px]">
