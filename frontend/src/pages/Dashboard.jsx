@@ -567,6 +567,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   const sidebarMenu = [
     { id: 'all-tournaments', label: 'All Tournaments', icon: Trophy, badge: null },
     { id: 'my-tournaments', label: 'My Tournaments', icon: CalendarDays, badge: null },
+    { id: 'history', label: 'History', icon: Activity, badge: null },
     { id: 'live-tournaments', label: 'Live Tournaments', icon: Radio, badge: 'pulse' },
     { id: 'teams', label: 'Teams', icon: Users, badge: null },
     { id: 'my-profile', label: 'My Profile', icon: User, badge: null },
@@ -768,6 +769,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                 <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight flex items-center gap-2">
                   {activeTab === 'all-tournaments' && <Trophy className="w-6 h-6 text-yellow-500" />}
                   {activeTab === 'my-tournaments' && <CalendarDays className="w-6 h-6 text-green-500" />}
+                  {activeTab === 'history' && <Activity className="w-6 h-6 text-cyan-500" />}
                   {activeTab === 'live-tournaments' && <Radio className="w-6 h-6 text-red-500 animate-pulse" />}
                   {activeTab === 'teams' && <Users className="w-6 h-6 text-purple-500" />}
                   {activeTab === 'my-profile' && <User className="w-6 h-6 text-pink-500" />}
@@ -939,6 +941,113 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                           </button>
                         </div>
                       ))}
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+
+            {/* TAB 4: HISTORY */}
+            {activeTab === 'history' && (
+              <div className="flex-1 flex flex-col gap-8">
+                {(() => {
+                  const joinedGames = tournaments.filter(t => 
+                    t.registeredTeams?.some(team => team.captainEmail === user?.email)
+                  );
+                  const hostedGames = tournaments.filter(t => 
+                    t.hostId?._id === user?.id || t.hostId === user?.id || t.hostId?.username === user?.username
+                  );
+
+                  return (
+                    <div className="flex flex-col gap-8 text-left">
+                      {/* Section 1: Playing History */}
+                      <div>
+                        <h3 className="text-lg font-black uppercase mb-4 flex items-center gap-2 border-b-2 border-black pb-2 text-black dark:text-white">
+                          <Trophy className="w-5 h-5 text-yellow-500" /> Games Registered & Paid (To Play)
+                        </h3>
+
+                        {joinedGames.length === 0 ? (
+                          <div className="bg-[#bde3fb] border-[3px] border-black p-6 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] text-center">
+                            <p className="text-xs font-bold text-black opacity-75">You have not registered for any upcoming games as a player yet.</p>
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 gap-4">
+                            {joinedGames.map((t, idx) => (
+                              <div 
+                                key={t._id || idx}
+                                className="bg-white hover:bg-yellow-50 border-[3px] border-black p-5 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer text-black"
+                                onClick={() => navigate(`/tournament/${t._id}`)}
+                              >
+                                <div>
+                                  <div className="flex gap-2 items-center mb-1">
+                                    <span className="bg-black text-white text-[9px] px-1.5 py-0.5 uppercase font-black">{t.gameName}</span>
+                                    <span className="bg-green-200 text-black border border-black text-[9px] px-1.5 py-0.5 uppercase font-black flex items-center gap-1">
+                                      <Check className="w-3 h-3 text-green-700" /> PAID & LOCKED
+                                    </span>
+                                  </div>
+                                  <h4 className="text-base font-black uppercase">{t.title}</h4>
+                                  <div className="flex flex-col gap-0.5 mt-1 text-[10px] text-gray-500 font-bold uppercase">
+                                    <span>📍 Venue: {t.venueType === 'offline' ? (t.venueDetails?.physicalAddress || 'Ground Venue') : `Online (${t.venueDetails?.serverRegion || 'Global'} Server)`}</span>
+                                    <span>📅 Start: {t.startDate ? new Date(t.startDate).toLocaleString() : 'Sunday, 10:00 AM'}</span>
+                                    <span>💰 Entry Fee: ₹{t.entryFee || 0} (Wallet)</span>
+                                  </div>
+                                </div>
+
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); navigate(`/tournament/${t._id}`); }}
+                                  className="bg-yellow-200 hover:bg-yellow-300 border-2 border-black px-4 py-2 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all interactive-target cursor-pointer"
+                                >
+                                  Enter Lobby
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Section 2: Hosting History */}
+                      <div>
+                        <h3 className="text-lg font-black uppercase mb-4 flex items-center gap-2 border-b-2 border-black pb-2 text-black dark:text-white">
+                          <Zap className="w-5 h-5 text-purple-500 animate-pulse" /> Tournaments Hosted By Me
+                        </h3>
+
+                        {hostedGames.length === 0 ? (
+                          <div className="bg-[#fce4fb] border-[3px] border-black p-6 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] text-center">
+                            <p className="text-xs font-bold text-black opacity-75">You have not hosted or created any event listings yet.</p>
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 gap-4">
+                            {hostedGames.map((t, idx) => (
+                              <div 
+                                key={t._id || idx}
+                                className="bg-white hover:bg-purple-50 border-[3px] border-black p-5 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer text-black"
+                                onClick={() => navigate(`/tournament/${t._id}`)}
+                              >
+                                <div>
+                                  <div className="flex gap-2 items-center mb-1">
+                                    <span className="bg-black text-white text-[9px] px-1.5 py-0.5 uppercase font-black">{t.gameName}</span>
+                                    <span className="bg-purple-200 text-black border border-black text-[9px] px-1.5 py-0.5 uppercase font-black">HOSTING</span>
+                                  </div>
+                                  <h4 className="text-base font-black uppercase">{t.title}</h4>
+                                  <div className="flex flex-col gap-0.5 mt-1 text-[10px] text-gray-500 font-bold uppercase">
+                                    <span>📍 Slots Filled: {t.registeredTeams?.length || 0} / {t.maxTeams}</span>
+                                    <span>📅 Start: {t.startDate ? new Date(t.startDate).toLocaleString() : 'Sunday, 10:00 AM'}</span>
+                                    <span>💰 Total Purse: ₹{t.prizePool || 0}</span>
+                                  </div>
+                                </div>
+
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); navigate(`/tournament/${t._id}`); }}
+                                  className="bg-purple-500 hover:bg-purple-600 text-white border-2 border-black px-4 py-2 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all interactive-target cursor-pointer"
+                                >
+                                  Manage Brackets
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
                     </div>
                   );
                 })()}
