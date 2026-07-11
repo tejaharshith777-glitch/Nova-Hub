@@ -6,18 +6,18 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-[#c4e4e3] border-b-[3px] border-[#1a1a1a] py-4 px-6 md:px-12 flex justify-between items-center shadow-sm">
+    <header className="fixed top-0 left-0 w-full z-50 bg-[#c4e4e3] dark:bg-[#07090d] border-b-[3px] border-[#1a1a1a] dark:border-white/10 py-4 px-6 md:px-12 flex justify-between items-center shadow-sm transition-colors duration-300">
       <Link to="/" className="flex items-center gap-2 group interactive-target" onClick={() => setIsMobileOpen(false)}>
-        <div className="border-[3px] border-[#1a1a1a] bg-yellow-200 px-3 py-1 font-bold text-base uppercase tracking-tighter hover:bg-[#1a1a1a] hover:text-white transition-colors duration-150 shadow-[2px_2px_0px_rgba(26,26,26,1)]">
+        <div className="border-[3px] border-[#1a1a1a] dark:border-white/20 bg-yellow-200 dark:bg-yellow-300/80 px-3 py-1 font-bold text-base uppercase tracking-tighter hover:bg-[#1a1a1a] hover:text-white transition-colors duration-150 shadow-[2px_2px_0px_rgba(26,26,26,1)] dark:shadow-[2px_2px_0px_rgba(255,255,255,0.15)]">
           NH
         </div>
-        <span className="text-sm font-bold tracking-widest uppercase text-[#1a1a1a]">
+        <span className="text-sm font-bold tracking-widest uppercase text-[#1a1a1a] dark:text-white transition-colors">
           NOVA // <span className="underline decoration-yellow-400 decoration-[3px]">HUB</span>
         </span>
       </Link>
 
       {/* Desktop Navigation */}
-      <nav className="flex items-center gap-6 text-xs font-bold uppercase tracking-wider hidden md:flex text-[#1a1a1a]">
+      <nav className="flex items-center gap-6 text-xs font-bold uppercase tracking-wider hidden md:flex text-[#1a1a1a] dark:text-gray-300 transition-colors">
         <Link to="/" className="hover:underline decoration-yellow-400 decoration-2 interactive-target">
           Home
         </Link>
@@ -101,7 +101,7 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
         )}
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="text-[#1a1a1a] bg-white border-2 border-[#1a1a1a] p-1 shadow-[2px_2px_0px_rgba(26,26,26,1)] interactive-target"
+          className="text-[#1a1a1a] dark:text-white bg-white dark:bg-slate-900 border-2 border-[#1a1a1a] dark:border-white/10 p-1 shadow-[2px_2px_0px_rgba(26,26,26,1)] dark:shadow-[2px_2px_0px_rgba(255,255,255,0.15)] interactive-target"
         >
           {isMobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </button>
@@ -109,7 +109,7 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
 
       {/* Mobile Drawer Dropdown */}
       {isMobileOpen && (
-        <div className="absolute top-[67px] left-0 w-full bg-[#c4e4e3] border-b-[3px] border-[#1a1a1a] p-6 flex flex-col gap-4 md:hidden shadow-lg z-40 font-mono text-xs font-bold uppercase tracking-wider text-[#1a1a1a]">
+        <div className="absolute top-[67px] left-0 w-full bg-[#c4e4e3] dark:bg-[#07090d] border-b-[3px] border-[#1a1a1a] dark:border-white/10 p-6 flex flex-col gap-4 md:hidden shadow-lg z-40 font-mono text-xs font-bold uppercase tracking-wider text-[#1a1a1a] dark:text-white transition-colors duration-300">
           <Link 
             to="/" 
             className="hover:underline decoration-yellow-400 decoration-2 py-2 interactive-target"

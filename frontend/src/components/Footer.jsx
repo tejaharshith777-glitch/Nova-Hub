@@ -5,24 +5,24 @@ const Footer = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="pt-24 pb-0 bg-white relative z-10 border-t-[3px] border-[#1a1a1a] font-mono select-none">
+    <footer className="pt-24 pb-0 bg-white dark:bg-[#07090d] relative z-10 border-t-[3px] border-[#1a1a1a] dark:border-white/10 font-mono select-none transition-colors duration-300">
       <div className="max-w-[1400px] mx-auto px-8 flex flex-col xl:flex-row justify-between items-start xl:items-stretch gap-12 mb-16">
         
-        {/* Light Blue Banner */}
-        <div className="w-full xl:w-[75%] bg-[#bde3fb] rounded-[2rem] p-10 md:p-16 flex flex-col md:flex-row justify-between items-center relative overflow-hidden shadow-[8px_8px_0px_rgba(26,26,26,1)] border-[3px] border-[#1a1a1a]">
+        {/* Light Blue Banner / Purple Glass in Dark */}
+        <div className="w-full xl:w-[75%] bg-[#bde3fb] dark:bg-purple-950/20 rounded-[2rem] p-10 md:p-16 flex flex-col md:flex-row justify-between items-center relative overflow-hidden shadow-[8px_8px_0px_rgba(26,26,26,1)] dark:shadow-[8px_8px_0px_rgba(255,255,255,0.15)] border-[3px] border-[#1a1a1a] dark:border-purple-500/30 transition-all duration-300">
           {/* Grainy Noise Texture (simulated with CSS pattern) */}
           <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(#1a1a1a 1px, transparent 1px)', backgroundSize: '4px 4px' }} />
 
           <div className="w-full md:w-[60%] relative z-10">
-            <h2 className="text-5xl md:text-[5.5rem] font-medium font-display leading-[1.1] text-[#1a1a1a] mb-6">
+            <h2 className="text-5xl md:text-[5.5rem] font-medium font-display leading-[1.1] text-[#1a1a1a] dark:text-white mb-6">
               Let's <span className="inline-block hover:scale-110 transition-transform cursor-pointer">🎯</span> host it.<br />
               <span className="italic">Or play it. Or win it.</span>
             </h2>
-            <p className="text-xs md:text-sm font-bold text-[#1a1a1a]/70 max-w-md leading-relaxed mb-10 font-mono">
+            <p className="text-xs md:text-sm font-bold text-[#1a1a1a]/70 dark:text-gray-300 max-w-md leading-relaxed mb-10 font-mono">
               Book a local arena slot. No pressure, no hassle. Just a quick setup to get your team on the field and the tournament running.
             </p>
             
-            <button onClick={() => navigate('/dashboard?tab=host')} className="bg-gradient-to-b from-[#333] to-[#111] border border-[#000] text-white px-8 py-4 rounded-full font-bold font-mono text-xs md:text-sm shadow-[0_8px_16px_rgba(0,0,0,0.4)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:translate-y-1 transition-all duration-200 interactive-target cursor-pointer">
+            <button onClick={() => navigate('/dashboard?tab=host')} className="bg-gradient-to-b from-[#333] to-[#111] dark:from-cyan-400 dark:to-cyan-500 border border-[#000] dark:border-cyan-300 text-white dark:text-black px-8 py-4 rounded-full font-bold font-mono text-xs md:text-sm shadow-[0_8px_16px_rgba(0,0,0,0.4)] dark:shadow-[0_0_15px_rgba(0,240,255,0.3)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.5)] hover:translate-y-1 transition-all duration-200 interactive-target cursor-pointer">
               Book an arena slot
             </button>
           </div>
@@ -50,8 +50,8 @@ const Footer = () => {
 
         {/* Right Links Section */}
         <div className="w-full xl:w-[25%] flex flex-col justify-between py-4">
-          <div className="flex flex-row justify-between font-mono text-sm font-bold text-[#1a1a1a]">
-            <div class="space-y-4">
+          <div className="flex flex-row justify-between font-mono text-sm font-bold text-[#1a1a1a] dark:text-gray-300 transition-colors">
+            <div className="space-y-4">
               <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">Leagues</a>
               <a href="#" className="block hover:underline decoration-2 decoration-yellow-400 interactive-target">Arenas</a>
             </div>
@@ -64,7 +64,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="mt-16 xl:mt-auto text-[10px] font-mono font-bold text-[#1a1a1a]/50 text-center xl:text-left border-t border-[#1a1a1a]/10 pt-4 xl:border-0 xl:pt-0">
+          <div className="mt-16 xl:mt-auto text-[10px] font-mono font-bold text-[#1a1a1a]/50 dark:text-gray-500 text-center xl:text-left border-t border-[#1a1a1a]/10 dark:border-white/10 pt-4 xl:border-0 xl:pt-0 transition-colors">
             @2026 Nova Hub Studio | Terms & Conditions
           </div>
         </div>
@@ -72,8 +72,8 @@ const Footer = () => {
       </div>
 
       {/* Giant Typography Wordmark at the very bottom */}
-      <div className="w-full bg-[#c4e4e3] border-t-[3px] border-[#1a1a1a] py-12 md:py-20 overflow-hidden flex items-center justify-center">
-        <h1 className="text-[14vw] font-black tracking-tighter text-[#1a1a1a] uppercase leading-none select-none font-display text-center transition-all duration-300 hover:text-white">
+      <div className="w-full bg-[#c4e4e3] dark:bg-[#090b11] border-t-[3px] border-[#1a1a1a] dark:border-white/10 py-12 md:py-20 overflow-hidden flex items-center justify-center transition-colors duration-300">
+        <h1 className="text-[14vw] font-black tracking-tighter text-[#1a1a1a] dark:text-white/10 uppercase leading-none select-none font-display text-center transition-all duration-300 hover:text-white dark:hover:text-cyan-400">
           NOVA HUB
         </h1>
       </div>

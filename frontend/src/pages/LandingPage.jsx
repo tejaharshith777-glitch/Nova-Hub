@@ -96,7 +96,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         <span 
           key={c} 
           className={`w-[3px] h-[3px] md:w-[4px] md:h-[4px] rounded-sm transition-colors duration-150 ${
-            isFilled ? 'bg-[#1a1a1a]' : 'bg-[#1a1a1a]/15'
+            isFilled ? 'bg-[#1a1a1a] dark:bg-white' : 'bg-[#1a1a1a]/15 dark:bg-white/15'
           }`} 
         />
       );

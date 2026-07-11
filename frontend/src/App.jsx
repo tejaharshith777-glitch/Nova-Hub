@@ -12,6 +12,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
 import TournamentRadar from './components/TournamentRadar';
+import ThemeToggle from './components/ThemeToggle';
 
 // Detect query parameters inside router to auto-open Sign Up / Sign In modal
 const AuthQueryHandler = ({ setIsAuthOpen }) => {
@@ -119,7 +120,7 @@ export const App = () => {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#c4e4e3] text-[#1a1a1a] font-mono selection:bg-yellow-300 relative overflow-x-hidden">
+      <div className="min-h-screen bg-[#c4e4e3] dark:bg-[#090b11] text-[#1a1a1a] dark:text-[#f3f4f6] font-mono selection:bg-yellow-300 relative overflow-x-hidden transition-colors duration-300">
         {/* Helper to open auth modal when guest lands on ?auth=true */}
         <AuthQueryHandler setIsAuthOpen={setIsAuthOpen} />
 
@@ -173,6 +174,9 @@ export const App = () => {
         <Footer />
 
         <Chatbot apiBaseUrl={API_BASE_URL} />
+
+        {/* Global theme switcher (Sun/Moon capsule toggle) */}
+        <ThemeToggle />
 
         {/* Access Authentication Modal */}
         <AuthModal

@@ -160,3 +160,95 @@
   transform-origin: bottom right;
 }
 
+/* ─── Global Dark Mode Base & Utility Overrides ─────────────────── */
+.dark body {
+  background-color: #090b11;
+  color: #f3f4f6;
+}
+
+/* Carbon grid dark override */
+.dark .carbon-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px) !important;
+}
+
+/* Hard shadow dark override */
+.dark .hard-shadow {
+  box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.1) !important;
+}
+.dark .hard-shadow:hover {
+  box-shadow: 2px 2px 0px 0px rgba(255, 255, 255, 0.1) !important;
+}
+.dark .hard-shadow-active {
+  box-shadow: 2px 2px 0px 0px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Attribute-level global selectors to adapt hardcoded color classes */
+.dark [class*="text-[#1a1a1a]"] {
+  color: #f3f4f6 !important;
+}
+.dark [class*="text-[#1a1a1a]/70"] {
+  color: rgba(243, 244, 246, 0.7) !important;
+}
+.dark [class*="text-[#1a1a1a]/60"] {
+  color: rgba(243, 244, 246, 0.6) !important;
+}
+.dark [class*="text-[#1a1a1a]/50"] {
+  color: rgba(243, 244, 246, 0.45) !important;
+}
+.dark [class*="bg-[#c4e4e3]"] {
+  background-color: #090b11 !important;
+}
+.dark [class*="border-[#1a1a1a]"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.dark [class*="shadow-[6px_6px_0px_rgba(26,26,26,1)]"] {
+  box-shadow: 6px 6px 0px rgba(255, 255, 255, 0.15) !important;
+}
+.dark [class*="shadow-[4px_4px_0px_rgba(26,26,26,1)]"] {
+  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.15) !important;
+}
+.dark [class*="shadow-[2px_2px_0px_rgba(26,26,26,1)]"] {
+  box-shadow: 2px 2px 0px rgba(255, 255, 255, 0.15) !important;
+}
+.dark [class*="shadow-[6px_6px_0px_0px_rgba(26,26,26,1)]"] {
+  box-shadow: 6px 6px 0px 0px rgba(255, 255, 255, 0.15) !important;
+}
+.dark [class*="bg-[#d1fa50]"] {
+  background-color: #1a2205 !important;
+  color: #d1fa50 !important;
+}
+.dark [class*="bg-[#2ca684]"] {
+  background-color: #062118 !important;
+  color: #2ca684 !important;
+}
+.dark [class*="bg-[#ffedd5]"] {
+  background-color: #1f1406 !important;
+}
+.dark [class*="bg-[#fef08a]"] {
+  background-color: #211d04 !important;
+}
+.dark [class*="bg-[#cffafe]"] {
+  background-color: #051d21 !important;
+}
+.dark [class*="bg-[#dcfce7]"] {
+  background-color: #041f0a !important;
+}
+.dark [class*="bg-white"] {
+  background-color: #121420 !important;
+}
+.dark [class*="border-t-[#1a1a1a]/10"] {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+.dark [class*="border-b-[#1a1a1a]/10"] {
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+.dark [class*="border-l-[#1a1a1a]/10"] {
+  border-left-color: rgba(255, 255, 255, 0.1) !important;
+}
+.dark [class*="border-r-[#1a1a1a]/10"] {
+  border-right-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+
