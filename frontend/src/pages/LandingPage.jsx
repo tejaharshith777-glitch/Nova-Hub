@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Trophy, Sparkles, Pin, Compass, Info, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import FeaturedCarousel from '../components/FeaturedCarousel';
@@ -16,6 +16,18 @@ export const LandingPage = ({ onOpenAuth, user }) => {
   const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('WELCOME');
+
+  const servicesContainerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: servicesContainerRef,
+    offset: ['start start', 'end start']
+  });
+
+  const card1Scale = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], [1, 0.95, 0.9, 0.9]);
+  const card1Brightness = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], ["brightness(1)", "brightness(0.85)", "brightness(0.7)", "brightness(0.7)"]);
+
+  const card2Scale = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], [1, 1, 0.95, 0.95]);
+  const card2Brightness = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], ["brightness(1)", "brightness(1)", "brightness(0.85)", "brightness(0.85)"]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1084,10 +1096,15 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             </h2>
           </div>
 
-          <div className="relative max-w-5xl mx-auto flex flex-col pb-12">
+          <div ref={servicesContainerRef} className="relative max-w-5xl mx-auto flex flex-col pb-12">
             {/* Card 1 Track */}
-            <div className="h-[85vh] relative flex justify-center items-start">
-              <div className="sticky top-24 md:top-32 w-full min-h-[420px] md:min-h-[460px] bg-[#d1fa50] text-[#1a1a1a] rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center transition-all hover:scale-[1.01] overflow-hidden">
+            <div className="h-[85vh] sticky top-24 md:top-32 flex justify-center items-start z-10">
+              <motion.div 
+                style={{ scale: card1Scale, filter: card1Brightness }}
+                whileHover={{ scale: 1.02, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="w-full min-h-[420px] md:min-h-[460px] bg-[#d1fa50] text-[#1a1a1a] rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center overflow-hidden origin-center rotate-[-1.5deg] cursor-pointer"
+              >
                 <div className="flex-1 flex flex-col items-start text-left gap-4 md:gap-6 relative z-10">
                   <span className="text-[10px] font-mono uppercase tracking-widest bg-white border-2 border-[#1a1a1a] px-3 py-1 shadow-[2px_2px_0px_rgba(26,26,26,1)] font-bold">
                     Service 01
@@ -1122,12 +1139,17 @@ export const LandingPage = ({ onOpenAuth, user }) => {
                 <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-[#1a1a1a]/5 pointer-events-none select-none z-0">
                   01
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Card 2 Track */}
-            <div className="h-[85vh] relative flex justify-center items-start">
-              <div className="sticky top-24 md:top-32 w-full min-h-[420px] md:min-h-[460px] bg-white text-[#1a1a1a] rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center transition-all hover:scale-[1.01] overflow-hidden">
+            <div className="h-[85vh] sticky top-24 md:top-32 flex justify-center items-start z-20">
+              <motion.div 
+                style={{ scale: card2Scale, filter: card2Brightness }}
+                whileHover={{ scale: 1.02, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="w-full min-h-[420px] md:min-h-[460px] bg-white text-[#1a1a1a] rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center overflow-hidden origin-center rotate-[1deg] cursor-pointer"
+              >
                 <div className="flex-1 flex flex-col items-start text-left gap-4 md:gap-6 relative z-10">
                   <span className="text-xs font-mono uppercase tracking-widest bg-yellow-200 border-2 border-[#1a1a1a] px-3 py-1 shadow-[2px_2px_0px_rgba(26,26,26,1)] font-bold">
                     Service 02
@@ -1162,12 +1184,16 @@ export const LandingPage = ({ onOpenAuth, user }) => {
                 <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-[#1a1a1a]/5 pointer-events-none select-none z-0">
                   02
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Card 3 Track */}
-            <div className="h-[85vh] relative flex justify-center items-start">
-              <div className="sticky top-24 md:top-32 w-full min-h-[420px] md:min-h-[460px] bg-[#2ca684] text-white rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center transition-all hover:scale-[1.01] overflow-hidden">
+            <div className="h-[85vh] sticky top-24 md:top-32 flex justify-center items-start z-30">
+              <motion.div 
+                whileHover={{ scale: 1.02, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="w-full min-h-[420px] md:min-h-[460px] bg-[#2ca684] text-white rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center overflow-hidden origin-center rotate-[-0.5deg] cursor-pointer"
+              >
                 <div className="flex-1 flex flex-col items-start text-left gap-4 md:gap-6 relative z-10">
                   <span className="text-xs font-mono uppercase tracking-widest bg-[#1a1a1a] text-white border-2 border-white/20 px-3 py-1 shadow-[2px_2px_0px_rgba(0,0,0,0.15)] font-bold">
                     Service 03
@@ -1202,7 +1228,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
                 <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-white/5 pointer-events-none select-none z-0">
                   03
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
