@@ -230,16 +230,22 @@ export const LandingPage = ({ onOpenAuth, user }) => {
       {/* ==========================================
           FRAME 1: HERO SECTION
          ========================================== */}
-      <section id="hero" className="min-h-[95vh] flex flex-col md:flex-row items-center justify-between px-8 md:px-24 pt-28 pb-16 relative z-10 gap-12">
+      <section id="hero" className="min-h-[95vh] flex flex-col md:flex-row items-center justify-between px-8 md:px-24 pt-32 pb-20 relative z-10 gap-12 bg-gradient-to-br from-[#1e3a8a] via-[#2563eb] to-[#7c3aed] text-white border-b-[4px] border-[#1a1a1a] overflow-hidden">
+        {/* Skewed Yellow Accent Slash Grid matching Picture 1 */}
+        <div className="absolute right-0 bottom-0 top-0 w-[42%] bg-[#facc15] -skew-x-[18deg] origin-top-right z-0 pointer-events-none hidden md:block border-l-[4px] border-[#1a1a1a]" />
+        
+        {/* Subtle dot overlay matching Picture 1 */}
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+
         {/* Left Typography Block */}
-        <div className="w-full md:w-[60%] text-left flex flex-col gap-6">
+        <div className="w-full md:w-[55%] text-left flex flex-col gap-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-xs font-bold uppercase tracking-widest bg-white border-[3px] border-[#1a1a1a] px-3.5 py-1 shadow-[3px_3px_0px_rgba(26,26,26,1)]">
-              ★ Ground Booking & Bracket Sync
+            <span className="text-[10px] font-black uppercase tracking-widest bg-yellow-450 border-2 border-white px-3 py-1 text-black shadow-[2px_2px_0px_rgba(255,255,255,1)]">
+              ★ Active WebGL Tournament Grid
             </span>
           </motion.div>
 
@@ -247,49 +253,55 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black font-display text-[#1a1a1a] leading-none"
+            className="text-5xl md:text-7xl font-black font-display text-white leading-none uppercase"
           >
-            Turn chaotic weekend sports into professional local leagues.
+            Behind the Greatest Matches, <br />
+            There's <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-400">Nova Hub</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-xs md:text-sm font-semibold max-w-lg leading-relaxed text-[#1a1a1a]/85"
+            className="text-xs md:text-sm font-semibold max-w-lg leading-relaxed text-white/90 font-mono uppercase tracking-wide"
           >
-            Nova Hub coordinates tournament setups. Register rosters, coordinate check-ins on physical ground maps, stakes listing invoices, and updates league points.
+            Quietly syncing local sports turf bookings and global esports brackets to deliver professional tournament events. Set roster sizes, allocate ground slots, and verify clan rosters.
           </motion.p>
-        </div>
 
-        {/* Right Floating sticker card */}
-        <div className="w-full md:w-[40%] flex flex-col items-center gap-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-            className="w-full max-w-sm"
-          >
-            <Interactive3DHologram />
-          </motion.div>
-
-          <div className="w-full max-w-sm">
+          <div className="flex gap-4 pt-4">
             {user ? (
               <button
                 onClick={() => navigate('/dashboard')}
-                className="w-full text-center bg-yellow-200 hover:bg-yellow-300 border-[3px] border-[#1a1a1a] py-4 rounded-2xl font-bold uppercase tracking-wider text-xs shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 interactive-target"
+                className="bg-[#1a1a1a] hover:bg-black text-white px-8 py-4 border-2 border-white rounded-2xl font-bold uppercase tracking-wider text-xs shadow-[5px_5px_0px_rgba(255,255,255,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 interactive-target"
               >
                 Go to Dashboard Console <ArrowRight className="w-4 h-4" />
               </button>
             ) : (
               <button
                 onClick={onOpenAuth}
-                className="w-full text-center bg-yellow-200 hover:bg-yellow-300 border-[3px] border-[#1a1a1a] py-4 rounded-2xl font-bold uppercase tracking-wider text-xs shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 interactive-target"
+                className="bg-[#1a1a1a] hover:bg-black text-white px-8 py-4 border-2 border-white rounded-2xl font-bold uppercase tracking-wider text-xs shadow-[5px_5px_0px_rgba(255,255,255,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 interactive-target"
               >
                 Host a Tournament Now <ArrowRight className="w-4 h-4" />
               </button>
             )}
           </div>
+        </div>
+
+        {/* Right Floating group collage image matching Picture 1 */}
+        <div className="w-full md:w-[45%] flex justify-center items-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
+            animate={{ opacity: 1, scale: 1, rotate: 2 }}
+            transition={{ type: 'spring', stiffness: 120, delay: 0.2 }}
+            className="w-full max-w-md relative group"
+          >
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-500" />
+            <img 
+              src="/esports_sports_group.png" 
+              alt="Nova Hub Gamers and Sports Players" 
+              className="relative w-full h-auto object-cover rounded-3xl border-[3px] border-[#1a1a1a] shadow-[12px_12px_0px_rgba(26,26,26,1)] hover:scale-[1.03] transition-transform duration-300"
+            />
+          </motion.div>
         </div>
       </section>
 
