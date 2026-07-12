@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Trophy, Sparkles, Pin, Compass, Info, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import * as THREE from 'three';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useTexture } from '@react-three/drei';
 import FeaturedCarousel from '../components/FeaturedCarousel';
 
 const ScrollParallaxHeading = ({ children, className, axis = "x", speed = 30, direction = 1 }) => {
@@ -18,6 +21,110 @@ const ScrollParallaxHeading = ({ children, className, axis = "x", speed = 30, di
     <motion.h2 ref={ref} style={style} className={className}>
       {children}
     </motion.h2>
+  );
+};
+
+const HologramCard = () => {
+  const cardRef = useRef(null);
+  const ringRef1 = useRef(null);
+  const ringRef2 = useRef(null);
+  const texture = useTexture('/cyber_sports_trophy.png');
+
+  useFrame((state) => {
+    const { x, y } = state.pointer; // Mouse pointer coordinates between -1 and 1
+    const time = state.clock.getElapsedTime();
+
+    if (cardRef.current) {
+      // Tilt toward mouse pointer with smooth interpolation
+      cardRef.current.rotation.y = THREE.MathUtils.lerp(cardRef.current.rotation.y, x * 0.4, 0.1);
+      cardRef.current.rotation.x = THREE.MathUtils.lerp(cardRef.current.rotation.x, -y * 0.4, 0.1);
+
+      // Subtle float up and down
+      cardRef.current.position.y = Math.sin(time * 1.5) * 0.1;
+    }
+
+    if (ringRef1.current) {
+      ringRef1.current.rotation.y = time * 0.4;
+      ringRef1.current.rotation.x = time * 0.1;
+    }
+    if (ringRef2.current) {
+      ringRef2.current.rotation.z = -time * 0.6;
+      ringRef2.current.rotation.y = time * 0.2;
+    }
+  });
+
+  return (
+    <group>
+      {/* Centered Holographic Render Image Card */}
+      <group ref={cardRef}>
+        {/* Inner Image Mesh */}
+        <mesh position={[0, 0, 0]}>
+          <planeGeometry args={[2.5, 2.5]} />
+          <meshBasicMaterial map={texture} transparent opacity={0.95} />
+        </mesh>
+        
+        {/* Glassmorphic border glow frame */}
+        <mesh position={[0, 0, -0.05]}>
+          <planeGeometry args={[2.7, 2.7]} />
+          <meshPhysicalMaterial 
+            color="#00f0ff"
+            emissive="#d900ff"
+            emissiveIntensity={0.2}
+            roughness={0.1}
+            metalness={0.9}
+            transparent
+            opacity={0.3}
+          />
+        </mesh>
+      </group>
+
+      {/* Orbiting cyber rings */}
+      <mesh ref={ringRef1} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[1.9, 0.02, 16, 100]} />
+        <meshBasicMaterial color="#d900ff" wireframe />
+      </mesh>
+
+      <mesh ref={ringRef2} rotation={[0, Math.PI / 4, 0]}>
+        <torusGeometry args={[2.1, 0.015, 16, 100]} />
+        <meshBasicMaterial color="#00f0ff" wireframe />
+      </mesh>
+      
+      {/* Top and Bottom futuristic light indicators */}
+      <mesh position={[0, 1.4, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.6, 0.03, 8, 32]} />
+        <meshStandardMaterial color="#00f0ff" metalness={0.9} roughness={0.1} emissive="#00f0ff" emissiveIntensity={0.5} />
+      </mesh>
+    </group>
+  );
+};
+
+const Interactive3DHologram = () => {
+  return (
+    <div className="w-full h-[380px] md:h-[420px] bg-slate-950 border-[3px] border-[#1a1a1a] rounded-[2rem] shadow-[8px_8px_0px_rgba(26,26,26,1)] overflow-hidden relative group">
+      {/* Top neubrutalist panel header */}
+      <div className="absolute top-0 inset-x-0 bg-yellow-200 border-b-[3px] border-[#1a1a1a] px-5 py-2.5 flex items-center justify-between z-20">
+        <span className="text-[10px] font-black tracking-widest text-[#1a1a1a] uppercase flex items-center gap-1.5 font-mono">
+          <span className="w-2.5 h-2.5 rounded-full bg-green-500 border border-[#1a1a1a]" />
+          WebGL Active: Nova Hub Visualizer
+        </span>
+        <div className="flex gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#1a1a1a]/20" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#1a1a1a]/20" />
+        </div>
+      </div>
+
+      <Canvas camera={{ position: [0, 0, 4], fov: 50 }} className="z-10 mt-6">
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[5, 5, 5]} intensity={1.5} color="#00f0ff" />
+        <pointLight position={[0, -2, 2]} intensity={2.0} color="#d900ff" />
+        <React.Suspense fallback={null}>
+          <HologramCard />
+        </React.Suspense>
+      </Canvas>
+
+      {/* Retro overlay stripes */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(transparent_50%,rgba(0,0,0,0.4))] z-15" />
+    </div>
   );
 };
 
@@ -161,19 +268,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-            className="w-full max-w-sm bg-yellow-100 border-[3px] border-[#1a1a1a] p-8 rounded-2xl hard-shadow relative rotate-3 sticker-hover"
+            className="w-full max-w-sm"
           >
-            <div className="absolute -top-4 -right-4 bg-red-400 border-[3px] border-[#1a1a1a] px-3 py-1 text-[10px] font-bold uppercase rotate-12 shadow-[2px_2px_0px_rgba(26,26,26,1)]">
-              100% Sports
-            </div>
-            
-            <Trophy className="w-12 h-12 text-[#1a1a1a] mb-6 stroke-[2.5]" />
-            <h3 className="text-xl font-bold font-display uppercase tracking-tight text-[#1a1a1a] mb-3">
-              Ground Management & Roster Arrays
-            </h3>
-            <p className="text-[10px] text-[#1a1a1a]/80 font-bold leading-relaxed">
-              We focus entirely on physical sports logic. Set roster sizes, allocate ground slots, check referee stakes, and display private address passes to players.
-            </p>
+            <Interactive3DHologram />
           </motion.div>
 
           <div className="w-full max-w-sm">
