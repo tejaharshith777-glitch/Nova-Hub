@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Html } from '@react-three/drei';
+import { Float, Html, useTexture } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -18,149 +18,77 @@ gsap.registerPlugin(ScrollTrigger);
 // 3D Procedural Trophy Component (WebGL)
 const GlowingTrophy = () => {
   const groupRef = useRef(null);
+  const texture = useTexture('/national_grid_bg.png');
 
   // Define the coordinates of the 5 main city nodes (relative to base)
   // Bengaluru, Mumbai, Delhi, Kolkata, Guntur
   const nodes = [
-    { name: 'BENGALURU_HUB-HQ', status: '[CONFIRMED]', color: '#22c55e', pos: [-2.0, 0.4, -1.8], height: 2.2, active: true },
-    { name: 'GUNTUR_BATTLE_TURF', status: 'SYNCED', color: '#22c55e', pos: [0.8, -0.1, 1.2], height: 1.7, active: true },
-    { name: 'DELHI_NODE-NORTH', status: '[VALIDATING]', color: '#06b6d4', pos: [1.2, 0.6, -2.4], height: 2.8, active: true },
-    { name: 'MUMBAI', status: '', color: '#a855f7', pos: [-2.6, 0.2, 0.8], height: 2.1, active: false },
-    { name: 'KOLKATA', status: '', color: '#ec4899', pos: [2.4, 0.1, -0.4], height: 1.9, active: false }
+    { name: 'BENGALURU_HUB-HQ', status: '[CONFIRMED]', color: '#22c55e', pos: [-2.1, -0.6, 0.4] },
+    { name: 'GUNTUR_BATTLE_TURF', status: 'SYNCED', color: '#22c55e', pos: [0.7, -0.4, 0.4] },
+    { name: 'DELHI_NODE-NORTH', status: '[VALIDATING]', color: '#06b6d4', pos: [0.8, 1.0, 0.4] },
+    { name: 'MUMBAI', status: '', color: '#a855f7', pos: [-1.6, 0.3, 0.4] },
+    { name: 'KOLKATA', status: '', color: '#ec4899', pos: [2.3, 0.1, 0.4] }
   ];
-
-  // We can also generate a set of minor filler server blocks to make it look like a dense data grid
-  const fillerTowers = [];
-  // Use a pseudo-random seed to generate consistent coordinates
-  let seed = 42;
-  const random = () => {
-    const x = Math.sin(seed++) * 10000;
-    return x - Math.floor(x);
-  };
-
-  // Generate around 25 filler columns
-  for (let i = 0; i < 25; i++) {
-    const x = (random() * 8) - 4;
-    const z = (random() * 8) - 4;
-    
-    // Ensure they don't overlap too closely with the main nodes
-    let tooClose = false;
-    for (const node of nodes) {
-      const dx = x - node.pos[0];
-      const dz = z - node.pos[2];
-      if (Math.sqrt(dx*dx + dz*dz) < 1.0) {
-        tooClose = true;
-        break;
-      }
-    }
-    
-    if (!tooClose) {
-      fillerTowers.push({
-        id: i,
-        pos: [x, (random() * 0.8) - 0.4, z],
-        height: random() * 1.5 + 0.4,
-        scaleY: random() * 0.4 + 0.8
-      });
-    }
-  }
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
 
     if (groupRef.current) {
-      // Tilt the grid slightly and rotate slowly
-      groupRef.current.rotation.y = time * 0.05;
+      // Subtle tilt/hover rotation based on time
+      groupRef.current.rotation.y = Math.sin(time * 0.1) * 0.05;
+      groupRef.current.rotation.x = 0.2 + Math.cos(time * 0.1) * 0.02;
       
-      // Tilt based on scroll progress
+      // Link scale & position directly to window scroll progress
       const scrollY = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollProgress = docHeight > 0 ? scrollY / docHeight : 0;
 
-      // Adjust scale and position based on scroll just like previous code
-      const targetScale = Math.max(0.45, 1.2 - scrollProgress * 0.7);
+      // Object zooms out and shifts left as user scrolls down
+      const targetScale = Math.max(0.65, 1.35 - scrollProgress * 0.7);
       groupRef.current.scale.set(targetScale, targetScale, targetScale);
 
       // Shifting position on screen
-      groupRef.current.position.x = -scrollProgress * 3.5;
-      groupRef.current.position.y = -0.3 - scrollProgress * 1.2;
+      groupRef.current.position.x = -scrollProgress * 4.0;
+      groupRef.current.position.y = -scrollProgress * 1.5;
     }
   });
 
   return (
-    <group ref={groupRef} rotation={[0.4, 0, 0]}>
-      {/* 1. COORDINATE GRID FLOOR */}
-      <gridHelper args={[12, 16, '#06b6d4', '#111122']} position={[0, -1.2, 0]} opacity={0.25} transparent />
-
-      {/* 2. GLOWING NETWORKING DATA LINES */}
-      {/* Line between Bengaluru and Guntur */}
-      <mesh position={[-0.6, -1.18, -0.3]} rotation={[0, -Math.atan2(3.0, 2.8), 0]}>
-        <boxGeometry args={[Math.sqrt(2.8*2.8 + 3.0*3.0), 0.015, 0.015]} />
-        <meshBasicMaterial color="#22c55e" opacity={0.6} transparent />
-      </mesh>
-      {/* Line between Delhi and Guntur */}
-      <mesh position={[1.0, -1.18, -0.6]} rotation={[0, -Math.atan2(-3.6, -0.4), 0]}>
-        <boxGeometry args={[Math.sqrt(0.4*0.4 + 3.6*3.6), 0.015, 0.015]} />
-        <meshBasicMaterial color="#06b6d4" opacity={0.5} transparent />
-      </mesh>
-      {/* Line between Mumbai and Bengaluru */}
-      <mesh position={[-2.3, -1.18, -0.5]} rotation={[0, -Math.atan2(-2.6, 0.6), 0]}>
-        <boxGeometry args={[Math.sqrt(0.6*0.6 + 2.6*2.6), 0.015, 0.015]} />
-        <meshBasicMaterial color="#a855f7" opacity={0.4} transparent />
-      </mesh>
-      {/* Line between Kolkata and Delhi */}
-      <mesh position={[1.8, -1.18, -1.4]} rotation={[0, -Math.atan2(2.0, 1.2), 0]}>
-        <boxGeometry args={[Math.sqrt(1.2*1.2 + 2.0*2.0), 0.015, 0.015]} />
-        <meshBasicMaterial color="#ec4899" opacity={0.4} transparent />
+    <group ref={groupRef}>
+      {/* 1. HIGH-FIDELITY NATIONAL GRID BACKDROP PLANE */}
+      <mesh position={[0, 0, 0]}>
+        <planeGeometry args={[7.2, 4.0]} />
+        <meshBasicMaterial map={texture} transparent opacity={0.8} />
       </mesh>
 
-      {/* 3. GENERATE MAJOR NODE TOWERS */}
+      {/* 2. GLOWING INTERACTIVE NODE DOTS & OVERLAYS */}
       {nodes.map((node, index) => {
         const x = node.pos[0];
-        const yBase = -1.2;
-        const h = node.height;
+        const y = node.pos[1];
         const z = node.pos[2];
 
         return (
-          <group key={index} position={[x, yBase + h / 2, z]}>
-            {/* Outer Tower Chassis */}
+          <group key={index} position={[x, y, z]}>
+            {/* Glowing Emissive Indicator Sphere */}
             <mesh>
-              <boxGeometry args={[0.42, h, 0.42]} />
-              <meshPhysicalMaterial 
-                color="#090d16"
-                roughness={0.2}
-                metalness={0.9}
-                transparent
-                opacity={0.7}
-                clearcoat={1.0}
-              />
-            </mesh>
-
-            {/* Glowing Emissive Inner Core (Cylinder) */}
-            <mesh position={[0, 0, 0]}>
-              <cylinderGeometry args={[0.12, 0.12, h - 0.1, 16]} />
-              <meshPhysicalMaterial 
-                color={node.color}
-                emissive={node.color}
-                emissiveIntensity={1.8}
-                transparent
-                opacity={0.8}
-              />
-            </mesh>
-
-            {/* Glowing Emissive Indicator Bead on Top */}
-            <mesh position={[0, h / 2 + 0.06, 0]}>
-              <sphereGeometry args={[0.08, 16, 16]} />
+              <sphereGeometry args={[0.075, 16, 16]} />
               <meshBasicMaterial color={node.color} />
             </mesh>
 
-            {/* Drei HTML floating HUD Node tag */}
+            {/* Pulsing visual halo ring */}
+            <mesh position={[0, 0, -0.01]}>
+              <ringGeometry args={[0.09, 0.13, 32]} />
+              <meshBasicMaterial color={node.color} transparent opacity={0.3} />
+            </mesh>
+
+            {/* Drei HTML floating node HUD label tag */}
             <Html 
-              position={[0, h / 2 + 0.35, 0]} 
-              distanceFactor={8}
+              position={[0, 0.22, 0.1]} 
+              distanceFactor={6}
               center
             >
               <div 
-                className={`font-mono text-[8px] md:text-[9px] px-2 py-0.5 rounded border whitespace-nowrap uppercase tracking-widest font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all duration-300 ${
+                className={`font-mono text-[7px] md:text-[8px] px-2 py-0.5 rounded border whitespace-nowrap uppercase tracking-widest font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all duration-300 ${
                   node.color === '#22c55e'
                     ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-400'
                     : node.color === '#06b6d4'
@@ -170,7 +98,7 @@ const GlowingTrophy = () => {
                     : 'bg-pink-950/90 border-pink-500/40 text-pink-400'
                 }`}
               >
-                {node.active && (
+                {node.color === '#22c55e' || node.color === '#06b6d4' ? (
                   <span className="relative flex h-1.5 w-1.5">
                     <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
                       node.color === '#22c55e' ? 'bg-emerald-400' : 'bg-cyan-400'
@@ -179,7 +107,7 @@ const GlowingTrophy = () => {
                       node.color === '#22c55e' ? 'bg-emerald-500' : 'bg-cyan-500'
                     }`}></span>
                   </span>
-                )}
+                ) : null}
                 <span>
                   {node.name === 'MUMBAI' || node.name === 'KOLKATA' ? (
                     node.name
@@ -191,33 +119,6 @@ const GlowingTrophy = () => {
                 </span>
               </div>
             </Html>
-          </group>
-        );
-      })}
-
-      {/* 4. GENERATE MINOR SERVER BLOCKS (Grid filler) */}
-      {fillerTowers.map((tower) => {
-        const x = tower.pos[0];
-        const yBase = -1.2;
-        const h = tower.height;
-        const z = tower.pos[2];
-
-        return (
-          <group key={tower.id} position={[x, yBase + h / 2, z]}>
-            <mesh>
-              <boxGeometry args={[0.22, h, 0.22]} />
-              <meshPhysicalMaterial 
-                color="#061c2a"
-                roughness={0.4}
-                metalness={0.8}
-                transparent
-                opacity={0.5}
-              />
-            </mesh>
-            <mesh position={[0, h / 2 + 0.02, 0]}>
-              <sphereGeometry args={[0.03, 8, 8]} />
-              <meshBasicMaterial color="#00f0ff" opacity={0.6} transparent />
-            </mesh>
           </group>
         );
       })}
