@@ -230,12 +230,12 @@ export const LandingPage = ({ onOpenAuth, user }) => {
       {/* ==========================================
           FRAME 1: HERO SECTION
          ========================================== */}
-      <section id="hero" className="min-h-[95vh] flex flex-col md:flex-row items-center justify-between px-8 md:px-24 pt-32 pb-20 relative z-10 gap-12 bg-gradient-to-br from-[#1e3a8a] via-[#2563eb] to-[#7c3aed] text-white border-b-[4px] border-[#1a1a1a] overflow-hidden">
+      <section id="hero" className="min-h-[95vh] flex flex-col md:flex-row items-center justify-between px-8 md:px-24 pt-32 pb-20 relative z-10 gap-12 bg-[#c4e4e3] dark:bg-gradient-to-br dark:from-[#090b16] dark:via-[#111324] dark:to-[#1e0f35] text-[#1a1a1a] dark:text-white border-b-[4px] border-[#1a1a1a] dark:border-white/10 transition-colors duration-500 overflow-hidden">
         {/* Skewed Yellow Accent Slash Grid matching Picture 1 */}
-        <div className="absolute right-0 bottom-0 top-0 w-[42%] bg-[#facc15] -skew-x-[18deg] origin-top-right z-0 pointer-events-none hidden md:block border-l-[4px] border-[#1a1a1a]" />
+        <div className="absolute right-0 bottom-0 top-0 w-[42%] bg-[#facc15] dark:bg-[#1a1c30] -skew-x-[18deg] origin-top-right z-0 pointer-events-none hidden md:block border-l-[4px] border-[#1a1a1a] dark:border-l-white/10 transition-all duration-500" />
         
         {/* Subtle dot overlay matching Picture 1 */}
-        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(26,26,26,0.06)_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none transition-all duration-500" />
 
         {/* Left Typography Block */}
         <div className="w-full md:w-[55%] text-left flex flex-col gap-6 relative z-10">
@@ -244,7 +244,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-[10px] font-black uppercase tracking-widest bg-yellow-450 border-2 border-white px-3 py-1 text-black shadow-[2px_2px_0px_rgba(255,255,255,1)]">
+            <span className="text-[10px] font-black uppercase tracking-widest bg-white dark:bg-slate-900 border-2 border-[#1a1a1a] dark:border-cyan-500/35 px-3 py-1 text-[#1a1a1a] dark:text-cyan-400 shadow-[2px_2px_0px_rgba(26,26,26,1)] dark:shadow-[2px_2px_0px_rgba(0,240,255,0.8)] transition-all duration-500">
               ★ Active WebGL Tournament Grid
             </span>
           </motion.div>
@@ -253,17 +253,17 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-black font-display text-white leading-none uppercase"
+            className="text-5xl md:text-7xl font-black font-display text-[#1a1a1a] dark:text-white leading-none uppercase transition-colors duration-500"
           >
             Behind the Greatest Matches, <br />
-            There's <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-400">Nova Hub</span>
+            There's <span className="text-[#e86c3f] dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-yellow-300 dark:via-yellow-400 dark:to-orange-400">Nova Hub</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-xs md:text-sm font-semibold max-w-lg leading-relaxed text-white/90 font-mono uppercase tracking-wide"
+            className="text-xs md:text-sm font-semibold max-w-lg leading-relaxed text-[#1a1a1a]/85 dark:text-white/80 font-mono uppercase tracking-wide transition-colors duration-500"
           >
             Quietly syncing local sports turf bookings and global esports brackets to deliver professional tournament events. Set roster sizes, allocate ground slots, and verify clan rosters.
           </motion.p>
@@ -272,14 +272,14 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             {user ? (
               <button
                 onClick={() => navigate('/dashboard')}
-                className="bg-[#1a1a1a] hover:bg-black text-white px-8 py-4 border-2 border-white rounded-2xl font-bold uppercase tracking-wider text-xs shadow-[5px_5px_0px_rgba(255,255,255,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 interactive-target"
+                className="bg-[#1a1a1a] dark:bg-cyan-500 hover:bg-black dark:hover:bg-cyan-400 text-white dark:text-slate-950 px-8 py-4 border-2 border-[#1a1a1a] dark:border-slate-950 rounded-2xl font-bold uppercase tracking-wider text-xs shadow-[5px_5px_0px_rgba(26,26,26,1)] dark:shadow-[5px_5px_0px_rgba(217,0,255,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 interactive-target"
               >
                 Go to Dashboard Console <ArrowRight className="w-4 h-4" />
               </button>
             ) : (
               <button
                 onClick={onOpenAuth}
-                className="bg-[#1a1a1a] hover:bg-black text-white px-8 py-4 border-2 border-white rounded-2xl font-bold uppercase tracking-wider text-xs shadow-[5px_5px_0px_rgba(255,255,255,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 interactive-target"
+                className="bg-[#1a1a1a] dark:bg-cyan-500 hover:bg-black dark:hover:bg-cyan-400 text-white dark:text-slate-950 px-8 py-4 border-2 border-[#1a1a1a] dark:border-slate-950 rounded-2xl font-bold uppercase tracking-wider text-xs shadow-[5px_5px_0px_rgba(26,26,26,1)] dark:shadow-[5px_5px_0px_rgba(217,0,255,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center gap-2 interactive-target"
               >
                 Host a Tournament Now <ArrowRight className="w-4 h-4" />
               </button>
@@ -295,11 +295,11 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             transition={{ type: 'spring', stiffness: 120, delay: 0.2 }}
             className="w-full max-w-md relative group"
           >
-            <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-500" />
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-500 hidden dark:block" />
             <img 
               src="/esports_sports_group.png" 
               alt="Nova Hub Gamers and Sports Players" 
-              className="relative w-full h-auto object-cover rounded-3xl border-[3px] border-[#1a1a1a] shadow-[12px_12px_0px_rgba(26,26,26,1)] hover:scale-[1.03] transition-transform duration-300"
+              className="relative w-full h-auto object-cover rounded-3xl border-[3px] border-[#1a1a1a] dark:border-cyan-500/30 shadow-[12px_12px_0px_rgba(26,26,26,1)] dark:shadow-[12px_12px_0px_rgba(217,0,255,0.4)] transition-all duration-500"
             />
           </motion.div>
         </div>
