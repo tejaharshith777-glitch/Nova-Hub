@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
+import { Float, Html } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -17,265 +17,210 @@ gsap.registerPlugin(ScrollTrigger);
 
 // 3D Procedural Trophy Component (WebGL)
 const GlowingTrophy = () => {
-  const trophyRef = useRef(null);
-  const soccerRef = useRef(null);
-  const basketballRef = useRef(null);
-  const tennisRef = useRef(null);
+  const groupRef = useRef(null);
 
-  // useFrame runs in R3F render loop (gpu-optimized)
+  // Define the coordinates of the 5 main city nodes (relative to base)
+  // Bengaluru, Mumbai, Delhi, Kolkata, Guntur
+  const nodes = [
+    { name: 'BENGALURU_HUB-HQ', status: '[CONFIRMED]', color: '#22c55e', pos: [-2.0, 0.4, -1.8], height: 2.2, active: true },
+    { name: 'GUNTUR_BATTLE_TURF', status: 'SYNCED', color: '#22c55e', pos: [0.8, -0.1, 1.2], height: 1.7, active: true },
+    { name: 'DELHI_NODE-NORTH', status: '[VALIDATING]', color: '#06b6d4', pos: [1.2, 0.6, -2.4], height: 2.8, active: true },
+    { name: 'MUMBAI', status: '', color: '#a855f7', pos: [-2.6, 0.2, 0.8], height: 2.1, active: false },
+    { name: 'KOLKATA', status: '', color: '#ec4899', pos: [2.4, 0.1, -0.4], height: 1.9, active: false }
+  ];
+
+  // We can also generate a set of minor filler server blocks to make it look like a dense data grid
+  const fillerTowers = [];
+  // Use a pseudo-random seed to generate consistent coordinates
+  let seed = 42;
+  const random = () => {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  };
+
+  // Generate around 25 filler columns
+  for (let i = 0; i < 25; i++) {
+    const x = (random() * 8) - 4;
+    const z = (random() * 8) - 4;
+    
+    // Ensure they don't overlap too closely with the main nodes
+    let tooClose = false;
+    for (const node of nodes) {
+      const dx = x - node.pos[0];
+      const dz = z - node.pos[2];
+      if (Math.sqrt(dx*dx + dz*dz) < 1.0) {
+        tooClose = true;
+        break;
+      }
+    }
+    
+    if (!tooClose) {
+      fillerTowers.push({
+        id: i,
+        pos: [x, (random() * 0.8) - 0.4, z],
+        height: random() * 1.5 + 0.4,
+        scaleY: random() * 0.4 + 0.8
+      });
+    }
+  }
+
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
 
-    if (trophyRef.current) {
-      // Automatic rotation of the main controller assembly
-      trophyRef.current.rotation.y = time * 0.2;
-
-      // Link rotation & scaling directly to window scroll progress
+    if (groupRef.current) {
+      // Tilt the grid slightly and rotate slowly
+      groupRef.current.rotation.y = time * 0.05;
+      
+      // Tilt based on scroll progress
       const scrollY = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollProgress = docHeight > 0 ? scrollY / docHeight : 0;
 
-      // Object zooms out and shifts left as user scrolls down
-      const targetScale = Math.max(0.4, 1.2 - scrollProgress * 0.9);
-      trophyRef.current.scale.set(targetScale, targetScale, targetScale);
+      // Adjust scale and position based on scroll just like previous code
+      const targetScale = Math.max(0.45, 1.2 - scrollProgress * 0.7);
+      groupRef.current.scale.set(targetScale, targetScale, targetScale);
 
       // Shifting position on screen
-      trophyRef.current.position.x = -scrollProgress * 4.0;
-      trophyRef.current.position.y = -scrollProgress * 1.5;
-    }
-
-    // Orbit 1: Cyber Soccer Ball (faster, slight tilt)
-    if (soccerRef.current) {
-      const radius = 2.3;
-      soccerRef.current.position.x = Math.cos(time * 1.4) * radius;
-      soccerRef.current.position.z = Math.sin(time * 1.4) * radius;
-      soccerRef.current.position.y = Math.sin(time * 0.7) * 0.6;
-      soccerRef.current.rotation.y += 0.02;
-      soccerRef.current.rotation.x += 0.01;
-    }
-
-    // Orbit 2: Neon Basketball (slower, vertical tilt)
-    if (basketballRef.current) {
-      const radius = 2.8;
-      basketballRef.current.position.x = Math.cos(time * 0.9 + Math.PI * 0.6) * radius;
-      basketballRef.current.position.z = Math.sin(time * 0.9 + Math.PI * 0.6) * radius;
-      basketballRef.current.position.y = Math.cos(time * 0.9) * 1.0;
-      basketballRef.current.rotation.y += 0.01;
-      basketballRef.current.rotation.z += 0.015;
-    }
-
-    // Orbit 3: Cyber Tennis/Cricket Ball (very fast, inclined orbit)
-    if (tennisRef.current) {
-      const radius = 1.8;
-      tennisRef.current.position.x = Math.cos(time * 2.0 + Math.PI * 1.2) * radius;
-      tennisRef.current.position.z = Math.sin(time * 2.0 + Math.PI * 1.2) * radius;
-      tennisRef.current.position.y = Math.sin(time * 2.0) * -0.4;
-      tennisRef.current.rotation.y += 0.03;
+      groupRef.current.position.x = -scrollProgress * 3.5;
+      groupRef.current.position.y = -0.3 - scrollProgress * 1.2;
     }
   });
 
   return (
-    <group ref={trophyRef}>
-      {/* 1. FUTURISTIC CYBER GAME CONTROLLER ASSEMBLY */}
-      <group position={[0, 0.2, 0]} scale={[1.1, 1.1, 1.1]}>
-        {/* Main Center body bridge */}
-        <mesh position={[0, 0, 0]}>
-          <boxGeometry args={[1.2, 0.7, 0.3]} />
-          <meshPhysicalMaterial 
-            color="#131326" 
-            roughness={0.2} 
-            metalness={0.8}
-            clearcoat={1.0}
-          />
-        </mesh>
+    <group ref={groupRef} rotation={[0.4, 0, 0]}>
+      {/* 1. COORDINATE GRID FLOOR */}
+      <gridHelper args={[12, 16, '#06b6d4', '#111122']} position={[0, -1.2, 0]} opacity={0.25} transparent />
 
-        {/* Left Grip Handle */}
-        <mesh position={[-0.8, -0.2, 0]} rotation={[0, 0, Math.PI / 12]}>
-          <boxGeometry args={[0.5, 1.1, 0.3]} />
-          <meshPhysicalMaterial 
-            color="#0c0c1a" 
-            roughness={0.25} 
-            metalness={0.9}
-            clearcoat={1.0}
-          />
-        </mesh>
-
-        {/* Right Grip Handle */}
-        <mesh position={[0.8, -0.2, 0]} rotation={[0, 0, -Math.PI / 12]}>
-          <boxGeometry args={[0.5, 1.1, 0.3]} />
-          <meshPhysicalMaterial 
-            color="#0c0c1a" 
-            roughness={0.25} 
-            metalness={0.9}
-            clearcoat={1.0}
-          />
-        </mesh>
-
-        {/* Left Thumbstick (Cylinder & Cap) */}
-        <group position={[-0.35, -0.1, 0.2]}>
-          <mesh>
-            <cylinderGeometry args={[0.1, 0.1, 0.15, 16]} />
-            <meshStandardMaterial color="#00f0ff" metalness={0.8} roughness={0.2} />
-          </mesh>
-          <mesh position={[0, 0.08, 0]}>
-            <sphereGeometry args={[0.13, 16, 16]} />
-            <meshPhysicalMaterial color="#d900ff" roughness={0.1} metalness={0.5} />
-          </mesh>
-        </group>
-
-        {/* Right Thumbstick (Cylinder & Cap) */}
-        <group position={[0.35, -0.2, 0.2]}>
-          <mesh>
-            <cylinderGeometry args={[0.1, 0.1, 0.15, 16]} />
-            <meshStandardMaterial color="#00f0ff" metalness={0.8} roughness={0.2} />
-          </mesh>
-          <mesh position={[0, 0.08, 0]}>
-            <sphereGeometry args={[0.13, 16, 16]} />
-            <meshPhysicalMaterial color="#d900ff" roughness={0.1} metalness={0.5} />
-          </mesh>
-        </group>
-
-        {/* D-Pad (Left Side) */}
-        <group position={[-0.55, 0.2, 0.18]}>
-          {/* Vertical Bar */}
-          <mesh>
-            <boxGeometry args={[0.08, 0.24, 0.05]} />
-            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={0.6} />
-          </mesh>
-          {/* Horizontal Bar */}
-          <mesh>
-            <boxGeometry args={[0.24, 0.08, 0.05]} />
-            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={0.6} />
-          </mesh>
-        </group>
-
-        {/* Action Buttons A/B/X/Y (Right Side) */}
-        <group position={[0.55, 0.15, 0.18]}>
-          {/* Y Button (Top) */}
-          <mesh position={[0, 0.12, 0]}>
-            <sphereGeometry args={[0.05, 16, 16]} />
-            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={1.0} />
-          </mesh>
-          {/* A Button (Bottom) */}
-          <mesh position={[0, -0.12, 0]}>
-            <sphereGeometry args={[0.05, 16, 16]} />
-            <meshStandardMaterial color="#d900ff" emissive="#d900ff" emissiveIntensity={1.0} />
-          </mesh>
-          {/* X Button (Left) */}
-          <mesh position={[-0.12, 0, 0]}>
-            <sphereGeometry args={[0.05, 16, 16]} />
-            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={1.0} />
-          </mesh>
-          {/* B Button (Right) */}
-          <mesh position={[0.12, 0, 0]}>
-            <sphereGeometry args={[0.05, 16, 16]} />
-            <meshStandardMaterial color="#d900ff" emissive="#d900ff" emissiveIntensity={1.0} />
-          </mesh>
-        </group>
-
-        {/* Glowing Center Logo Core */}
-        <mesh position={[0, 0.1, 0.16]}>
-          <octahedronGeometry args={[0.16, 0]} />
-          <meshPhysicalMaterial 
-            color="#00f0ff" 
-            emissive="#00f0ff" 
-            emissiveIntensity={1.5}
-            roughness={0.1}
-          />
-        </mesh>
-      </group>
-
-      {/* Cyber Pedestal/Base */}
-      <mesh position={[0, -1.8, 0]}>
-        <cylinderGeometry args={[1.2, 1.5, 0.4, 8]} />
-        <meshStandardMaterial color="#111122" metalness={0.9} roughness={0.1} />
+      {/* 2. GLOWING NETWORKING DATA LINES */}
+      {/* Line between Bengaluru and Guntur */}
+      <mesh position={[-0.6, -1.18, -0.3]} rotation={[0, -Math.atan2(3.0, 2.8), 0]}>
+        <boxGeometry args={[Math.sqrt(2.8*2.8 + 3.0*3.0), 0.015, 0.015]} />
+        <meshBasicMaterial color="#22c55e" opacity={0.6} transparent />
       </mesh>
-      <mesh position={[0, -1.5, 0]}>
-        <cylinderGeometry args={[0.3, 0.3, 0.6, 8]} />
-        <meshStandardMaterial color="#00f0ff" metalness={0.9} roughness={0.1} emissive="#00f0ff" emissiveIntensity={0.3} />
+      {/* Line between Delhi and Guntur */}
+      <mesh position={[1.0, -1.18, -0.6]} rotation={[0, -Math.atan2(-3.6, -0.4), 0]}>
+        <boxGeometry args={[Math.sqrt(0.4*0.4 + 3.6*3.6), 0.015, 0.015]} />
+        <meshBasicMaterial color="#06b6d4" opacity={0.5} transparent />
+      </mesh>
+      {/* Line between Mumbai and Bengaluru */}
+      <mesh position={[-2.3, -1.18, -0.5]} rotation={[0, -Math.atan2(-2.6, 0.6), 0]}>
+        <boxGeometry args={[Math.sqrt(0.6*0.6 + 2.6*2.6), 0.015, 0.015]} />
+        <meshBasicMaterial color="#a855f7" opacity={0.4} transparent />
+      </mesh>
+      {/* Line between Kolkata and Delhi */}
+      <mesh position={[1.8, -1.18, -1.4]} rotation={[0, -Math.atan2(2.0, 1.2), 0]}>
+        <boxGeometry args={[Math.sqrt(1.2*1.2 + 2.0*2.0), 0.015, 0.015]} />
+        <meshBasicMaterial color="#ec4899" opacity={0.4} transparent />
       </mesh>
 
-      {/* Outer Orbiting Grid Rims */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[2.5, 0.04, 16, 100]} />
-        <meshBasicMaterial color="#d900ff" wireframe />
-      </mesh>
-      <mesh rotation={[0, Math.PI / 4, 0]}>
-        <torusGeometry args={[2.8, 0.02, 16, 100]} />
-        <meshBasicMaterial color="#00f0ff" wireframe />
-      </mesh>
+      {/* 3. GENERATE MAJOR NODE TOWERS */}
+      {nodes.map((node, index) => {
+        const x = node.pos[0];
+        const yBase = -1.2;
+        const h = node.height;
+        const z = node.pos[2];
 
-      {/* Top Halo Ring */}
-      <mesh position={[0, 1.2, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[1.0, 0.05, 8, 50]} />
-        <meshStandardMaterial color="#00f0ff" metalness={0.9} roughness={0.1} emissive="#00f0ff" emissiveIntensity={0.5} />
-      </mesh>
+        return (
+          <group key={index} position={[x, yBase + h / 2, z]}>
+            {/* Outer Tower Chassis */}
+            <mesh>
+              <boxGeometry args={[0.42, h, 0.42]} />
+              <meshPhysicalMaterial 
+                color="#090d16"
+                roughness={0.2}
+                metalness={0.9}
+                transparent
+                opacity={0.7}
+                clearcoat={1.0}
+              />
+            </mesh>
 
-      {/* 2. ORBITING SPORTS SHAPES */}
+            {/* Glowing Emissive Inner Core (Cylinder) */}
+            <mesh position={[0, 0, 0]}>
+              <cylinderGeometry args={[0.12, 0.12, h - 0.1, 16]} />
+              <meshPhysicalMaterial 
+                color={node.color}
+                emissive={node.color}
+                emissiveIntensity={1.8}
+                transparent
+                opacity={0.8}
+              />
+            </mesh>
 
-      {/* A. Cyber Soccer Ball */}
-      <group ref={soccerRef}>
-        <mesh>
-          <icosahedronGeometry args={[0.32, 1]} />
-          <meshStandardMaterial color="#00f0ff" wireframe roughness={0.1} />
-        </mesh>
-        <mesh>
-          <sphereGeometry args={[0.3, 16, 16]} />
-          <meshPhysicalMaterial 
-            color="#d900ff" 
-            emissive="#d900ff"
-            emissiveIntensity={0.6}
-            roughness={0.2}
-            metalness={0.8}
-          />
-        </mesh>
-      </group>
+            {/* Glowing Emissive Indicator Bead on Top */}
+            <mesh position={[0, h / 2 + 0.06, 0]}>
+              <sphereGeometry args={[0.08, 16, 16]} />
+              <meshBasicMaterial color={node.color} />
+            </mesh>
 
-      {/* B. Cyber Basketball */}
-      <group ref={basketballRef}>
-        <mesh>
-          <sphereGeometry args={[0.35, 32, 32]} />
-          <meshPhysicalMaterial 
-            color="#f97316" 
-            roughness={0.3} 
-            metalness={0.7}
-            emissive="#ea580c"
-            emissiveIntensity={0.15}
-          />
-        </mesh>
-        {/* Seams */}
-        <mesh rotation={[0, 0, 0]}>
-          <torusGeometry args={[0.355, 0.012, 8, 32]} />
-          <meshBasicMaterial color="#1e1b4b" />
-        </mesh>
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[0.355, 0.012, 8, 32]} />
-          <meshBasicMaterial color="#1e1b4b" />
-        </mesh>
-        <mesh rotation={[0, Math.PI / 2, 0]}>
-          <torusGeometry args={[0.355, 0.012, 8, 32]} />
-          <meshBasicMaterial color="#1e1b4b" />
-        </mesh>
-      </group>
+            {/* Drei HTML floating HUD Node tag */}
+            <Html 
+              position={[0, h / 2 + 0.35, 0]} 
+              distanceFactor={8}
+              center
+            >
+              <div 
+                className={`font-mono text-[8px] md:text-[9px] px-2 py-0.5 rounded border whitespace-nowrap uppercase tracking-widest font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all duration-300 ${
+                  node.color === '#22c55e'
+                    ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-400'
+                    : node.color === '#06b6d4'
+                    ? 'bg-cyan-950/90 border-cyan-500/40 text-cyan-400'
+                    : node.color === '#a855f7'
+                    ? 'bg-purple-950/90 border-purple-500/40 text-purple-400'
+                    : 'bg-pink-950/90 border-pink-500/40 text-pink-400'
+                }`}
+              >
+                {node.active && (
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                      node.color === '#22c55e' ? 'bg-emerald-400' : 'bg-cyan-400'
+                    }`}></span>
+                    <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
+                      node.color === '#22c55e' ? 'bg-emerald-500' : 'bg-cyan-500'
+                    }`}></span>
+                  </span>
+                )}
+                <span>
+                  {node.name === 'MUMBAI' || node.name === 'KOLKATA' ? (
+                    node.name
+                  ) : (
+                    <>
+                      {node.name.split('_')[0]} <span className="opacity-60">{node.status}</span>
+                    </>
+                  )}
+                </span>
+              </div>
+            </Html>
+          </group>
+        );
+      })}
 
-      {/* C. Cyber Tennis / Cricket Ball */}
-      <group ref={tennisRef}>
-        <mesh>
-          <sphereGeometry args={[0.22, 32, 32]} />
-          <meshPhysicalMaterial 
-            color="#ccff00" 
-            roughness={0.15} 
-            metalness={0.8}
-            emissive="#ccff00"
-            emissiveIntensity={0.8}
-          />
-        </mesh>
-        {/* Tennis Seam curve */}
-        <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>
-          <torusGeometry args={[0.225, 0.008, 8, 32]} />
-          <meshBasicMaterial color="#ffffff" />
-        </mesh>
-      </group>
+      {/* 4. GENERATE MINOR SERVER BLOCKS (Grid filler) */}
+      {fillerTowers.map((tower) => {
+        const x = tower.pos[0];
+        const yBase = -1.2;
+        const h = tower.height;
+        const z = tower.pos[2];
+
+        return (
+          <group key={tower.id} position={[x, yBase + h / 2, z]}>
+            <mesh>
+              <boxGeometry args={[0.22, h, 0.22]} />
+              <meshPhysicalMaterial 
+                color="#061c2a"
+                roughness={0.4}
+                metalness={0.8}
+                transparent
+                opacity={0.5}
+              />
+            </mesh>
+            <mesh position={[0, h / 2 + 0.02, 0]}>
+              <sphereGeometry args={[0.03, 8, 8]} />
+              <meshBasicMaterial color="#00f0ff" opacity={0.6} transparent />
+            </mesh>
+          </group>
+        );
+      })}
     </group>
   );
 };
@@ -567,27 +512,102 @@ export const PremiumShowdown = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-l border-t border-cyan-500/20 pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-r border-b border-purple-500/20 pointer-events-none" />
 
+        {/* Left Side HUD widgets */}
+        <div className="absolute left-8 top-1/2 -translate-y-1/2 w-64 hidden lg:flex flex-col gap-6 text-left font-mono z-20 pointer-events-none">
+          <div className="bg-slate-950/75 backdrop-blur-md border border-cyan-500/20 p-4 rounded-xl space-y-3 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="text-[9px] font-bold uppercase tracking-widest text-cyan-400 border-b border-cyan-500/20 pb-1.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
+              Global Hub Validation
+            </div>
+            <div className="text-[10px] text-gray-400 font-bold uppercase">
+              Protocol: <span className="text-green-400">Active</span>
+            </div>
+            
+            {/* Sparkline Charts */}
+            <div className="grid grid-cols-2 gap-2.5 pt-1">
+              <div className="border border-cyan-500/10 p-1.5 rounded bg-cyan-950/20">
+                <div className="text-[8px] text-gray-500 font-bold uppercase tracking-wider mb-1">Latency</div>
+                <svg className="w-full h-8 stroke-cyan-400 stroke-[1.5] fill-none">
+                  <path d="M0 25 L8 22 L16 28 L24 15 L32 20 L40 10 L48 24 L56 12 L64 22 L72 15 L80 18" />
+                </svg>
+              </div>
+              <div className="border border-purple-500/10 p-1.5 rounded bg-purple-950/20">
+                <div className="text-[8px] text-gray-500 font-bold uppercase tracking-wider mb-1">Sync Load</div>
+                <svg className="w-full h-8 stroke-purple-400 stroke-[1.5] fill-none">
+                  <path d="M0 10 L8 15 L16 12 L24 25 L32 18 L40 28 L48 15 L56 22 L64 12 L72 26 L80 15" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-950/75 backdrop-blur-md border border-cyan-500/20 p-4 rounded-xl space-y-2 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="text-[9px] text-cyan-400 uppercase tracking-widest font-bold">
+              Route: Bengaluru → Guntur
+            </div>
+            <div className="text-[11px] font-black text-white flex items-center gap-2">
+              <span className="text-[8px] px-1 py-0.5 bg-green-500/10 border border-green-500/25 text-green-400 rounded font-bold">Ping</span>
+              1.2 ms
+            </div>
+            <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider pt-1 border-t border-white/5">
+              Regional Traffic: <span className="text-cyan-400">Active</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side HUD widgets */}
+        <div className="absolute right-8 top-1/2 -translate-y-1/2 w-64 hidden lg:flex flex-col gap-6 text-left font-mono z-20 pointer-events-none">
+          <div className="bg-slate-950/75 backdrop-blur-md border border-cyan-500/20 p-4 rounded-xl space-y-3 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="text-[9px] font-bold uppercase tracking-widest text-cyan-400 border-b border-cyan-500/20 pb-1.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
+              Global Hub Validation
+            </div>
+            <div className="text-[10px] text-gray-400 font-bold uppercase">
+              Protocol: <span className="text-green-400 font-bold">Active</span>
+            </div>
+            <div className="text-[10px] font-bold text-gray-400">
+              Active Teams: <span className="text-white font-black text-xs">128/128</span>
+            </div>
+            <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider pt-1.5 border-t border-white/5">
+              Grid Sync Health: <span className="text-green-400 font-black">Optimal</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Center Main Text Typography Block */}
         <div className="relative z-10 space-y-6 max-w-3xl">
           <div className="inline-flex items-center gap-2 border border-cyan-500/30 px-4 py-1.5 rounded-full bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-cyan-400 font-bold uppercase animate-pulse">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> WebGL Node Link Status: Standby
           </div>
           
           <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tight text-white font-display">
-            SHOWDOWN <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500">ARENA</span>
+            NOVA NATIONAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500">GRID</span>
           </h1>
 
-          <p className="text-gray-400 text-xs md:text-sm font-mono tracking-wider max-w-lg mx-auto uppercase">
-            Initialize validation sequence. Syncing offline battle nodal corridors and low-ping server metrics.
+          <p className="text-gray-400 text-xs md:text-sm font-mono tracking-wider max-w-2xl mx-auto uppercase">
+            Initialize national validation sequence. Syncing offline national nodal corridors and regional server metrics.
           </p>
 
           {/* Scroll Down Indicator */}
           <div className="pt-16 flex flex-col items-center justify-center gap-2">
             <span className="text-[9px] font-bold text-cyan-450 uppercase tracking-[0.25em] animate-pulse">
-              Scroll to Sync Offline Grid
+              Scroll to Engage National Tournament Network
             </span>
             <div className="w-6 h-10 border-2 border-cyan-500/30 rounded-full p-1 flex justify-center">
               <div className="w-1.5 h-2.5 bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]" />
             </div>
+          </div>
+        </div>
+
+        {/* Bottom Coordinates & status bar */}
+        <div className="absolute bottom-8 left-8 right-8 hidden md:flex items-center justify-between font-mono text-[9px] text-cyan-400/70 z-20 pointer-events-none">
+          <div className="bg-slate-950/75 backdrop-blur-md border border-cyan-500/20 px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+            <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
+            <span className="text-white font-bold uppercase">Regional Coordination [Guntur]: Established</span>
+          </div>
+
+          <div className="bg-slate-955/75 backdrop-blur-md border border-cyan-500/20 px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+            <span className="uppercase text-gray-400 font-bold">Sync Progress:</span>
+            <span className="text-green-400 font-bold tracking-tight">|||||||||||||||||||||| 100%</span>
           </div>
         </div>
       </section>
@@ -1216,6 +1236,18 @@ export const PremiumShowdown = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Floating AI Chat Assistant Button */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button className="relative flex items-center justify-center w-12 h-12 rounded-full bg-slate-900 border-2 border-cyan-500/50 hover:border-cyan-400 text-cyan-400 hover:text-white transition-all shadow-[0_0_15px_rgba(0,240,255,0.25)] cursor-pointer group">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 stroke-[2] fill-none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+          </svg>
+          <span className="absolute -top-1.5 -right-1.5 px-1 py-0.5 bg-yellow-400 text-black text-[7px] font-black rounded uppercase tracking-wider font-mono border border-black animate-bounce shadow-md">
+            AI
+          </span>
+        </button>
+      </div>
     </div>
   );
 };
