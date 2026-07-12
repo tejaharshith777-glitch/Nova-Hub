@@ -18,12 +18,17 @@ gsap.registerPlugin(ScrollTrigger);
 // 3D Procedural Trophy Component (WebGL)
 const GlowingTrophy = () => {
   const trophyRef = useRef(null);
+  const soccerRef = useRef(null);
+  const basketballRef = useRef(null);
+  const tennisRef = useRef(null);
 
   // useFrame runs in R3F render loop (gpu-optimized)
-  useFrame(() => {
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+
     if (trophyRef.current) {
-      // Automatic rotation
-      trophyRef.current.rotation.y += 0.005;
+      // Automatic rotation of the main controller assembly
+      trophyRef.current.rotation.y = time * 0.2;
 
       // Link rotation & scaling directly to window scroll progress
       const scrollY = window.scrollY;
@@ -38,33 +43,156 @@ const GlowingTrophy = () => {
       trophyRef.current.position.x = -scrollProgress * 4.0;
       trophyRef.current.position.y = -scrollProgress * 1.5;
     }
+
+    // Orbit 1: Cyber Soccer Ball (faster, slight tilt)
+    if (soccerRef.current) {
+      const radius = 2.3;
+      soccerRef.current.position.x = Math.cos(time * 1.4) * radius;
+      soccerRef.current.position.z = Math.sin(time * 1.4) * radius;
+      soccerRef.current.position.y = Math.sin(time * 0.7) * 0.6;
+      soccerRef.current.rotation.y += 0.02;
+      soccerRef.current.rotation.x += 0.01;
+    }
+
+    // Orbit 2: Neon Basketball (slower, vertical tilt)
+    if (basketballRef.current) {
+      const radius = 2.8;
+      basketballRef.current.position.x = Math.cos(time * 0.9 + Math.PI * 0.6) * radius;
+      basketballRef.current.position.z = Math.sin(time * 0.9 + Math.PI * 0.6) * radius;
+      basketballRef.current.position.y = Math.cos(time * 0.9) * 1.0;
+      basketballRef.current.rotation.y += 0.01;
+      basketballRef.current.rotation.z += 0.015;
+    }
+
+    // Orbit 3: Cyber Tennis/Cricket Ball (very fast, inclined orbit)
+    if (tennisRef.current) {
+      const radius = 1.8;
+      tennisRef.current.position.x = Math.cos(time * 2.0 + Math.PI * 1.2) * radius;
+      tennisRef.current.position.z = Math.sin(time * 2.0 + Math.PI * 1.2) * radius;
+      tennisRef.current.position.y = Math.sin(time * 2.0) * -0.4;
+      tennisRef.current.rotation.y += 0.03;
+    }
   });
 
   return (
     <group ref={trophyRef}>
-      {/* Central Cyber Gem/Core */}
-      <mesh position={[0, 0, 0]}>
-        <octahedronGeometry args={[1.5, 0]} />
-        <meshPhysicalMaterial 
-          color="#00f0ff" 
-          emissive="#d900ff"
-          emissiveIntensity={0.2}
-          metalness={0.9} 
-          roughness={0.15} 
-          clearcoat={1.0}
-          clearcoatRoughness={0.1}
-        />
-      </mesh>
+      {/* 1. FUTURISTIC CYBER GAME CONTROLLER ASSEMBLY */}
+      <group position={[0, 0.2, 0]} scale={[1.1, 1.1, 1.1]}>
+        {/* Main Center body bridge */}
+        <mesh position={[0, 0, 0]}>
+          <boxGeometry args={[1.2, 0.7, 0.3]} />
+          <meshPhysicalMaterial 
+            color="#131326" 
+            roughness={0.2} 
+            metalness={0.8}
+            clearcoat={1.0}
+          />
+        </mesh>
 
-      {/* Cyber Base */}
+        {/* Left Grip Handle */}
+        <mesh position={[-0.8, -0.2, 0]} rotation={[0, 0, Math.PI / 12]}>
+          <boxGeometry args={[0.5, 1.1, 0.3]} />
+          <meshPhysicalMaterial 
+            color="#0c0c1a" 
+            roughness={0.25} 
+            metalness={0.9}
+            clearcoat={1.0}
+          />
+        </mesh>
+
+        {/* Right Grip Handle */}
+        <mesh position={[0.8, -0.2, 0]} rotation={[0, 0, -Math.PI / 12]}>
+          <boxGeometry args={[0.5, 1.1, 0.3]} />
+          <meshPhysicalMaterial 
+            color="#0c0c1a" 
+            roughness={0.25} 
+            metalness={0.9}
+            clearcoat={1.0}
+          />
+        </mesh>
+
+        {/* Left Thumbstick (Cylinder & Cap) */}
+        <group position={[-0.35, -0.1, 0.2]}>
+          <mesh>
+            <cylinderGeometry args={[0.1, 0.1, 0.15, 16]} />
+            <meshStandardMaterial color="#00f0ff" metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0.08, 0]}>
+            <sphereGeometry args={[0.13, 16, 16]} />
+            <meshPhysicalMaterial color="#d900ff" roughness={0.1} metalness={0.5} />
+          </mesh>
+        </group>
+
+        {/* Right Thumbstick (Cylinder & Cap) */}
+        <group position={[0.35, -0.2, 0.2]}>
+          <mesh>
+            <cylinderGeometry args={[0.1, 0.1, 0.15, 16]} />
+            <meshStandardMaterial color="#00f0ff" metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0.08, 0]}>
+            <sphereGeometry args={[0.13, 16, 16]} />
+            <meshPhysicalMaterial color="#d900ff" roughness={0.1} metalness={0.5} />
+          </mesh>
+        </group>
+
+        {/* D-Pad (Left Side) */}
+        <group position={[-0.55, 0.2, 0.18]}>
+          {/* Vertical Bar */}
+          <mesh>
+            <boxGeometry args={[0.08, 0.24, 0.05]} />
+            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={0.6} />
+          </mesh>
+          {/* Horizontal Bar */}
+          <mesh>
+            <boxGeometry args={[0.24, 0.08, 0.05]} />
+            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={0.6} />
+          </mesh>
+        </group>
+
+        {/* Action Buttons A/B/X/Y (Right Side) */}
+        <group position={[0.55, 0.15, 0.18]}>
+          {/* Y Button (Top) */}
+          <mesh position={[0, 0.12, 0]}>
+            <sphereGeometry args={[0.05, 16, 16]} />
+            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={1.0} />
+          </mesh>
+          {/* A Button (Bottom) */}
+          <mesh position={[0, -0.12, 0]}>
+            <sphereGeometry args={[0.05, 16, 16]} />
+            <meshStandardMaterial color="#d900ff" emissive="#d900ff" emissiveIntensity={1.0} />
+          </mesh>
+          {/* X Button (Left) */}
+          <mesh position={[-0.12, 0, 0]}>
+            <sphereGeometry args={[0.05, 16, 16]} />
+            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={1.0} />
+          </mesh>
+          {/* B Button (Right) */}
+          <mesh position={[0.12, 0, 0]}>
+            <sphereGeometry args={[0.05, 16, 16]} />
+            <meshStandardMaterial color="#d900ff" emissive="#d900ff" emissiveIntensity={1.0} />
+          </mesh>
+        </group>
+
+        {/* Glowing Center Logo Core */}
+        <mesh position={[0, 0.1, 0.16]}>
+          <octahedronGeometry args={[0.16, 0]} />
+          <meshPhysicalMaterial 
+            color="#00f0ff" 
+            emissive="#00f0ff" 
+            emissiveIntensity={1.5}
+            roughness={0.1}
+          />
+        </mesh>
+      </group>
+
+      {/* Cyber Pedestal/Base */}
       <mesh position={[0, -1.8, 0]}>
         <cylinderGeometry args={[1.2, 1.5, 0.4, 8]} />
-        <meshStandardMaterial color="#1a1a2e" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#111122" metalness={0.9} roughness={0.1} />
       </mesh>
-      
       <mesh position={[0, -1.5, 0]}>
         <cylinderGeometry args={[0.3, 0.3, 0.6, 8]} />
-        <meshStandardMaterial color="#00f0ff" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#00f0ff" metalness={0.9} roughness={0.1} emissive="#00f0ff" emissiveIntensity={0.3} />
       </mesh>
 
       {/* Outer Orbiting Grid Rims */}
@@ -72,7 +200,6 @@ const GlowingTrophy = () => {
         <torusGeometry args={[2.5, 0.04, 16, 100]} />
         <meshBasicMaterial color="#d900ff" wireframe />
       </mesh>
-
       <mesh rotation={[0, Math.PI / 4, 0]}>
         <torusGeometry args={[2.8, 0.02, 16, 100]} />
         <meshBasicMaterial color="#00f0ff" wireframe />
@@ -83,6 +210,72 @@ const GlowingTrophy = () => {
         <torusGeometry args={[1.0, 0.05, 8, 50]} />
         <meshStandardMaterial color="#00f0ff" metalness={0.9} roughness={0.1} emissive="#00f0ff" emissiveIntensity={0.5} />
       </mesh>
+
+      {/* 2. ORBITING SPORTS SHAPES */}
+
+      {/* A. Cyber Soccer Ball */}
+      <group ref={soccerRef}>
+        <mesh>
+          <icosahedronGeometry args={[0.32, 1]} />
+          <meshStandardMaterial color="#00f0ff" wireframe roughness={0.1} />
+        </mesh>
+        <mesh>
+          <sphereGeometry args={[0.3, 16, 16]} />
+          <meshPhysicalMaterial 
+            color="#d900ff" 
+            emissive="#d900ff"
+            emissiveIntensity={0.6}
+            roughness={0.2}
+            metalness={0.8}
+          />
+        </mesh>
+      </group>
+
+      {/* B. Cyber Basketball */}
+      <group ref={basketballRef}>
+        <mesh>
+          <sphereGeometry args={[0.35, 32, 32]} />
+          <meshPhysicalMaterial 
+            color="#f97316" 
+            roughness={0.3} 
+            metalness={0.7}
+            emissive="#ea580c"
+            emissiveIntensity={0.15}
+          />
+        </mesh>
+        {/* Seams */}
+        <mesh rotation={[0, 0, 0]}>
+          <torusGeometry args={[0.355, 0.012, 8, 32]} />
+          <meshBasicMaterial color="#1e1b4b" />
+        </mesh>
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.355, 0.012, 8, 32]} />
+          <meshBasicMaterial color="#1e1b4b" />
+        </mesh>
+        <mesh rotation={[0, Math.PI / 2, 0]}>
+          <torusGeometry args={[0.355, 0.012, 8, 32]} />
+          <meshBasicMaterial color="#1e1b4b" />
+        </mesh>
+      </group>
+
+      {/* C. Cyber Tennis / Cricket Ball */}
+      <group ref={tennisRef}>
+        <mesh>
+          <sphereGeometry args={[0.22, 32, 32]} />
+          <meshPhysicalMaterial 
+            color="#ccff00" 
+            roughness={0.15} 
+            metalness={0.8}
+            emissive="#ccff00"
+            emissiveIntensity={0.8}
+          />
+        </mesh>
+        {/* Tennis Seam curve */}
+        <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>
+          <torusGeometry args={[0.225, 0.008, 8, 32]} />
+          <meshBasicMaterial color="#ffffff" />
+        </mesh>
+      </group>
     </group>
   );
 };
