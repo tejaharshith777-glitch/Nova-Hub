@@ -945,7 +945,7 @@ export const PremiumShowdown = () => {
                   setRegStep(1);
                   setIsRegModalOpen(true);
                 }}
-                className="mt-8 w-full py-4 bg-white hover:bg-slate-50 border-2 border-black text-black font-black uppercase text-xs tracking-wider transition-all rounded-xl cursor-pointer shadow-[3px_3px_0px_#1a1a1a] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:shadow-none"
+                className="mt-8 w-full py-4 bg-[#ffffff] hover:bg-slate-50 border-2 border-[#1a1a1a] text-[#1a1a1a] dark:bg-[#f8fafc] dark:hover:bg-slate-200 dark:text-[#090b11] dark:border-transparent font-black uppercase text-xs tracking-wider transition-all rounded-xl cursor-pointer shadow-[3px_3px_0px_#1a1a1a] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:shadow-none"
               >
                 Claim Free Pass
               </button>
