@@ -1,6 +1,104 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+/* ──────────────────────────────────────────
+   Himalayan Snow Canvas
+   Renders drifting snowflakes that float
+   down and sway – blue/cyan tinted to match
+   the website palette.
+────────────────────────────────────────── */
+const HimalayaSnow = () => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let animId;
+    let W = canvas.offsetWidth;
+    let H = canvas.offsetHeight;
+
+    const resize = () => {
+      W = canvas.offsetWidth;
+      H = canvas.offsetHeight;
+      canvas.width = W;
+      canvas.height = H;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Create snowflakes
+    const COUNT = 120;
+    const flakes = Array.from({ length: COUNT }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 3 + 0.8,          // radius 0.8–3.8
+      speed: Math.random() * 0.8 + 0.3,    // fall speed
+      sway: Math.random() * 0.6 - 0.3,     // horizontal drift
+      swayOffset: Math.random() * Math.PI * 2,
+      opacity: Math.random() * 0.5 + 0.35, // 0.35–0.85
+    }));
+
+    let tick = 0;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, W, H);
+
+      for (const f of flakes) {
+        // Gentle sinusoidal horizontal sway
+        const swayX = Math.sin(tick * 0.018 + f.swayOffset) * 1.4;
+
+        f.x += f.sway + swayX * 0.25;
+        f.y += f.speed;
+
+        // Wrap around
+        if (f.y > H + 4) { f.y = -4; f.x = Math.random() * W; }
+        if (f.x > W + 4) { f.x = -4; }
+        if (f.x < -4)    { f.x = W + 4; }
+
+        // Draw with cyan-white gradient glow
+        const grad = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * 2.2);
+        grad.addColorStop(0, `rgba(220, 245, 255, ${f.opacity})`);
+        grad.addColorStop(0.5, `rgba(180, 225, 240, ${f.opacity * 0.6})`);
+        grad.addColorStop(1, `rgba(160, 210, 230, 0)`);
+
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Bright core dot
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r * 0.55, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${f.opacity * 0.9})`;
+        ctx.fill();
+      }
+
+      tick++;
+      animId = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 3 }}
+    />
+  );
+};
+
+/* ──────────────────────────────────────────
+   Main Footer Component
+────────────────────────────────────────── */
 const Footer = () => {
   const navigate = useNavigate();
 
@@ -65,59 +163,82 @@ const Footer = () => {
           </div>
 
           <div className="mt-16 xl:mt-auto text-[10px] font-mono font-bold text-[#1a1a1a]/50 dark:text-gray-500 text-center xl:text-left border-t border-[#1a1a1a]/10 dark:border-white/10 pt-4 xl:border-0 xl:pt-0 transition-colors">
-            @2026 Nova Hub Studio | Terms & Conditions
+            @2026 Nova Hub Studio | Terms &amp; Conditions
           </div>
         </div>
 
       </div>
 
-      {/* Giant Cooldock-style Landscape Wordmark */}
-      <div className="w-full relative overflow-hidden" style={{ height: '280px' }}>
-        {/* Rolling hills background image */}
+      {/* ════════════════════════════════════════════
+          Giant Himalayan Wordmark Section
+          Blue snowy Himalayas backdrop + visible
+          "NOVA HUB" text + animated snow particles
+      ════════════════════════════════════════════ */}
+      <div className="w-full relative overflow-hidden border-t-[3px] border-[#1a1a1a]/20 dark:border-white/10" style={{ height: '340px' }}>
+
+        {/* Blue Himalayan landscape background */}
         <img
-          src="/rolling_hills_hero.png"
+          src="/blue_himalayas_footer.png"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-center select-none pointer-events-none"
-          style={{ filter: 'saturate(0.7) brightness(1.05)' }}
+          style={{ zIndex: 1, filter: 'brightness(0.75) saturate(1.1)' }}
         />
-        {/* Teal/cyan gradient fade from top (matching website color) */}
+
+        {/* Teal-blue overlay to blend with website color palette */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to bottom, #c4e4e3 0%, rgba(196,228,227,0.55) 28%, rgba(196,228,227,0) 62%)',
+            zIndex: 2,
+            background: 'linear-gradient(to bottom, rgba(196,228,227,0.35) 0%, rgba(100,180,200,0.15) 40%, rgba(20,60,90,0.35) 100%)',
           }}
         />
-        {/* Dark mode overlay */}
+
+        {/* Animated Snow Canvas */}
+        <HimalayaSnow />
+
+        {/* ──── NOVA HUB VISIBLE TEXT ──── */}
         <div
-          className="absolute inset-0 pointer-events-none dark:block hidden"
-          style={{
-            background: 'linear-gradient(to bottom, #07090d 0%, rgba(7,9,13,0.6) 28%, rgba(7,9,13,0) 62%)',
-          }}
-        />
-        {/* Giant ghost wordmark text sitting on the hills */}
-        <div className="absolute bottom-0 left-0 w-full flex items-end justify-center pb-0 overflow-hidden">
+          className="absolute bottom-0 left-0 w-full flex items-end justify-center overflow-hidden"
+          style={{ zIndex: 4, paddingBottom: '0px' }}
+        >
           <h1
-            className="text-[18vw] font-black tracking-tighter leading-none select-none uppercase font-display text-center transition-all duration-500 hover:scale-[1.02]"
+            className="text-[16vw] font-black leading-none select-none uppercase text-center transition-all duration-700 hover:scale-[1.015] cursor-default"
             style={{
-              color: 'rgba(255,255,255,0.22)',
-              WebkitTextStroke: '1.5px rgba(255,255,255,0.18)',
-              textShadow: '0 8px 48px rgba(0,0,0,0.18)',
-              letterSpacing: '-0.04em',
+              fontFamily: '"Inter", "Outfit", sans-serif',
+              letterSpacing: '-0.03em',
               lineHeight: '0.88',
+              /* Clearly visible white text with cyan tint and strong shadow for depth */
+              color: 'rgba(255, 255, 255, 0.90)',
+              textShadow: [
+                '0 0 60px rgba(100, 220, 255, 0.55)',
+                '0 0 20px rgba(180, 240, 255, 0.4)',
+                '0 4px 24px rgba(0, 60, 100, 0.65)',
+                '0 2px 6px rgba(0, 0, 0, 0.5)',
+              ].join(', '),
+              WebkitTextStroke: '1px rgba(150, 230, 255, 0.3)',
             }}
           >
             NOVA HUB
           </h1>
         </div>
-        {/* Bottom fade to footer bg */}
+
+        {/* Bottom fade out */}
         <div
-          className="absolute bottom-0 left-0 w-full h-16 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom, transparent, #c4e4e3)' }}
+          className="absolute bottom-0 left-0 w-full pointer-events-none"
+          style={{
+            zIndex: 5,
+            height: '48px',
+            background: 'linear-gradient(to bottom, transparent, rgba(196,228,227,0.9))',
+          }}
         />
         <div
-          className="absolute bottom-0 left-0 w-full h-16 pointer-events-none dark:block hidden"
-          style={{ background: 'linear-gradient(to bottom, transparent, #07090d)' }}
+          className="absolute bottom-0 left-0 w-full pointer-events-none dark:block hidden"
+          style={{
+            zIndex: 5,
+            height: '48px',
+            background: 'linear-gradient(to bottom, transparent, rgba(7,9,13,0.95))',
+          }}
         />
       </div>
     </footer>
