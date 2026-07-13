@@ -147,11 +147,17 @@ export const LandingPage = ({ onOpenAuth, user }) => {
     offset: ['start start', 'end start']
   });
 
-  const card1Scale = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], [1, 0.95, 0.9, 0.9]);
-  const card1Brightness = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], ["brightness(1)", "brightness(0.85)", "brightness(0.7)", "brightness(0.7)"]);
+  const card1Scale = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [1, 0.96, 0.92, 0.88, 0.88]);
+  const card1Brightness = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], ["brightness(1)", "brightness(0.9)", "brightness(0.8)", "brightness(0.7)", "brightness(0.7)"]);
 
-  const card2Scale = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], [1, 1, 0.95, 0.95]);
-  const card2Brightness = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], ["brightness(1)", "brightness(1)", "brightness(0.85)", "brightness(0.85)"]);
+  const card2Scale = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [1, 1, 0.96, 0.92, 0.92]);
+  const card2Brightness = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], ["brightness(1)", "brightness(1)", "brightness(0.9)", "brightness(0.8)", "brightness(0.8)"]);
+
+  const card3Scale = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [1, 1, 1, 0.96, 0.96]);
+  const card3Brightness = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], ["brightness(1)", "brightness(1)", "brightness(1)", "brightness(0.9)", "brightness(0.9)"]);
+
+  const card4Scale = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [1, 1, 1, 1, 0.96]);
+  const card4Brightness = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], ["brightness(1)", "brightness(1)", "brightness(1)", "brightness(1)", "brightness(0.9)"]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1224,7 +1230,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
 
           <div ref={servicesContainerRef} className="relative max-w-5xl mx-auto flex flex-col pb-12">
             {/* Card 1 Track */}
-            <div className="h-[85vh] sticky top-24 md:top-32 flex justify-center items-start z-10">
+            <div className="h-[50vh] sticky top-24 md:top-32 flex justify-center items-start z-10">
               <motion.div 
                 style={{ scale: card1Scale, filter: card1Brightness }}
                 whileHover={{ scale: 1.02, rotate: 0 }}
@@ -1269,7 +1275,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             </div>
 
             {/* Card 2 Track */}
-            <div className="h-[85vh] sticky top-24 md:top-32 flex justify-center items-start z-20">
+            <div className="h-[50vh] sticky top-24 md:top-32 flex justify-center items-start z-20">
               <motion.div 
                 style={{ scale: card2Scale, filter: card2Brightness }}
                 whileHover={{ scale: 1.02, rotate: 0 }}
@@ -1314,8 +1320,9 @@ export const LandingPage = ({ onOpenAuth, user }) => {
             </div>
 
             {/* Card 3 Track */}
-            <div className="h-[85vh] sticky top-24 md:top-32 flex justify-center items-start z-30">
+            <div className="h-[50vh] sticky top-24 md:top-32 flex justify-center items-start z-30">
               <motion.div 
+                style={{ scale: card3Scale, filter: card3Brightness }}
                 whileHover={{ scale: 1.02, rotate: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="w-full min-h-[420px] md:min-h-[460px] bg-[#2ca684] text-white rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center overflow-hidden origin-center rotate-[-0.5deg] cursor-pointer"
@@ -1353,6 +1360,95 @@ export const LandingPage = ({ onOpenAuth, user }) => {
                 </div>
                 <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-white/5 pointer-events-none select-none z-0">
                   03
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Card 4 Track */}
+            <div className="h-[50vh] sticky top-24 md:top-32 flex justify-center items-start z-40">
+              <motion.div 
+                style={{ scale: card4Scale, filter: card4Brightness }}
+                whileHover={{ scale: 1.02, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="w-full min-h-[420px] md:min-h-[460px] bg-[#e8f0fe] text-[#1a1a1a] rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center overflow-hidden origin-center rotate-[1.5deg] cursor-pointer"
+              >
+                <div className="flex-1 flex flex-col items-start text-left gap-4 md:gap-6 relative z-10">
+                  <span className="text-xs font-mono uppercase tracking-widest bg-white border-2 border-[#1a1a1a] px-3 py-1 shadow-[2px_2px_0px_rgba(26,26,26,1)] font-bold">
+                    Service 04
+                  </span>
+                  <h3 className="text-3xl md:text-5xl font-playfair font-bold leading-tight">
+                    Sponsorships & Brands
+                  </h3>
+                  <p className="text-xs md:text-sm font-mono font-bold leading-relaxed text-[#1a1a1a]/85 max-w-lg">
+                    Connect local turf tournaments with corporate brand sponsors.
+                  </p>
+                  <p className="text-xs md:text-sm font-mono leading-relaxed text-[#1a1a1a]/70 max-w-lg">
+                    We coordinate sponsorship packages: automated local overlays, live stream product slots, and roster discount stamps. Build marketing returns that local match sponsors value.
+                  </p>
+                  <button className="bg-[#1a1a1a] text-white font-mono font-bold uppercase tracking-wider text-xs pl-5 pr-2 py-2 border-[3px] border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_rgba(0,0,0,0.15)] flex items-center justify-between gap-4 group">
+                    <span>Discover sponsor specs</span>
+                    <span className="bg-[#d1fa50] text-[#1a1a1a] w-8 h-8 rounded flex items-center justify-center font-black text-sm group-hover:translate-x-1 transition-transform">→</span>
+                  </button>
+                </div>
+                
+                <div className="flex-shrink-0 w-full md:w-[260px] h-[320px] md:h-[360px] bg-white border-[3px] border-[#1a1a1a] rounded-2xl p-2.5 shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col relative overflow-hidden group z-10">
+                  <div className="absolute top-2 right-2 bg-blue-200 border-2 border-[#1a1a1a] px-2 py-0.5 text-[8px] font-mono font-bold uppercase z-10 shadow-[1px_1px_0px_rgba(26,26,26,1)]">
+                    SPONSORS ON-AIR
+                  </div>
+                  <div className="w-full h-full overflow-hidden rounded-lg border border-[#1a1a1a]/15 relative bg-[#1a1a1a]">
+                    <img src="/veloce_card.png" alt="Sponsorships & Brands" className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
+                      <p className="text-[9px] font-mono uppercase tracking-widest text-blue-300 font-bold mb-1">★ PARTNER NETWORK</p>
+                      <p className="text-xs font-bold leading-tight">Veloce Motorsports Campaign</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-[#1a1a1a]/5 pointer-events-none select-none z-0">
+                  04
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Card 5 Track */}
+            <div className="h-[50vh] sticky top-24 md:top-32 flex justify-center items-start z-50">
+              <motion.div 
+                whileHover={{ scale: 1.02, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="w-full min-h-[420px] md:min-h-[460px] bg-[#ffb3ba] text-[#1a1a1a] rounded-[2rem] border-[3px] border-[#1a1a1a] p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col md:flex-row gap-8 justify-between items-center overflow-hidden origin-center rotate-[-1.5deg] cursor-pointer"
+              >
+                <div className="flex-1 flex flex-col items-start text-left gap-4 md:gap-6 relative z-10">
+                  <span className="text-xs font-mono uppercase tracking-widest bg-[#1a1a1a] text-white border-2 border-[#1a1a1a] px-3 py-1 shadow-[2px_2px_0px_rgba(26,26,26,1)] font-bold">
+                    Service 05
+                  </span>
+                  <h3 className="text-3xl md:text-5xl font-playfair font-bold leading-tight">
+                    Anti-Cheat & Roster Check
+                  </h3>
+                  <p className="text-xs md:text-sm font-mono font-bold leading-relaxed text-[#1a1a1a]/85 max-w-lg">
+                    Roster integrity audits and physical validation passes.
+                  </p>
+                  <p className="text-xs md:text-sm font-mono leading-relaxed text-[#1a1a1a]/70 max-w-lg">
+                    Secure registrations with coordinate check-ins, IP scans, age boundary checks, and system validation checks. Every roster parameter is audited and locked before bracket generation.
+                  </p>
+                  <button className="bg-[#1a1a1a] text-white font-mono font-bold uppercase tracking-wider text-xs pl-5 pr-2 py-2 border-[3px] border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_rgba(0,0,0,0.15)] flex items-center justify-between gap-4 group">
+                    <span>Explore safety check</span>
+                    <span className="bg-[#ffb3ba] text-[#1a1a1a] w-8 h-8 rounded flex items-center justify-center font-black text-sm group-hover:translate-x-1 transition-transform">→</span>
+                  </button>
+                </div>
+                
+                <div className="flex-shrink-0 w-full md:w-[260px] h-[320px] md:h-[360px] bg-white border-[3px] border-[#1a1a1a] rounded-2xl p-2.5 shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col relative overflow-hidden group z-10">
+                  <div className="absolute top-2 right-2 bg-red-200 border-2 border-[#1a1a1a] px-2 py-0.5 text-[8px] font-mono font-bold uppercase z-10 shadow-[1px_1px_0px_rgba(26,26,26,1)]">
+                    AUDIT COMPLETE
+                  </div>
+                  <div className="w-full h-full overflow-hidden rounded-lg border border-[#1a1a1a]/15 relative bg-[#1a1a1a]">
+                    <img src="/valorant_card.png" alt="Anti-Cheat & Roster Check" className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
+                      <p className="text-[9px] font-mono uppercase tracking-widest text-red-300 font-bold mb-1">★ ROSTER GUARD</p>
+                      <p className="text-xs font-bold leading-tight">Valorant India Cup Stage 1</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute top-4 right-8 text-7xl md:text-9xl font-playfair font-black text-[#1a1a1a]/5 pointer-events-none select-none z-0">
+                  05
                 </div>
               </motion.div>
             </div>
