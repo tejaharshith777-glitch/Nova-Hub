@@ -402,7 +402,7 @@ export const PremiumShowdown = () => {
   };
 
   return (
-    <div className={`font-mono overflow-x-hidden min-h-screen relative selection:bg-cyan-500 selection:text-black transition-colors duration-500 ${isDark ? 'bg-[#040408] text-white' : 'bg-[#c4e4e3] text-[#1a1a1a]'}`}>
+    <div className={`font-mono overflow-x-hidden min-h-screen relative selection:bg-cyan-500 selection:text-black transition-colors duration-500 ${isDark ? 'bg-[#040408] text-white' : 'bg-[#ffffff] text-[#1a1a1a]'}`}>
       {/* CSS Background Layer */}
       <div 
         className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-[0.08] dark:opacity-20 transition-all duration-500 bg-center bg-cover mix-blend-overlay dark:mix-blend-normal invert dark:invert-0"
@@ -421,90 +421,37 @@ export const PremiumShowdown = () => {
       <section className="relative z-10 min-h-[90vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
         {/* Sunlit Rolling Hills Background Image Backdrop (Cooldock style) */}
         <div 
-          className="absolute inset-0 w-full h-full z-0 bg-cover bg-center transition-all duration-700 opacity-95 dark:opacity-40 select-none pointer-events-none mix-blend-multiply dark:mix-blend-normal"
+          className="absolute inset-0 w-full h-full z-0 bg-cover bg-center transition-all duration-700 opacity-100 dark:opacity-50 select-none pointer-events-none"
           style={{ 
             backgroundImage: "url('/rolling_hills_hero.png')",
           }}
         />
-        {/* Soft bottom transition gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#c4e4e3] dark:to-[#040408] z-0 pointer-events-none transition-colors duration-500" />
+        {/* Soft bottom transition gradient fading into white (light) or dark background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent/40 to-white dark:to-[#040408] z-0 pointer-events-none transition-colors duration-500" />
         
         {/* Falling Blue/Cyan Snow Particles Canvas */}
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0 mix-blend-screen" />
 
-        {/* target HUD brackets */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-l border-t border-purple-500/20 dark:border-cyan-500/20 pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-r border-b border-purple-500/20 dark:border-purple-550/20 pointer-events-none" />
-
-        {/* Left Side HUD widgets */}
-        <div className="absolute left-8 top-1/2 -translate-y-1/2 w-64 hidden lg:flex flex-col gap-6 text-left font-mono z-20 pointer-events-none">
-          <div className="bg-white/90 dark:bg-slate-950/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 p-4 rounded-2xl space-y-3 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300">
-            <div className="text-[9px] font-bold uppercase tracking-widest text-purple-700 dark:text-cyan-400 border-b border-black/10 dark:border-cyan-500/20 pb-1.5 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-purple-600 dark:bg-cyan-400 rounded-full animate-pulse" />
-              Global Hub Validation
-            </div>
-            <div className="text-[10px] text-gray-700 dark:text-gray-400 font-bold uppercase">
-              Protocol: <span className="text-green-650 dark:text-green-400">Active</span>
-            </div>
-            
-            {/* Sparkline Charts */}
-            <div className="grid grid-cols-2 gap-2.5 pt-1">
-              <div className="border border-purple-500/10 dark:border-cyan-500/10 p-1.5 rounded bg-purple-50 dark:bg-cyan-950/20">
-                <div className="text-[8px] text-gray-550 font-bold uppercase tracking-wider mb-1">Latency</div>
-                <svg className="w-full h-8 stroke-purple-600 dark:stroke-cyan-400 stroke-[1.5] fill-none">
-                  <path d="M0 25 L8 22 L16 28 L24 15 L32 20 L40 10 L48 24 L56 12 L64 22 L72 15 L80 18" />
-                </svg>
-              </div>
-              <div className="border border-purple-500/10 dark:border-purple-500/10 p-1.5 rounded bg-purple-50 dark:bg-purple-950/20">
-                <div className="text-[8px] text-gray-550 font-bold uppercase tracking-wider mb-1">Sync Load</div>
-                <svg className="w-full h-8 stroke-purple-600 dark:stroke-purple-400 stroke-[1.5] fill-none">
-                  <path d="M0 10 L8 15 L16 12 L24 25 L32 18 L40 28 L48 15 L56 22 L64 12 L72 26 L80 15" />
-                </svg>
-              </div>
-            </div>
+        {/* Top minimal Cooldock-style navigation */}
+        <div className="absolute top-6 left-8 right-8 flex items-center justify-between text-[10px] font-mono text-white/80 select-none z-20 pointer-events-none">
+          <div className="flex items-center gap-1.5 bg-black/35 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 shadow-sm">
+            Built with 💙 by <span className="font-bold text-white uppercase tracking-wider">Nova Hub Team</span>
           </div>
-
-          <div className="bg-white/90 dark:bg-slate-950/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 p-4 rounded-2xl space-y-2 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300">
-            <div className="text-[9px] text-purple-700 dark:text-cyan-400 uppercase tracking-widest font-bold">
-              Route: Bengaluru → Guntur
-            </div>
-            <div className="text-[11px] font-black text-[#1a1a1a] dark:text-white flex items-center gap-2">
-              <span className="text-[8px] px-1 py-0.5 bg-green-500/10 border border-green-500/25 text-green-600 dark:text-green-400 rounded font-bold">Ping</span>
-              1.2 ms
-            </div>
-            <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider pt-1 border-t border-black/10 dark:border-white/5">
-              Regional Traffic: <span className="text-purple-700 dark:text-cyan-400">Active</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side HUD widgets */}
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 w-64 hidden lg:flex flex-col gap-6 text-left font-mono z-20 pointer-events-none">
-          <div className="bg-white/90 dark:bg-slate-955/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 p-4 rounded-2xl space-y-3 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300">
-            <div className="text-[9px] font-bold uppercase tracking-widest text-purple-700 dark:text-cyan-400 border-b border-black/10 dark:border-cyan-500/20 pb-1.5 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-purple-600 dark:bg-cyan-400 rounded-full animate-pulse" />
-              Global Hub Validation
-            </div>
-            <div className="text-[10px] text-gray-700 dark:text-gray-400 font-bold uppercase">
-              Protocol: <span className="text-green-600 dark:text-green-400 font-bold">Active</span>
-            </div>
-            <div className="text-[10px] font-bold text-gray-700 dark:text-gray-400">
-              Active Teams: <span className="text-black dark:text-white font-black text-xs">128/128</span>
-            </div>
-            <div className="text-[9px] text-gray-550 dark:text-gray-550 font-bold uppercase tracking-wider pt-1.5 border-t border-black/10 dark:border-white/5">
-              Grid Sync Health: <span className="text-green-600 dark:text-green-400 font-black">Optimal</span>
-            </div>
+          <div className="flex items-center gap-4 bg-black/35 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 shadow-sm">
+            <span className="hover:text-white cursor-pointer pointer-events-auto">Verification.Desk</span>
+            <span>·</span>
+            <span className="hover:text-white cursor-pointer pointer-events-auto">Roster.Registry</span>
           </div>
         </div>
 
         {/* Center Main Text Typography Block */}
-        <div className="relative z-10 space-y-6 max-w-4xl">
+        <div className="relative z-10 space-y-6 max-w-4xl mt-12">
           <div className="inline-flex items-center gap-2 border border-white/20 dark:border-cyan-500/30 px-4 py-1.5 rounded-full bg-white/15 dark:bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-white dark:text-cyan-400 font-bold uppercase animate-pulse shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-white dark:text-cyan-400" /> Regional Node Registry: Active
           </div>
           
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] dark:drop-shadow-[0_4px_24px_rgba(0,240,255,0.15)] font-display leading-none select-none">
-            NOVA REGIONAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-white to-cyan-100 dark:from-cyan-400 dark:via-purple-400 dark:to-pink-400">OFFICES</span>
+          <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-black uppercase tracking-tighter text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.35)] dark:drop-shadow-[0_8px_45px_rgba(0,240,255,0.15)] font-display leading-none select-none">
+            NOVA HUB
           </h1>
 
           <p className="text-white/95 dark:text-gray-300 text-xs md:text-sm font-mono tracking-wider max-w-2xl mx-auto uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] leading-relaxed">
@@ -516,22 +463,9 @@ export const PremiumShowdown = () => {
             <span className="text-[9px] font-bold text-white dark:text-cyan-400 uppercase tracking-[0.25em] animate-pulse drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
               Scroll to Engage Regional Registration Network
             </span>
-            <div className="w-6 h-10 border-2 border-white/30 dark:border-cyan-500/30 rounded-full p-1 flex justify-center backdrop-blur-sm">
+            <div className="w-6 h-10 border-2 border-white/30 dark:border-cyan-500/30 rounded-full p-1 flex justify-center backdrop-blur-sm shadow-sm">
               <div className="w-1.5 h-2.5 bg-white dark:bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]" />
             </div>
-          </div>
-        </div>
-
-        {/* Bottom Coordinates & status bar */}
-        <div className="absolute bottom-8 left-8 right-8 hidden md:flex items-center justify-between font-mono text-[9px] text-purple-700 dark:text-cyan-400/70 z-20 pointer-events-none">
-          <div className="bg-white/90 dark:bg-slate-950/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-            <span className="w-2 h-2 bg-green-550 dark:bg-green-500 rounded-full animate-ping" />
-            <span className="text-black dark:text-white font-bold uppercase">Regional Coordination [Guntur]: Established</span>
-          </div>
-
-          <div className="bg-white/90 dark:bg-slate-955/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 px-4 py-2.5 rounded-2xl flex items-center gap-2 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-            <span className="uppercase text-gray-550 dark:text-gray-400 font-bold">Sync Progress:</span>
-            <span className="text-green-600 dark:text-green-400 font-bold tracking-tight">|||||||||||||||||||||| 100%</span>
           </div>
         </div>
       </section>
