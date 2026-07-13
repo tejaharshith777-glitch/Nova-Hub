@@ -7,13 +7,13 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-[#c4e4e3] dark:bg-[#07090d] border-b-[3px] border-[#1a1a1a] dark:border-white/10 py-4 px-6 md:px-12 flex justify-between items-center shadow-sm transition-colors duration-300">
-      <Link to="/" className="flex items-center gap-2 group interactive-target" onClick={() => setIsMobileOpen(false)}>
-        <div className="border-[3px] border-[#1a1a1a] dark:border-white/20 bg-yellow-200 dark:bg-yellow-300/80 px-3 py-1 font-bold text-base uppercase tracking-tighter hover:bg-[#1a1a1a] hover:text-white transition-colors duration-150 shadow-[2px_2px_0px_rgba(26,26,26,1)] dark:shadow-[2px_2px_0px_rgba(255,255,255,0.15)]">
-          NH
-        </div>
-        <span className="text-sm font-bold tracking-widest uppercase text-[#1a1a1a] dark:text-white transition-colors">
-          NOVA // <span className="underline decoration-yellow-400 decoration-[3px]">HUB</span>
-        </span>
+      <Link to="/" className="flex items-center group interactive-target" onClick={() => setIsMobileOpen(false)}>
+        <img
+          src="/nova_hub_logo.png"
+          alt="Nova Hub Logo"
+          className="h-11 md:h-13 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform duration-200"
+          style={{ maxHeight: '52px' }}
+        />
       </Link>
 
       {/* Desktop Navigation */}

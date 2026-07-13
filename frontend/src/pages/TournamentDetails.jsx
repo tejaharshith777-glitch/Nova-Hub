@@ -244,7 +244,7 @@ const TournamentDetails = ({ user }) => {
         >
           <ArrowLeft className="w-4 h-4" /> Back to Home
         </button>
-        <div className="font-display font-black tracking-widest text-xl">NOVA // HUB</div>
+        <img src="/nova_hub_logo.png" alt="Nova Hub Logo" style={{ maxHeight: '44px' }} className="h-10 w-auto object-contain" />
       </nav>
 
       <div className="max-w-6xl mx-auto px-6 md:px-8 mt-12">
