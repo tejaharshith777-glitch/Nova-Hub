@@ -141,20 +141,20 @@ const Chatbot = ({ apiBaseUrl }) => {
 
   return (
     <>
-      {/* Chat Toggle Button */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setIsOpen(prev => !prev)}
-        className={`fixed bottom-6 right-6 z-[60] p-4 bg-[#1a1a1a] text-white rounded-full shadow-[4px_4px_0px_rgba(232,108,63,1)] hover:shadow-[2px_2px_0px_rgba(232,108,63,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center`}
-      >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
-        {!isOpen && (
+      {/* Chat Toggle Button — only visible when chatbot is closed */}
+      {!isOpen && (
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-6 right-6 z-[60] p-4 bg-[#1a1a1a] text-white rounded-full shadow-[4px_4px_0px_rgba(232,108,63,1)] hover:shadow-[2px_2px_0px_rgba(232,108,63,1)] hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center"
+        >
+          <MessageSquare className="w-6 h-6" />
           <span className="absolute -top-2 -right-2 bg-yellow-400 text-xs text-black font-bold px-2 py-0.5 rounded-full border-2 border-black">
             AI
           </span>
-        )}
-      </motion.button>
+        </motion.button>
+      )}
 
       {/* Chat Window */}
       <AnimatePresence>
@@ -165,13 +165,9 @@ const Chatbot = ({ apiBaseUrl }) => {
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[400px] h-[500px] bg-white dark:bg-slate-900 text-[#1a1a1a] dark:text-white border-[3px] border-[#1a1a1a] dark:border-white/20 shadow-[8px_8px_0px_rgba(26,26,26,1)] dark:shadow-[8px_8px_0px_rgba(255,255,255,0.15)] rounded-2xl flex flex-col overflow-hidden font-mono"
           >
-            {/* Header — click logo area to close */}
+            {/* Header */}
             <div className="bg-[#1a1a1a] text-white p-4 flex items-center justify-between">
-              <button
-                onClick={() => setIsOpen(false)}
-                title="Click to close"
-                className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer text-left"
-              >
+              <div className="flex items-center gap-3">
                 <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-1.5 rounded-lg border border-white/20">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
@@ -181,7 +177,7 @@ const Chatbot = ({ apiBaseUrl }) => {
                   </h3>
                   <p className="text-[10px] text-white/60">Powered by Gemini 2.5 Flash</p>
                 </div>
-              </button>
+              </div>
               <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1.5 rounded-md transition-colors">
                 <X className="w-5 h-5" />
               </button>
