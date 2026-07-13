@@ -15,95 +15,95 @@ gsap.registerPlugin(ScrollTrigger);
 
 const CITIES_DATA = {
   bengaluru: {
-    name: "NOVA HUB // BENGALURU ALPHA",
+    name: "NOVA REGIONAL OFFICE // BENGALURU",
     address: "6th Floor, Cyber Corridor Tower, Indira Nagar, Bengaluru - 560038",
-    specs: "60x RTX 4080 Super Rigs, Intel i9-14900K, 360Hz BenQ Zowie Monitors, 10Gbps Dedicated Fiber Loop",
-    slots: "24/32 Teams Checked-in",
+    specs: "12x Roster Verification Stations, 2x Admin Terminals, High-Speed Player Pass Printers, Helpdesk & Roster Authentication Coordinates",
+    slots: "24/32 Teams Pre-Registered",
     coords: [12.9716, 77.5946],
-    status: "Registration Phase 1: OPEN",
+    status: "Roster Registration Phase 1: OPEN",
     latency: "1.2 ms",
-    operatingHours: "09:00 AM - 11:00 PM IST",
+    operatingHours: "09:00 AM - 06:00 PM IST",
     contact: "+91 80 4912 3456 | blr@novahub.gg",
-    connectivity: "10Gbps Dedicated Tata Fiber, Direct Peering Link",
-    capacity: "60 High-End Seats, 5 Team Rooms"
+    connectivity: "10Gbps Dedicated Tata Fiber, Direct Admin Roster Link",
+    capacity: "12 Active Verification Desks, 2 Admin Coordinator Suites"
   },
   mumbai: {
-    name: "NOVA HUB // MUMBAI NEXUS",
+    name: "NOVA REGIONAL OFFICE // MUMBAI",
     address: "Nodal Plaza, Bandra Kurla Complex, Mumbai - 400051",
-    specs: "80x RTX 4090 Rigs, AMD Ryzen 9 7950X3D, 540Hz ASUS ROG Panels, Low-Latency Local CDN Node",
-    slots: "18/32 Teams Checked-in",
+    specs: "15x Roster Verification Stations, 3x Support Desks, Biometric Scanner Systems, Player Pass Printers, Regional Admin Offices",
+    slots: "18/32 Teams Pre-Registered",
     coords: [19.0760, 72.8777],
-    status: "Registration Phase 1: OPEN",
+    status: "Roster Registration Phase 1: OPEN",
     latency: "0.8 ms",
-    operatingHours: "10:00 AM - 12:00 AM IST",
+    operatingHours: "09:00 AM - 06:00 PM IST",
     contact: "+91 22 6902 7812 | mum@novahub.gg",
     connectivity: "20Gbps Dual-redundant Jio Enterprise, Ultra-low-latency CDN Node",
-    capacity: "80 Premium Seats, 8 Private Squad Cabins"
+    capacity: "15 Active Verification Desks, 3 Admin Suites"
   },
   delhi: {
-    name: "NOVA HUB // DELHI NODAL",
+    name: "NOVA REGIONAL OFFICE // DELHI NCR",
     address: "Plot 12, Sector 62, Cyber City, Noida, Delhi NCR - 201301",
-    specs: "50x RTX 4080 Super Rigs, Intel i9-14900K, 360Hz Monitors, LAN Server Rack Hub",
-    slots: "31/32 Teams Checked-in",
+    specs: "10x Roster Verification Stations, 2x Support Desks, Player Pass Printers, Dedicated Admin Server Nodes",
+    slots: "31/32 Teams Pre-Registered",
     coords: [28.6139, 77.2090],
     status: "CRITICAL CAPACITY: 1 SLOT LEFT",
     latency: "1.5 ms",
-    operatingHours: "09:00 AM - 11:00 PM IST",
+    operatingHours: "09:00 AM - 06:00 PM IST",
     contact: "+91 11 4153 9812 | del@novahub.gg",
     connectivity: "10Gbps Airtel Business Fiber, Dedicated LAN Server Rack Hub",
-    capacity: "50 Premium Seats, 4 Streaming Booths"
+    capacity: "10 Active Verification Desks, 2 Admin Suites"
   },
   hyderabad: {
-    name: "NOVA HUB // HYDERABAD CYBER",
+    name: "NOVA REGIONAL OFFICE // HYDERABAD",
     address: "Apex Wing, Tech Park, Hitec City, Hyderabad - 500081",
-    specs: "45x RTX 4080 Rigs, AMD Ryzen 7 7800X3D, 360Hz Monitors, Zero-Ping Local Switch Matrix",
-    slots: "12/32 Teams Checked-in",
+    specs: "10x Roster Verification Stations, 2x Support Desks, Roster Approval Coordinates, Support Desk Setup",
+    slots: "12/32 Teams Pre-Registered",
     coords: [17.3850, 78.4867],
-    status: "Registration Phase 1: OPEN",
+    status: "Roster Registration Phase 1: OPEN",
     latency: "1.1 ms",
-    operatingHours: "09:00 AM - 11:00 PM IST",
+    operatingHours: "09:00 AM - 06:00 PM IST",
     contact: "+91 40 4567 8910 | hyd@novahub.gg",
     connectivity: "10Gbps ACT Fibernet, Zero-Ping Local Switch Matrix",
-    capacity: "45 Premium Seats, 4 Team Rooms"
+    capacity: "10 Active Verification Desks, 2 Admin Suites"
   },
   chennai: {
-    name: "NOVA HUB // CHENNAI MATRIX",
+    name: "NOVA REGIONAL OFFICE // CHENNAI",
     address: "Tower 2, OMR Tech Corridor, Chennai - 600119",
-    specs: "40x RTX 4070 Ti Rigs, Intel i7-14700K, 240Hz Monitors, Direct ISP Fiber Peer Link",
-    slots: "8/32 Teams Checked-in",
+    specs: "8x Roster Verification Stations, 2x Helpdesk Desks, Player Pass Printers, Admin Coordinator Center",
+    slots: "8/32 Teams Pre-Registered",
     coords: [13.0827, 80.2707],
-    status: "Registration Phase 1: OPEN",
+    status: "Roster Registration Phase 1: OPEN",
     latency: "1.4 ms",
-    operatingHours: "09:00 AM - 10:00 PM IST",
+    operatingHours: "09:00 AM - 06:00 PM IST",
     contact: "+91 44 2815 3456 | chn@novahub.gg",
     connectivity: "10Gbps Dedicated Fiber Peer Link",
-    capacity: "40 Premium Seats, 3 Team Rooms"
+    capacity: "8 Active Verification Desks, 1 Admin Coordinator Suite"
   },
   pune: {
-    name: "NOVA HUB // PUNE NODE",
+    name: "NOVA REGIONAL OFFICE // PUNE",
     address: "Tech Boulevard, Hinjawadi Phase 1, Pune - 411057",
-    specs: "50x RTX 4080 Rigs, Intel i9-13900K, 360Hz Monitors, Local Match-Making CDN",
-    slots: "15/32 Teams Checked-in",
+    specs: "10x Roster Verification Stations, 2x Helpdesk Desks, Roster Verification Terminals, Support Room",
+    slots: "15/32 Teams Pre-Registered",
     coords: [18.5204, 73.8567],
-    status: "Registration Phase 1: OPEN",
+    status: "Roster Registration Phase 1: OPEN",
     latency: "1.3 ms",
-    operatingHours: "09:00 AM - 11:00 PM IST",
+    operatingHours: "09:00 AM - 06:00 PM IST",
     contact: "+91 20 2567 8912 | pune@novahub.gg",
     connectivity: "10Gbps Tata Communications, Local Match-Making CDN",
-    capacity: "50 Premium Seats, 4 Team Rooms"
+    capacity: "10 Active Verification Desks, 2 Admin Suites"
   },
   kolkata: {
-    name: "NOVA HUB // KOLKATA VOID",
+    name: "NOVA REGIONAL OFFICE // KOLKATA",
     address: "Infinity Zone, Salt Lake Sector V, Kolkata - 700091",
-    specs: "40x RTX 4080 Rigs, Intel i9-13900K, 360Hz Monitors, Zero-Ping Matchmaking Lobby",
-    slots: "9/32 Teams Checked-in",
+    specs: "8x Roster Verification Stations, 2x Helpdesk Desks, Player Pass Printers, Admin Support Desk",
+    slots: "9/32 Teams Pre-Registered",
     coords: [22.5726, 88.3639],
-    status: "Registration Phase 1: OPEN",
+    status: "Roster Registration Phase 1: OPEN",
     latency: "1.9 ms",
-    operatingHours: "09:00 AM - 10:00 PM IST",
+    operatingHours: "09:00 AM - 06:00 PM IST",
     contact: "+91 33 2486 7890 | kol@novahub.gg",
     connectivity: "10Gbps Alliance Broadband, Zero-Ping Matchmaking Lobby",
-    capacity: "40 Premium Seats, 3 Team Rooms"
+    capacity: "8 Active Verification Desks, 1 Admin Suite"
   }
 };
 
@@ -419,24 +419,24 @@ export const PremiumShowdown = () => {
 
         {/* Center Main Text Typography Block */}
         <div className="relative z-10 space-y-6 max-w-3xl">
-          <div className="inline-flex items-center gap-2 border border-purple-550/30 dark:border-cyan-500/30 px-4 py-1.5 rounded-full bg-purple-50 dark:bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-purple-750 dark:text-cyan-400 font-bold uppercase animate-pulse">
-            <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-cyan-400" /> Node Link Status: Active
+          <div className="inline-flex items-center gap-2 border border-purple-500/30 dark:border-cyan-500/30 px-4 py-1.5 rounded-full bg-purple-50 dark:bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-purple-700 dark:text-cyan-400 font-bold uppercase animate-pulse">
+            <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-cyan-400" /> Regional Node Registry: Active
           </div>
           
           <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tight text-[#1a1a1a] dark:text-white font-display">
-            NOVA NATIONAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-purple-505 to-pink-505 dark:from-cyan-400 dark:via-purple-500 dark:to-pink-500">GRID</span>
+            NOVA REGIONAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 dark:from-cyan-400 dark:via-purple-500 dark:to-pink-500">OFFICES</span>
           </h1>
 
           <p className="text-gray-700 dark:text-gray-400 text-xs md:text-sm font-mono tracking-wider max-w-2xl mx-auto uppercase">
-            Initialize national validation sequence. Syncing offline national nodal corridors and regional server metrics.
+            Initialize regional check-in sequence. Syncing offline registration offices and coordinator coordinates for team roster verification. Note: Offline offices do not conduct matches.
           </p>
 
           {/* Scroll Down Indicator */}
           <div className="pt-16 flex flex-col items-center justify-center gap-2">
-            <span className="text-[9px] font-bold text-purple-700 dark:text-cyan-455 uppercase tracking-[0.25em] animate-pulse">
-              Scroll to Engage National Tournament Network
+            <span className="text-[9px] font-bold text-purple-700 dark:text-cyan-400 uppercase tracking-[0.25em] animate-pulse">
+              Scroll to Engage Regional Registration Network
             </span>
-            <div className="w-6 h-10 border-2 border-purple-550/30 dark:border-cyan-500/30 rounded-full p-1 flex justify-center">
+            <div className="w-6 h-10 border-2 border-purple-500/30 dark:border-cyan-500/30 rounded-full p-1 flex justify-center">
               <div className="w-1.5 h-2.5 bg-purple-600 dark:bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]" />
             </div>
           </div>
@@ -471,7 +471,7 @@ export const PremiumShowdown = () => {
           </h1>
           
           <p className="text-gray-700 dark:text-gray-400 text-xs md:text-sm font-mono mt-3 max-w-4xl leading-relaxed uppercase tracking-wider">
-            Zero-latency physical validation corridors across India. Find your nearest battle node, pre-verify your clan roster, and complete physical check-in.
+            Administrative registration offices and regional verification hubs across India. Find your nearest office, pre-verify your clan roster, and complete physical check-in. Note: Offline hubs are strictly for administrative roster verification and player pass collection; no tournament games are conducted on-site at these hubs.
           </p>
         </div>
 
@@ -479,7 +479,7 @@ export const PremiumShowdown = () => {
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
           
           {/* Left panel (City Selector & Hub Info) */}
-          <div className="lg:col-span-7 flex flex-col gap-6 bg-white/90 dark:bg-slate-955/40 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-white/10 p-6 md:p-8 rounded-3xl shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300">
+          <div className="lg:col-span-7 flex flex-col gap-6 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-white/10 p-6 md:p-8 rounded-3xl shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300">
             
             {/* City Selection Bar */}
             <div>
@@ -521,7 +521,7 @@ export const PremiumShowdown = () => {
                     <h3 className="text-xl md:text-2xl font-black uppercase text-[#1a1a1a] dark:text-white flex items-center gap-2">
                       <span className="text-purple-700 dark:text-cyan-400">⚡</span> {CITIES_DATA[selectedCity].name}
                     </h3>
-                    <p className="text-xs text-gray-650 dark:text-gray-400 font-mono mt-1 uppercase tracking-wide">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-mono mt-1 uppercase tracking-wide">
                       {CITIES_DATA[selectedCity].address}
                     </p>
                   </div>
@@ -541,27 +541,27 @@ export const PremiumShowdown = () => {
                   {/* Enhanced Nodal Info Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-black/10 dark:border-white/10 pt-4">
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-[9px] uppercase font-bold text-gray-500 dark:text-gray-400">⏱️ Operating Hours</span>
+                      <span className="text-[9px] uppercase font-bold text-gray-500 dark:text-gray-400 font-bold">⏱️ Operating Hours</span>
                       <span className="text-xs font-bold text-[#1a1a1a] dark:text-white">{CITIES_DATA[selectedCity].operatingHours}</span>
                     </div>
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-[9px] uppercase font-bold text-gray-505 dark:text-gray-400">📞 Contact Gateway</span>
+                      <span className="text-[9px] uppercase font-bold text-gray-500 dark:text-gray-400 font-bold">📞 Contact Gateway</span>
                       <span className="text-xs font-bold text-[#1a1a1a] dark:text-white">{CITIES_DATA[selectedCity].contact}</span>
                     </div>
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-[9px] uppercase font-bold text-gray-500 dark:text-gray-400">🌐 Connectivity SPEC</span>
+                      <span className="text-[9px] uppercase font-bold text-gray-500 dark:text-gray-400 font-bold font-bold">🌐 Connectivity SPEC</span>
                       <span className="text-xs font-bold text-[#1a1a1a] dark:text-white">{CITIES_DATA[selectedCity].connectivity}</span>
                     </div>
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-[9px] uppercase font-bold text-gray-505 dark:text-gray-400">👥 Hub Capacity</span>
+                      <span className="text-[9px] uppercase font-bold text-gray-500 dark:text-gray-400 font-bold font-bold">👥 Hub Capacity</span>
                       <span className="text-xs font-bold text-[#1a1a1a] dark:text-white">{CITIES_DATA[selectedCity].capacity}</span>
                     </div>
                   </div>
 
                   {/* Hardware Configuration Specifications */}
                   <div className="bg-slate-50 dark:bg-white/[0.02] border-2 border-black/10 dark:border-white/[0.06] p-5 rounded-2xl space-y-2">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-purple-750 dark:text-cyan-400 flex items-center gap-1.5">
-                      <Monitor className="w-3.5 h-3.5" /> Hardware Configurations Available
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-purple-700 dark:text-cyan-400 flex items-center gap-1.5">
+                      <Monitor className="w-3.5 h-3.5" /> Administrative Infrastructure Specs
                     </h4>
                     <p className="text-xs text-gray-800 dark:text-gray-300 font-mono uppercase leading-relaxed">
                       {CITIES_DATA[selectedCity].specs}
@@ -601,7 +601,7 @@ export const PremiumShowdown = () => {
           </div>
 
           {/* Right panel (Interactive Leaflet Map) */}
-          <div className="lg:col-span-5 flex flex-col p-3 bg-white/90 dark:bg-slate-950/40 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-white/10 rounded-3xl shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300">
+          <div className="lg:col-span-5 flex flex-col p-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-white/10 rounded-3xl shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300">
             <div 
               ref={mapContainerRef} 
               className="flex-1 min-h-[350px] w-full rounded-2xl border border-black/10 dark:border-white/10 overflow-hidden relative z-10"
