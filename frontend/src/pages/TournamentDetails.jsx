@@ -244,7 +244,19 @@ const TournamentDetails = ({ user }) => {
         >
           <ArrowLeft className="w-4 h-4" /> Back to Home
         </button>
-        <img src="/nova_hub_logo.png" alt="Nova Hub Logo" style={{ maxHeight: '44px' }} className="h-10 w-auto object-contain" />
+        <div 
+          onClick={() => navigate('/')}
+          className="bg-[#0f1117] border-[2.5px] border-[#1a1a1a] px-3.5 py-1.5 rounded-full flex items-center gap-3 transition-all duration-200 hover:scale-[1.03] shadow-[3px_3px_0px_rgba(26,26,26,1)] select-none cursor-pointer"
+        >
+          <img
+            src="/sports_flower_icon.png"
+            alt="Sports Icon Collage"
+            className="h-8 w-8 object-contain shrink-0 filter drop-shadow-sm"
+          />
+          <span className="font-display font-black text-sm tracking-widest text-white whitespace-nowrap uppercase">
+            NOVA <span className="text-gray-400 font-normal opacity-80">//</span> <span className="text-yellow-400 underline decoration-[3px] decoration-yellow-400 underline-offset-[5px]">HUB</span>
+          </span>
+        </div>
       </nav>
 
       <div className="max-w-6xl mx-auto px-6 md:px-8 mt-12">

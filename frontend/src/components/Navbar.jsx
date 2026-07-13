@@ -8,12 +8,16 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-[#c4e4e3] dark:bg-[#07090d] border-b-[3px] border-[#1a1a1a] dark:border-white/10 py-4 px-6 md:px-12 flex justify-between items-center shadow-sm transition-colors duration-300">
       <Link to="/" className="flex items-center group interactive-target" onClick={() => setIsMobileOpen(false)}>
-        <img
-          src="/nova_hub_logo.png"
-          alt="Nova Hub Logo"
-          className="h-11 md:h-13 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform duration-200"
-          style={{ maxHeight: '52px' }}
-        />
+        <div className="bg-[#0f1117] border-[2.5px] border-[#1a1a1a] dark:border-white/20 px-3.5 py-1.5 rounded-full flex items-center gap-3 transition-all duration-200 hover:scale-[1.03] shadow-[3px_3px_0px_rgba(26,26,26,1)] dark:shadow-[3px_3px_0px_rgba(255,255,255,0.15)] select-none">
+          <img
+            src="/sports_flower_icon.png"
+            alt="Sports Icon Collage"
+            className="h-8 w-8 object-contain shrink-0 filter drop-shadow-sm"
+          />
+          <span className="font-display font-black text-sm md:text-base tracking-widest text-white whitespace-nowrap uppercase">
+            NOVA <span className="text-gray-400 font-normal opacity-80">//</span> <span className="text-yellow-400 underline decoration-[3px] decoration-yellow-400 underline-offset-[5px]">HUB</span>
+          </span>
+        </div>
       </Link>
 
       {/* Desktop Navigation */}
