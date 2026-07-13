@@ -71,11 +71,54 @@ const Footer = () => {
 
       </div>
 
-      {/* Giant Typography Wordmark at the very bottom */}
-      <div className="w-full bg-[#c4e4e3] dark:bg-[#090b11] border-t-[3px] border-[#1a1a1a] dark:border-white/10 py-12 md:py-20 overflow-hidden flex items-center justify-center transition-colors duration-300">
-        <h1 className="text-[14vw] font-black tracking-tighter text-[#1a1a1a] dark:text-white/10 uppercase leading-none select-none font-display text-center transition-all duration-300 hover:text-white dark:hover:text-cyan-400">
-          NOVA HUB
-        </h1>
+      {/* Giant Cooldock-style Landscape Wordmark */}
+      <div className="w-full relative overflow-hidden" style={{ height: '280px' }}>
+        {/* Rolling hills background image */}
+        <img
+          src="/rolling_hills_hero.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center select-none pointer-events-none"
+          style={{ filter: 'saturate(0.7) brightness(1.05)' }}
+        />
+        {/* Teal/cyan gradient fade from top (matching website color) */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to bottom, #c4e4e3 0%, rgba(196,228,227,0.55) 28%, rgba(196,228,227,0) 62%)',
+          }}
+        />
+        {/* Dark mode overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none dark:block hidden"
+          style={{
+            background: 'linear-gradient(to bottom, #07090d 0%, rgba(7,9,13,0.6) 28%, rgba(7,9,13,0) 62%)',
+          }}
+        />
+        {/* Giant ghost wordmark text sitting on the hills */}
+        <div className="absolute bottom-0 left-0 w-full flex items-end justify-center pb-0 overflow-hidden">
+          <h1
+            className="text-[18vw] font-black tracking-tighter leading-none select-none uppercase font-display text-center transition-all duration-500 hover:scale-[1.02]"
+            style={{
+              color: 'rgba(255,255,255,0.22)',
+              WebkitTextStroke: '1.5px rgba(255,255,255,0.18)',
+              textShadow: '0 8px 48px rgba(0,0,0,0.18)',
+              letterSpacing: '-0.04em',
+              lineHeight: '0.88',
+            }}
+          >
+            NOVA HUB
+          </h1>
+        </div>
+        {/* Bottom fade to footer bg */}
+        <div
+          className="absolute bottom-0 left-0 w-full h-16 pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, transparent, #c4e4e3)' }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-full h-16 pointer-events-none dark:block hidden"
+          style={{ background: 'linear-gradient(to bottom, transparent, #07090d)' }}
+        />
       </div>
     </footer>
   );
