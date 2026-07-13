@@ -114,7 +114,7 @@ const Chatbot = ({ apiBaseUrl }) => {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[400px] h-[500px] bg-white border-[3px] border-[#1a1a1a] shadow-[8px_8px_0px_rgba(26,26,26,1)] rounded-2xl flex flex-col overflow-hidden font-mono"
+            className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[400px] h-[500px] bg-white dark:bg-slate-900 text-[#1a1a1a] dark:text-white border-[3px] border-[#1a1a1a] dark:border-white/20 shadow-[8px_8px_0px_rgba(26,26,26,1)] dark:shadow-[8px_8px_0px_rgba(255,255,255,0.15)] rounded-2xl flex flex-col overflow-hidden font-mono"
           >
             {/* Header */}
             <div className="bg-[#1a1a1a] text-white p-4 flex items-center justify-between">
@@ -135,22 +135,22 @@ const Chatbot = ({ apiBaseUrl }) => {
             </div>
 
             {/* Chat Area */}
-            <div className="flex-1 bg-gray-50 p-4 overflow-y-auto flex flex-col gap-4">
+            <div className="flex-1 bg-gray-50 dark:bg-slate-950 p-4 overflow-y-auto flex flex-col gap-4">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.sender === 'ai' && (
-                    <div className="w-6 h-6 bg-[#1a1a1a] rounded-full flex items-center justify-center mr-2 mt-1 shrink-0">
+                    <div className="w-6 h-6 bg-[#1a1a1a] dark:bg-slate-800 rounded-full flex items-center justify-center mr-2 mt-1 shrink-0 border dark:border-white/10">
                       <Bot className="w-3 h-3 text-white" />
                     </div>
                   )}
-                  <div className={`max-w-[75%] p-3 text-xs leading-relaxed ${msg.sender === 'user' ? 'bg-[#c4e4e3] border-[2px] border-[#1a1a1a] rounded-xl rounded-tr-sm text-[#1a1a1a] font-semibold' : 'bg-white border-[2px] border-[#1a1a1a] rounded-xl rounded-tl-sm text-[#1a1a1a]'}`}>
+                  <div className={`max-w-[75%] p-3 text-xs leading-relaxed ${msg.sender === 'user' ? 'bg-[#c4e4e3] dark:bg-cyan-950/40 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-xl rounded-tr-sm text-[#1a1a1a] dark:text-white font-semibold' : 'bg-white dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-xl rounded-tl-sm text-[#1a1a1a] dark:text-white'}`}>
                     {msg.text}
                   </div>
                 </div>
               ))}
               {isTyping && (
-                <div className="flex justify-start items-center gap-2 text-gray-500">
-                   <div className="w-6 h-6 bg-[#1a1a1a] rounded-full flex items-center justify-center mr-2 shrink-0">
+                <div className="flex justify-start items-center gap-2 text-gray-550">
+                   <div className="w-6 h-6 bg-[#1a1a1a] dark:bg-slate-800 rounded-full flex items-center justify-center mr-2 shrink-0 border dark:border-white/10">
                       <Bot className="w-3 h-3 text-white" />
                     </div>
                   <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5 }} className="w-2 h-2 bg-gray-400 rounded-full" />
@@ -162,7 +162,7 @@ const Chatbot = ({ apiBaseUrl }) => {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-white border-t-[3px] border-[#1a1a1a]">
+            <div className="p-4 bg-white dark:bg-slate-900 border-t-[3px] border-[#1a1a1a] dark:border-white/20">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -170,12 +170,12 @@ const Chatbot = ({ apiBaseUrl }) => {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                   placeholder="Ask Gemini about Nova Hub..."
-                  className="flex-1 bg-gray-100 border-[2px] border-[#1a1a1a] rounded-lg px-3 py-2 text-xs focus:outline-none focus:bg-white transition-colors"
+                  className="flex-1 bg-gray-100 dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-lg px-3 py-2 text-xs text-[#1a1a1a] dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-slate-750 transition-colors"
                 />
                 <button
                   onClick={handleSend}
                   disabled={!inputValue.trim() || isTyping}
-                  className="bg-[#e86c3f] hover:bg-[#d45b30] disabled:bg-gray-400 border-[2px] border-[#1a1a1a] text-white p-2 rounded-lg transition-colors flex items-center justify-center"
+                  className="bg-[#e86c3f] hover:bg-[#d45b30] disabled:bg-gray-400 border-[2px] border-[#1a1a1a] dark:border-white/20 text-white p-2 rounded-lg transition-colors flex items-center justify-center cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
                 </button>
