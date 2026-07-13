@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Html, useTexture } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -15,117 +13,6 @@ import {
 // Register GSAP ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
-// 3D Procedural Trophy Component (WebGL)
-const GlowingTrophy = () => {
-  const groupRef = useRef(null);
-  const texture = useTexture('/national_grid_bg.png');
-
-  // Define the coordinates of the 5 main city nodes (relative to base)
-  // Bengaluru, Mumbai, Delhi, Kolkata, Guntur
-  const nodes = [
-    { name: 'BENGALURU_HUB-HQ', status: '[CONFIRMED]', color: '#22c55e', pos: [-2.1, -0.6, 0.4] },
-    { name: 'GUNTUR_BATTLE_TURF', status: 'SYNCED', color: '#22c55e', pos: [0.7, -0.4, 0.4] },
-    { name: 'DELHI_NODE-NORTH', status: '[VALIDATING]', color: '#06b6d4', pos: [0.8, 1.0, 0.4] },
-    { name: 'MUMBAI', status: '', color: '#a855f7', pos: [-1.6, 0.3, 0.4] },
-    { name: 'KOLKATA', status: '', color: '#ec4899', pos: [2.3, 0.1, 0.4] }
-  ];
-
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime();
-
-    if (groupRef.current) {
-      // Subtle tilt/hover rotation based on time
-      groupRef.current.rotation.y = Math.sin(time * 0.1) * 0.05;
-      groupRef.current.rotation.x = 0.2 + Math.cos(time * 0.1) * 0.02;
-      
-      // Link scale & position directly to window scroll progress
-      const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollProgress = docHeight > 0 ? scrollY / docHeight : 0;
-
-      // Object zooms out and shifts left as user scrolls down
-      const targetScale = Math.max(0.65, 1.35 - scrollProgress * 0.7);
-      groupRef.current.scale.set(targetScale, targetScale, targetScale);
-
-      // Shifting position on screen
-      groupRef.current.position.x = -scrollProgress * 4.0;
-      groupRef.current.position.y = -scrollProgress * 1.5;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      {/* 1. HIGH-FIDELITY NATIONAL GRID BACKDROP PLANE */}
-      <mesh position={[0, 0, 0]}>
-        <planeGeometry args={[7.2, 4.0]} />
-        <meshBasicMaterial map={texture} transparent opacity={0.8} />
-      </mesh>
-
-      {/* 2. GLOWING INTERACTIVE NODE DOTS & OVERLAYS */}
-      {nodes.map((node, index) => {
-        const x = node.pos[0];
-        const y = node.pos[1];
-        const z = node.pos[2];
-
-        return (
-          <group key={index} position={[x, y, z]}>
-            {/* Glowing Emissive Indicator Sphere */}
-            <mesh>
-              <sphereGeometry args={[0.075, 16, 16]} />
-              <meshBasicMaterial color={node.color} />
-            </mesh>
-
-            {/* Pulsing visual halo ring */}
-            <mesh position={[0, 0, -0.01]}>
-              <ringGeometry args={[0.09, 0.13, 32]} />
-              <meshBasicMaterial color={node.color} transparent opacity={0.3} />
-            </mesh>
-
-            {/* Drei HTML floating node HUD label tag */}
-            <Html 
-              position={[0, 0.22, 0.1]} 
-              distanceFactor={6}
-              center
-            >
-              <div 
-                className={`font-mono text-[7px] md:text-[8px] px-2 py-0.5 rounded border whitespace-nowrap uppercase tracking-widest font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all duration-300 ${
-                  node.color === '#22c55e'
-                    ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-400'
-                    : node.color === '#06b6d4'
-                    ? 'bg-cyan-950/90 border-cyan-500/40 text-cyan-400'
-                    : node.color === '#a855f7'
-                    ? 'bg-purple-950/90 border-purple-500/40 text-purple-400'
-                    : 'bg-pink-950/90 border-pink-500/40 text-pink-400'
-                }`}
-              >
-                {node.color === '#22c55e' || node.color === '#06b6d4' ? (
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                      node.color === '#22c55e' ? 'bg-emerald-400' : 'bg-cyan-400'
-                    }`}></span>
-                    <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-                      node.color === '#22c55e' ? 'bg-emerald-500' : 'bg-cyan-500'
-                    }`}></span>
-                  </span>
-                ) : null}
-                <span>
-                  {node.name === 'MUMBAI' || node.name === 'KOLKATA' ? (
-                    node.name
-                  ) : (
-                    <>
-                      {node.name.split('_')[0]} <span className="opacity-60">{node.status}</span>
-                    </>
-                  )}
-                </span>
-              </div>
-            </Html>
-          </group>
-        );
-      })}
-    </group>
-  );
-};
-
 const CITIES_DATA = {
   bengaluru: {
     name: "NOVA HUB // BENGALURU ALPHA",
@@ -134,7 +21,11 @@ const CITIES_DATA = {
     slots: "24/32 Teams Checked-in",
     coords: [12.9716, 77.5946],
     status: "Registration Phase 1: OPEN",
-    latency: "1.2 ms"
+    latency: "1.2 ms",
+    operatingHours: "09:00 AM - 11:00 PM IST",
+    contact: "+91 80 4912 3456 | blr@novahub.gg",
+    connectivity: "10Gbps Dedicated Tata Fiber, Direct Peering Link",
+    capacity: "60 High-End Seats, 5 Team Rooms"
   },
   mumbai: {
     name: "NOVA HUB // MUMBAI NEXUS",
@@ -143,7 +34,11 @@ const CITIES_DATA = {
     slots: "18/32 Teams Checked-in",
     coords: [19.0760, 72.8777],
     status: "Registration Phase 1: OPEN",
-    latency: "0.8 ms"
+    latency: "0.8 ms",
+    operatingHours: "10:00 AM - 12:00 AM IST",
+    contact: "+91 22 6902 7812 | mum@novahub.gg",
+    connectivity: "20Gbps Dual-redundant Jio Enterprise, Ultra-low-latency CDN Node",
+    capacity: "80 Premium Seats, 8 Private Squad Cabins"
   },
   delhi: {
     name: "NOVA HUB // DELHI NODAL",
@@ -152,7 +47,11 @@ const CITIES_DATA = {
     slots: "31/32 Teams Checked-in",
     coords: [28.6139, 77.2090],
     status: "CRITICAL CAPACITY: 1 SLOT LEFT",
-    latency: "1.5 ms"
+    latency: "1.5 ms",
+    operatingHours: "09:00 AM - 11:00 PM IST",
+    contact: "+91 11 4153 9812 | del@novahub.gg",
+    connectivity: "10Gbps Airtel Business Fiber, Dedicated LAN Server Rack Hub",
+    capacity: "50 Premium Seats, 4 Streaming Booths"
   },
   hyderabad: {
     name: "NOVA HUB // HYDERABAD CYBER",
@@ -161,7 +60,11 @@ const CITIES_DATA = {
     slots: "12/32 Teams Checked-in",
     coords: [17.3850, 78.4867],
     status: "Registration Phase 1: OPEN",
-    latency: "1.1 ms"
+    latency: "1.1 ms",
+    operatingHours: "09:00 AM - 11:00 PM IST",
+    contact: "+91 40 4567 8910 | hyd@novahub.gg",
+    connectivity: "10Gbps ACT Fibernet, Zero-Ping Local Switch Matrix",
+    capacity: "45 Premium Seats, 4 Team Rooms"
   },
   chennai: {
     name: "NOVA HUB // CHENNAI MATRIX",
@@ -170,7 +73,11 @@ const CITIES_DATA = {
     slots: "8/32 Teams Checked-in",
     coords: [13.0827, 80.2707],
     status: "Registration Phase 1: OPEN",
-    latency: "1.4 ms"
+    latency: "1.4 ms",
+    operatingHours: "09:00 AM - 10:00 PM IST",
+    contact: "+91 44 2815 3456 | chn@novahub.gg",
+    connectivity: "10Gbps Dedicated Fiber Peer Link",
+    capacity: "40 Premium Seats, 3 Team Rooms"
   },
   pune: {
     name: "NOVA HUB // PUNE NODE",
@@ -179,7 +86,11 @@ const CITIES_DATA = {
     slots: "15/32 Teams Checked-in",
     coords: [18.5204, 73.8567],
     status: "Registration Phase 1: OPEN",
-    latency: "1.3 ms"
+    latency: "1.3 ms",
+    operatingHours: "09:00 AM - 11:00 PM IST",
+    contact: "+91 20 2567 8912 | pune@novahub.gg",
+    connectivity: "10Gbps Tata Communications, Local Match-Making CDN",
+    capacity: "50 Premium Seats, 4 Team Rooms"
   },
   kolkata: {
     name: "NOVA HUB // KOLKATA VOID",
@@ -188,7 +99,11 @@ const CITIES_DATA = {
     slots: "9/32 Teams Checked-in",
     coords: [22.5726, 88.3639],
     status: "Registration Phase 1: OPEN",
-    latency: "1.9 ms"
+    latency: "1.9 ms",
+    operatingHours: "09:00 AM - 10:00 PM IST",
+    contact: "+91 33 2486 7890 | kol@novahub.gg",
+    connectivity: "10Gbps Alliance Broadband, Zero-Ping Matchmaking Lobby",
+    capacity: "40 Premium Seats, 3 Team Rooms"
   }
 };
 
@@ -204,6 +119,20 @@ export const PremiumShowdown = () => {
   const [selectedCity, setSelectedCity] = useState('bengaluru');
   const [map, setMap] = useState(null);
   const markerRef = useRef(null);
+
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+  const tileLayerRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   // Registration Modal States
   const [isRegModalOpen, setIsRegModalOpen] = useState(false);
@@ -265,8 +194,6 @@ export const PremiumShowdown = () => {
     };
   }, []);
 
-
-
   // 3. Live Bracket Horizontal Scroll Pinning (GSAP)
   useEffect(() => {
     const pinSection = sectionPinRef.current;
@@ -296,8 +223,6 @@ export const PremiumShowdown = () => {
     };
   }, []);
 
-
-
   // 5. Leaflet Dark Mode Map Setup
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -311,12 +236,6 @@ export const PremiumShowdown = () => {
         zoomControl: false,
         scrollWheelZoom: false,
       });
-
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19,
-      }).addTo(m);
 
       L.control.zoom({ position: 'bottomright' }).addTo(m);
 
@@ -332,6 +251,28 @@ export const PremiumShowdown = () => {
       }
     };
   }, []);
+
+  // Map Tile layer update based on theme
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+    if (tileLayerRef.current) {
+      mapInstance.current.removeLayer(tileLayerRef.current);
+    }
+
+    const url = isDark 
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' 
+      : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+
+    const tiles = L.tileLayer(url, {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19,
+    });
+
+    tiles.addTo(mapInstance.current);
+    tileLayerRef.current = tiles;
+  }, [isDark, map]);
 
   // 6. Reactive Map Pan & Marker update on city change
   useEffect(() => {
@@ -349,9 +290,9 @@ export const PremiumShowdown = () => {
     const neonIcon = L.divIcon({
       className: 'div-neon-pin',
       html: `<div class="relative flex items-center justify-center w-10 h-10">
-               <div class="absolute w-10 h-10 bg-cyan-500/20 rounded-full animate-ping border border-cyan-400"></div>
-               <div class="absolute w-6 h-6 bg-cyan-400/30 rounded-full border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_15px_#00f0ff]">
-                 <div class="w-2.5 h-2.5 bg-cyan-300 rounded-full shadow-[0_0_5px_#00f0ff]"></div>
+               <div class="absolute w-10 h-10 ${isDark ? 'bg-cyan-500/20 border-cyan-400' : 'bg-purple-500/20 border-purple-600'} rounded-full animate-ping border"></div>
+               <div class="absolute w-6 h-6 ${isDark ? 'bg-cyan-400/30 border-cyan-400 shadow-[0_0_15px_#00f0ff]' : 'bg-purple-400/30 border-purple-600 shadow-[0_0_15px_rgba(147,51,234,0.4)]'} rounded-full border-2 flex items-center justify-center">
+                 <div class="w-2.5 h-2.5 ${isDark ? 'bg-cyan-300 shadow-[0_0_5px_#00f0ff]' : 'bg-purple-600 shadow-[0_0_5px_rgba(147,51,234,0.6)]'} rounded-full"></div>
                </div>
              </div>`,
       iconSize: [40, 40],
@@ -361,16 +302,20 @@ export const PremiumShowdown = () => {
     const marker = L.marker(loc, { icon: neonIcon })
       .addTo(map)
       .bindPopup(`
-        <div class="bg-slate-950 text-white font-mono p-3 rounded-xl border border-cyan-500/30 text-xs w-48">
-          <h4 class="font-bold text-cyan-400 flex items-center gap-1">⚡ ${cityData.name}</h4>
-          <p class="text-[10px] text-gray-400 mt-1">${cityData.address}</p>
-          <p class="text-[9px] text-purple-400 font-bold mt-1">Operational Matrix Gate</p>
+        <div class="p-3 rounded-xl border text-xs w-48 font-mono ${
+          isDark 
+            ? 'bg-slate-950 text-white border-cyan-500/30' 
+            : 'bg-white text-[#1a1a1a] border-[#1a1a1a] shadow-[4px_4px_0px_rgba(26,26,26,1)] border-[3px]'
+        }">
+          <h4 class="font-bold flex items-center gap-1 ${isDark ? 'text-cyan-400' : 'text-purple-700'}">⚡ ${cityData.name}</h4>
+          <p class="text-[10px] mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}">${cityData.address}</p>
+          <p class="text-[9px] font-bold mt-1 ${isDark ? 'text-purple-400' : 'text-orange-500'}">Operational Matrix Gate</p>
         </div>
       `)
       .openPopup();
 
     markerRef.current = marker;
-  }, [selectedCity, map]);
+  }, [selectedCity, map, isDark]);
 
   // Bracket Mock Data
   const bracketData = {
@@ -390,125 +335,123 @@ export const PremiumShowdown = () => {
   };
 
   return (
-    <div className="bg-[#040408] text-white font-mono overflow-x-hidden min-h-screen relative selection:bg-cyan-500 selection:text-black">
-      {/* 3D WebGL Background Canvas */}
-      <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
-        <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
-          <ambientLight intensity={0.15} />
-          <directionalLight position={[2, 4, 3]} intensity={1.5} color="#00f0ff" />
-          <directionalLight position={[-2, -4, -3]} intensity={1.0} color="#d900ff" />
-          <pointLight position={[0, 0, 2]} intensity={2.0} color="#00f0ff" distance={8} />
-          <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-            <GlowingTrophy />
-          </Float>
-        </Canvas>
+    <div className={`font-mono overflow-x-hidden min-h-screen relative selection:bg-cyan-500 selection:text-black transition-colors duration-500 ${isDark ? 'bg-[#040408] text-white' : 'bg-[#c4e4e3] text-[#1a1a1a]'}`}>
+      {/* CSS Background Layer */}
+      <div 
+        className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-[0.08] dark:opacity-20 transition-all duration-500 bg-center bg-cover mix-blend-overlay dark:mix-blend-normal invert dark:invert-0"
+        style={{ backgroundImage: "url('/national_grid_bg.png')" }}
+      />
+      
+      {/* Soft Neon Blur Blobs (only in dark mode) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden transition-all duration-500 opacity-20 dark:opacity-100">
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-cyan-500/10 blur-[120px] hidden dark:block" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-500/10 blur-[120px] hidden dark:block" />
       </div>
 
       {/* Cyber Overlay Background Grid */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[linear-gradient(rgba(18,18,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(18,18,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px]" />
-      
-      {/* SECTION 1: SYSTEM CALIBRATION GATE (Center 3D Trophy Showcase) */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03] dark:opacity-10 transition-all duration-500 bg-[linear-gradient(rgba(18,18,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(18,18,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px]" />
+           {/* SECTION 1: SYSTEM CALIBRATION GATE (Center Showcase) */}
       <section className="relative z-10 min-h-[90vh] flex flex-col items-center justify-center text-center px-6">
         {/* target HUD brackets */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-l border-t border-cyan-500/20 pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-r border-b border-purple-500/20 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-l border-t border-purple-500/20 dark:border-cyan-500/20 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-r border-b border-purple-500/20 dark:border-purple-550/20 pointer-events-none" />
 
         {/* Left Side HUD widgets */}
         <div className="absolute left-8 top-1/2 -translate-y-1/2 w-64 hidden lg:flex flex-col gap-6 text-left font-mono z-20 pointer-events-none">
-          <div className="bg-slate-950/75 backdrop-blur-md border border-cyan-500/20 p-4 rounded-xl space-y-3 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-            <div className="text-[9px] font-bold uppercase tracking-widest text-cyan-400 border-b border-cyan-500/20 pb-1.5 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
+          <div className="bg-white/90 dark:bg-slate-950/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 p-4 rounded-2xl space-y-3 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300">
+            <div className="text-[9px] font-bold uppercase tracking-widest text-purple-700 dark:text-cyan-400 border-b border-black/10 dark:border-cyan-500/20 pb-1.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-purple-600 dark:bg-cyan-400 rounded-full animate-pulse" />
               Global Hub Validation
             </div>
-            <div className="text-[10px] text-gray-400 font-bold uppercase">
-              Protocol: <span className="text-green-400">Active</span>
+            <div className="text-[10px] text-gray-700 dark:text-gray-400 font-bold uppercase">
+              Protocol: <span className="text-green-650 dark:text-green-400">Active</span>
             </div>
             
             {/* Sparkline Charts */}
             <div className="grid grid-cols-2 gap-2.5 pt-1">
-              <div className="border border-cyan-500/10 p-1.5 rounded bg-cyan-950/20">
-                <div className="text-[8px] text-gray-500 font-bold uppercase tracking-wider mb-1">Latency</div>
-                <svg className="w-full h-8 stroke-cyan-400 stroke-[1.5] fill-none">
+              <div className="border border-purple-500/10 dark:border-cyan-500/10 p-1.5 rounded bg-purple-50 dark:bg-cyan-950/20">
+                <div className="text-[8px] text-gray-550 font-bold uppercase tracking-wider mb-1">Latency</div>
+                <svg className="w-full h-8 stroke-purple-600 dark:stroke-cyan-400 stroke-[1.5] fill-none">
                   <path d="M0 25 L8 22 L16 28 L24 15 L32 20 L40 10 L48 24 L56 12 L64 22 L72 15 L80 18" />
                 </svg>
               </div>
-              <div className="border border-purple-500/10 p-1.5 rounded bg-purple-950/20">
-                <div className="text-[8px] text-gray-500 font-bold uppercase tracking-wider mb-1">Sync Load</div>
-                <svg className="w-full h-8 stroke-purple-400 stroke-[1.5] fill-none">
+              <div className="border border-purple-500/10 dark:border-purple-500/10 p-1.5 rounded bg-purple-50 dark:bg-purple-950/20">
+                <div className="text-[8px] text-gray-550 font-bold uppercase tracking-wider mb-1">Sync Load</div>
+                <svg className="w-full h-8 stroke-purple-600 dark:stroke-purple-400 stroke-[1.5] fill-none">
                   <path d="M0 10 L8 15 L16 12 L24 25 L32 18 L40 28 L48 15 L56 22 L64 12 L72 26 L80 15" />
                 </svg>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-950/75 backdrop-blur-md border border-cyan-500/20 p-4 rounded-xl space-y-2 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-            <div className="text-[9px] text-cyan-400 uppercase tracking-widest font-bold">
+          <div className="bg-white/90 dark:bg-slate-950/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 p-4 rounded-2xl space-y-2 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300">
+            <div className="text-[9px] text-purple-700 dark:text-cyan-400 uppercase tracking-widest font-bold">
               Route: Bengaluru → Guntur
             </div>
-            <div className="text-[11px] font-black text-white flex items-center gap-2">
-              <span className="text-[8px] px-1 py-0.5 bg-green-500/10 border border-green-500/25 text-green-400 rounded font-bold">Ping</span>
+            <div className="text-[11px] font-black text-[#1a1a1a] dark:text-white flex items-center gap-2">
+              <span className="text-[8px] px-1 py-0.5 bg-green-500/10 border border-green-500/25 text-green-600 dark:text-green-400 rounded font-bold">Ping</span>
               1.2 ms
             </div>
-            <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider pt-1 border-t border-white/5">
-              Regional Traffic: <span className="text-cyan-400">Active</span>
+            <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider pt-1 border-t border-black/10 dark:border-white/5">
+              Regional Traffic: <span className="text-purple-700 dark:text-cyan-400">Active</span>
             </div>
           </div>
         </div>
 
         {/* Right Side HUD widgets */}
         <div className="absolute right-8 top-1/2 -translate-y-1/2 w-64 hidden lg:flex flex-col gap-6 text-left font-mono z-20 pointer-events-none">
-          <div className="bg-slate-950/75 backdrop-blur-md border border-cyan-500/20 p-4 rounded-xl space-y-3 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-            <div className="text-[9px] font-bold uppercase tracking-widest text-cyan-400 border-b border-cyan-500/20 pb-1.5 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
+          <div className="bg-white/90 dark:bg-slate-955/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 p-4 rounded-2xl space-y-3 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300">
+            <div className="text-[9px] font-bold uppercase tracking-widest text-purple-700 dark:text-cyan-400 border-b border-black/10 dark:border-cyan-500/20 pb-1.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-purple-600 dark:bg-cyan-400 rounded-full animate-pulse" />
               Global Hub Validation
             </div>
-            <div className="text-[10px] text-gray-400 font-bold uppercase">
-              Protocol: <span className="text-green-400 font-bold">Active</span>
+            <div className="text-[10px] text-gray-700 dark:text-gray-400 font-bold uppercase">
+              Protocol: <span className="text-green-600 dark:text-green-400 font-bold">Active</span>
             </div>
-            <div className="text-[10px] font-bold text-gray-400">
-              Active Teams: <span className="text-white font-black text-xs">128/128</span>
+            <div className="text-[10px] font-bold text-gray-700 dark:text-gray-400">
+              Active Teams: <span className="text-black dark:text-white font-black text-xs">128/128</span>
             </div>
-            <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider pt-1.5 border-t border-white/5">
-              Grid Sync Health: <span className="text-green-400 font-black">Optimal</span>
+            <div className="text-[9px] text-gray-550 dark:text-gray-550 font-bold uppercase tracking-wider pt-1.5 border-t border-black/10 dark:border-white/5">
+              Grid Sync Health: <span className="text-green-600 dark:text-green-400 font-black">Optimal</span>
             </div>
           </div>
         </div>
 
         {/* Center Main Text Typography Block */}
         <div className="relative z-10 space-y-6 max-w-3xl">
-          <div className="inline-flex items-center gap-2 border border-cyan-500/30 px-4 py-1.5 rounded-full bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-cyan-400 font-bold uppercase animate-pulse">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> WebGL Node Link Status: Standby
+          <div className="inline-flex items-center gap-2 border border-purple-550/30 dark:border-cyan-500/30 px-4 py-1.5 rounded-full bg-purple-50 dark:bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-purple-750 dark:text-cyan-400 font-bold uppercase animate-pulse">
+            <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-cyan-400" /> Node Link Status: Active
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tight text-white font-display">
-            NOVA NATIONAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500">GRID</span>
+          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tight text-[#1a1a1a] dark:text-white font-display">
+            NOVA NATIONAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-purple-505 to-pink-505 dark:from-cyan-400 dark:via-purple-500 dark:to-pink-500">GRID</span>
           </h1>
 
-          <p className="text-gray-400 text-xs md:text-sm font-mono tracking-wider max-w-2xl mx-auto uppercase">
+          <p className="text-gray-700 dark:text-gray-400 text-xs md:text-sm font-mono tracking-wider max-w-2xl mx-auto uppercase">
             Initialize national validation sequence. Syncing offline national nodal corridors and regional server metrics.
           </p>
 
           {/* Scroll Down Indicator */}
           <div className="pt-16 flex flex-col items-center justify-center gap-2">
-            <span className="text-[9px] font-bold text-cyan-450 uppercase tracking-[0.25em] animate-pulse">
+            <span className="text-[9px] font-bold text-purple-700 dark:text-cyan-455 uppercase tracking-[0.25em] animate-pulse">
               Scroll to Engage National Tournament Network
             </span>
-            <div className="w-6 h-10 border-2 border-cyan-500/30 rounded-full p-1 flex justify-center">
-              <div className="w-1.5 h-2.5 bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]" />
+            <div className="w-6 h-10 border-2 border-purple-550/30 dark:border-cyan-500/30 rounded-full p-1 flex justify-center">
+              <div className="w-1.5 h-2.5 bg-purple-600 dark:bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]" />
             </div>
           </div>
         </div>
 
         {/* Bottom Coordinates & status bar */}
-        <div className="absolute bottom-8 left-8 right-8 hidden md:flex items-center justify-between font-mono text-[9px] text-cyan-400/70 z-20 pointer-events-none">
-          <div className="bg-slate-950/75 backdrop-blur-md border border-cyan-500/20 px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
-            <span className="text-white font-bold uppercase">Regional Coordination [Guntur]: Established</span>
+        <div className="absolute bottom-8 left-8 right-8 hidden md:flex items-center justify-between font-mono text-[9px] text-purple-700 dark:text-cyan-400/70 z-20 pointer-events-none">
+          <div className="bg-white/90 dark:bg-slate-950/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 px-4 py-2.5 rounded-2xl flex items-center gap-3 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+            <span className="w-2 h-2 bg-green-550 dark:bg-green-500 rounded-full animate-ping" />
+            <span className="text-black dark:text-white font-bold uppercase">Regional Coordination [Guntur]: Established</span>
           </div>
 
-          <div className="bg-slate-955/75 backdrop-blur-md border border-cyan-500/20 px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-            <span className="uppercase text-gray-400 font-bold">Sync Progress:</span>
-            <span className="text-green-400 font-bold tracking-tight">|||||||||||||||||||||| 100%</span>
+          <div className="bg-white/90 dark:bg-slate-955/75 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-cyan-500/20 px-4 py-2.5 rounded-2xl flex items-center gap-2 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+            <span className="uppercase text-gray-550 dark:text-gray-400 font-bold">Sync Progress:</span>
+            <span className="text-green-600 dark:text-green-400 font-bold tracking-tight">|||||||||||||||||||||| 100%</span>
           </div>
         </div>
       </section>
@@ -518,16 +461,16 @@ export const PremiumShowdown = () => {
         
         {/* Title / Subtitle Block */}
         <div className="max-w-7xl mx-auto w-full mb-8 text-left">
-          <div className="inline-flex items-center gap-2 border border-cyan-500/30 px-4 py-1.5 rounded-full bg-cyan-950/20 backdrop-blur-md mb-4 text-[10px] tracking-[0.25em] text-cyan-400 font-bold uppercase shadow-[0_0_15px_rgba(0,240,255,0.15)]">
-            <Activity className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 border border-purple-500/30 dark:border-cyan-500/30 px-4 py-1.5 rounded-full bg-purple-50 dark:bg-cyan-950/20 backdrop-blur-md mb-4 text-[10px] tracking-[0.25em] text-purple-700 dark:text-cyan-400 font-bold uppercase shadow-[3px_3px_0px_#1a1a1a] dark:shadow-[0_0_15px_rgba(0,240,255,0.15)]">
+            <Activity className="w-3.5 h-3.5 text-purple-600 dark:text-cyan-400 animate-pulse" />
             NOVA NODE MATRIX // INDIA LAN QUALIFIERS
           </div>
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black font-display uppercase tracking-tight leading-none text-white">
-            NOVA HUB <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500">OFFLINE NETWORK</span>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black font-display uppercase tracking-tight leading-none text-[#1a1a1a] dark:text-white">
+            NOVA HUB <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 dark:from-cyan-400 dark:via-purple-500 dark:to-pink-500">OFFLINE NETWORK</span>
           </h1>
           
-          <p className="text-gray-400 text-xs md:text-sm font-mono mt-3 max-w-4xl leading-relaxed uppercase tracking-wider">
+          <p className="text-gray-700 dark:text-gray-400 text-xs md:text-sm font-mono mt-3 max-w-4xl leading-relaxed uppercase tracking-wider">
             Zero-latency physical validation corridors across India. Find your nearest battle node, pre-verify your clan roster, and complete physical check-in.
           </p>
         </div>
@@ -536,11 +479,11 @@ export const PremiumShowdown = () => {
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
           
           {/* Left panel (City Selector & Hub Info) */}
-          <div className="lg:col-span-7 flex flex-col gap-6 bg-slate-950/40 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+          <div className="lg:col-span-7 flex flex-col gap-6 bg-white/90 dark:bg-slate-955/40 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-white/10 p-6 md:p-8 rounded-3xl shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300">
             
             {/* City Selection Bar */}
             <div>
-              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-500 block mb-3">
+              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-600 dark:text-gray-500 block mb-3">
                 Select Nearest Battle Node:
               </span>
               <div className="flex flex-wrap gap-2.5">
@@ -550,10 +493,10 @@ export const PremiumShowdown = () => {
                     <button
                       key={key}
                       onClick={() => setSelectedCity(key)}
-                      className={`px-4 py-2.5 font-mono font-bold text-[10px] uppercase rounded-xl border transition-all duration-200 ${
+                      className={`px-4 py-2.5 font-mono font-bold text-[10px] uppercase rounded-xl border transition-all duration-200 cursor-pointer ${
                         active 
-                          ? 'bg-cyan-500/20 text-cyan-400 border-cyan-450/80 shadow-[0_0_15px_rgba(0,240,255,0.25)]' 
-                          : 'bg-white/[0.02] text-gray-400 border-white/5 hover:border-white/20 hover:text-white'
+                          ? 'bg-cyan-500 text-black border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,1)] dark:bg-cyan-500/20 dark:text-cyan-400 dark:border-cyan-450/80 dark:shadow-[0_0_15px_rgba(0,240,255,0.25)]' 
+                          : 'bg-white text-gray-700 border-2 border-[#1a1a1a] hover:bg-slate-100 dark:bg-white/[0.02] dark:text-gray-400 dark:border-white/5 dark:hover:border-white/20 dark:hover:text-white dark:hover:bg-white/10'
                       }`}
                     >
                       {key === 'delhi' ? 'Delhi NCR' : key}
@@ -564,7 +507,7 @@ export const PremiumShowdown = () => {
             </div>
 
             {/* Hub Details Panel */}
-            <div className="flex-1 flex flex-col justify-between border-t border-white/10 pt-6 gap-6">
+            <div className="flex-1 flex flex-col justify-between border-t border-black/10 dark:border-white/10 pt-6 gap-6">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={selectedCity}
@@ -575,52 +518,72 @@ export const PremiumShowdown = () => {
                   className="space-y-6"
                 >
                   <div>
-                    <h3 className="text-xl md:text-2xl font-black uppercase text-white flex items-center gap-2">
-                      <span className="text-cyan-400">⚡</span> {CITIES_DATA[selectedCity].name}
+                    <h3 className="text-xl md:text-2xl font-black uppercase text-[#1a1a1a] dark:text-white flex items-center gap-2">
+                      <span className="text-purple-700 dark:text-cyan-400">⚡</span> {CITIES_DATA[selectedCity].name}
                     </h3>
-                    <p className="text-xs text-gray-400 font-mono mt-1 uppercase tracking-wide">
+                    <p className="text-xs text-gray-650 dark:text-gray-400 font-mono mt-1 uppercase tracking-wide">
                       {CITIES_DATA[selectedCity].address}
                     </p>
                   </div>
 
                   {/* Operational Details Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col gap-1">
+                    <div className="bg-slate-50 dark:bg-white/[0.02] border-2 border-black/10 dark:border-white/[0.04] p-4 rounded-2xl flex flex-col gap-1">
                       <span className="text-[9px] uppercase font-bold text-gray-500 tracking-wider">Operational Phase</span>
-                      <span className="text-xs font-bold text-white uppercase">{CITIES_DATA[selectedCity].status}</span>
+                      <span className="text-xs font-bold text-[#1a1a1a] dark:text-white uppercase">{CITIES_DATA[selectedCity].status}</span>
                     </div>
-                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col gap-1">
+                    <div className="bg-slate-50 dark:bg-white/[0.02] border-2 border-black/10 dark:border-white/[0.04] p-4 rounded-2xl flex flex-col gap-1">
                       <span className="text-[9px] uppercase font-bold text-gray-500 tracking-wider">Node Ping Latency</span>
-                      <span className="text-xs font-black text-green-400">{CITIES_DATA[selectedCity].latency}</span>
+                      <span className="text-xs font-black text-green-600 dark:text-green-400">{CITIES_DATA[selectedCity].latency}</span>
+                    </div>
+                  </div>
+
+                  {/* Enhanced Nodal Info Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-black/10 dark:border-white/10 pt-4">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[9px] uppercase font-bold text-gray-500 dark:text-gray-400">⏱️ Operating Hours</span>
+                      <span className="text-xs font-bold text-[#1a1a1a] dark:text-white">{CITIES_DATA[selectedCity].operatingHours}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[9px] uppercase font-bold text-gray-505 dark:text-gray-400">📞 Contact Gateway</span>
+                      <span className="text-xs font-bold text-[#1a1a1a] dark:text-white">{CITIES_DATA[selectedCity].contact}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[9px] uppercase font-bold text-gray-500 dark:text-gray-400">🌐 Connectivity SPEC</span>
+                      <span className="text-xs font-bold text-[#1a1a1a] dark:text-white">{CITIES_DATA[selectedCity].connectivity}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[9px] uppercase font-bold text-gray-505 dark:text-gray-400">👥 Hub Capacity</span>
+                      <span className="text-xs font-bold text-[#1a1a1a] dark:text-white">{CITIES_DATA[selectedCity].capacity}</span>
                     </div>
                   </div>
 
                   {/* Hardware Configuration Specifications */}
-                  <div className="bg-white/[0.02] border border-white/[0.06] p-5 rounded-2xl space-y-2">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
+                  <div className="bg-slate-50 dark:bg-white/[0.02] border-2 border-black/10 dark:border-white/[0.06] p-5 rounded-2xl space-y-2">
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-purple-750 dark:text-cyan-400 flex items-center gap-1.5">
                       <Monitor className="w-3.5 h-3.5" /> Hardware Configurations Available
                     </h4>
-                    <p className="text-xs text-gray-300 font-mono uppercase leading-relaxed">
+                    <p className="text-xs text-gray-800 dark:text-gray-300 font-mono uppercase leading-relaxed">
                       {CITIES_DATA[selectedCity].specs}
                     </p>
                   </div>
 
                   {/* Slot availability counter */}
-                  <div className="flex items-center justify-between bg-purple-950/10 border border-purple-500/20 p-4 rounded-xl">
-                    <span className="text-xs font-bold uppercase tracking-wider text-purple-300">Slot Registrations:</span>
-                    <span className="text-sm font-black text-purple-400 font-mono uppercase">{CITIES_DATA[selectedCity].slots}</span>
+                  <div className="flex items-center justify-between bg-purple-50 dark:bg-purple-950/10 border-2 border-purple-500/20 p-4 rounded-xl">
+                    <span className="text-xs font-bold uppercase tracking-wider text-purple-800 dark:text-purple-300">Slot Registrations:</span>
+                    <span className="text-sm font-black text-purple-900 dark:text-purple-400 font-mono uppercase">{CITIES_DATA[selectedCity].slots}</span>
                   </div>
                 </motion.div>
               </AnimatePresence>
 
               {/* Action buttons */}
-              <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row gap-4">
+              <div className="border-t border-black/10 dark:border-white/10 pt-6 flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => {
                     setRegStep(1);
                     setIsRegModalOpen(true);
                   }}
-                  className="flex-1 py-4 bg-cyan-400 hover:bg-white text-black font-black uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all cursor-pointer rounded-xl flex items-center justify-center gap-1.5"
+                  className="flex-1 py-4 bg-cyan-400 hover:bg-cyan-500 text-black border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer rounded-xl flex items-center justify-center gap-1.5 dark:shadow-none"
                 >
                   <Crosshair className="w-4 h-4" /> Official Hub Registration
                 </button>
@@ -628,7 +591,7 @@ export const PremiumShowdown = () => {
                   onClick={() => {
                     document.getElementById('live-bracket-section')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="px-6 py-4 bg-white/5 hover:bg-white/10 text-white font-black uppercase text-xs tracking-wider border border-white/10 transition-all rounded-xl"
+                  className="px-6 py-4 bg-white hover:bg-slate-50 border-2 border-black text-black font-black uppercase text-xs tracking-wider shadow-[4px_4px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all rounded-xl dark:bg-white/5 dark:text-white dark:border-white/10 dark:shadow-none"
                 >
                   View Active Brackets
                 </button>
@@ -638,11 +601,11 @@ export const PremiumShowdown = () => {
           </div>
 
           {/* Right panel (Interactive Leaflet Map) */}
-          <div className="lg:col-span-5 flex flex-col p-3 bg-slate-950/40 backdrop-blur-md border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+          <div className="lg:col-span-5 flex flex-col p-3 bg-white/90 dark:bg-slate-950/40 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-white/10 rounded-3xl shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300">
             <div 
               ref={mapContainerRef} 
-              className="flex-1 min-h-[350px] w-full rounded-2xl border border-white/10 overflow-hidden relative z-10"
-              style={{ background: '#0a0a14' }}
+              className="flex-1 min-h-[350px] w-full rounded-2xl border border-black/10 dark:border-white/10 overflow-hidden relative z-10"
+              style={{ background: isDark ? '#0a0a14' : '#e4f4f3' }}
             />
           </div>
 
@@ -651,7 +614,7 @@ export const PremiumShowdown = () => {
       </section>
 
       {/* HOW TO JOIN & EVENT ROADMAP SECTION */}
-      <section className="relative z-10 py-24 px-6 md:px-24 bg-black/40 backdrop-blur-sm border-t border-b border-white/5">
+      <section className="relative z-10 py-24 px-6 md:px-24 bg-white/20 dark:bg-black/40 backdrop-blur-sm border-t border-b border-black/10 dark:border-white/5 transition-all duration-500">
         <div className="max-w-6xl mx-auto">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
@@ -659,10 +622,10 @@ export const PremiumShowdown = () => {
             {/* Left: How to Join */}
             <div className="lg:col-span-6 flex flex-col gap-6">
               <div>
-                <span className="text-[10px] tracking-[0.3em] uppercase text-cyan-400 font-bold block mb-1">★ Registration protocol</span>
-                <h2 className="text-3xl md:text-4xl font-black uppercase text-white">HOW TO JOIN</h2>
+                <span className="text-[10px] tracking-[0.3em] uppercase text-purple-700 dark:text-cyan-400 font-bold block mb-1">★ Registration protocol</span>
+                <h2 className="text-3xl md:text-4xl font-black uppercase text-[#1a1a1a] dark:text-white">HOW TO JOIN</h2>
               </div>
-              <p className="text-gray-400 text-xs md:text-sm font-mono leading-relaxed">
+              <p className="text-gray-700 dark:text-gray-400 text-xs md:text-sm font-mono leading-relaxed">
                 Follow the four-step physical coordination checklist to verify check-in status, register active rosters, and unlock tournament lobby slots.
               </p>
               
@@ -673,13 +636,13 @@ export const PremiumShowdown = () => {
                   { step: '03', title: 'COMPLETE GROUND CHECK-IN', desc: 'Arrive at the Bangalore Stadium LAN desk to scan player passes.' },
                   { step: '04', title: 'CLAIM BRACKET KEYS', desc: 'Lobby locks open automatically 2 hours prior to bracket scheduling.' }
                 ].map((item, idx) => (
-                  <div key={idx} className="flex gap-4 p-5 bg-white/[0.01] border border-white/[0.04] rounded-2xl shadow-lg hover:border-cyan-500/20 transition-all duration-300">
-                    <div className="w-10 h-10 rounded-xl bg-cyan-950 flex items-center justify-center font-black text-cyan-400 border border-cyan-500/30 flex-shrink-0 text-sm">
+                  <div key={idx} className="flex gap-4 p-5 bg-white dark:bg-white/[0.01] border-2 border-black/10 dark:border-white/[0.04] rounded-2xl shadow-md hover:border-purple-500/20 dark:hover:border-cyan-500/20 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-cyan-950 flex items-center justify-center font-black text-purple-700 dark:text-cyan-400 border border-purple-300 dark:border-cyan-500/30 flex-shrink-0 text-sm">
                       {item.step}
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold uppercase tracking-wider text-white">{item.title}</h4>
-                      <p className="text-xs text-gray-400 mt-1 leading-relaxed">{item.desc}</p>
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-[#1a1a1a] dark:text-white">{item.title}</h4>
+                      <p className="text-xs text-gray-650 dark:text-gray-400 mt-1 leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -689,14 +652,14 @@ export const PremiumShowdown = () => {
             {/* Right: Timeline Roadmap */}
             <div className="lg:col-span-6 flex flex-col gap-6">
               <div>
-                <span className="text-[10px] tracking-[0.3em] uppercase text-purple-400 font-bold block mb-1">★ Official Timeline</span>
-                <h2 className="text-3xl md:text-4xl font-black uppercase text-white">EVENT ROADMAP</h2>
+                <span className="text-[10px] tracking-[0.3em] uppercase text-purple-700 dark:text-purple-400 font-bold block mb-1">★ Official Timeline</span>
+                <h2 className="text-3xl md:text-4xl font-black uppercase text-[#1a1a1a] dark:text-white">EVENT ROADMAP</h2>
               </div>
-              <p className="text-gray-400 text-xs md:text-sm font-mono leading-relaxed">
+              <p className="text-gray-750 dark:text-gray-400 text-xs md:text-sm font-mono leading-relaxed">
                 Hourly match plans and roster locks. Matches are direct local fiber configurations with zero latency brackets.
               </p>
               
-              <div className="flex flex-col gap-4 mt-2 relative border-l border-white/10 pl-6 ml-4">
+              <div className="flex flex-col gap-4 mt-2 relative border-l border-black/10 dark:border-white/10 pl-6 ml-4">
                 {[
                   { day: 'DAY 01 / JULY 18', event: 'KICKOFF & CHECK-INS', details: '9:00 AM IST // Physical Check-in & Key Card Allocations\n11:00 AM IST // Opening Ceremony & Quarter-final Matches' },
                   { day: 'DAY 02 / JULY 19', event: 'THE BRACKET CLASH', details: '2:00 PM IST // Semi-final Bracket Keys Live Lobby Matches' },
@@ -704,10 +667,10 @@ export const PremiumShowdown = () => {
                 ].map((item, idx) => (
                   <div key={idx} className="relative mb-4">
                     {/* Timeline dot */}
-                    <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-purple-500 border-2 border-black shadow-[0_0_10px_#9e00ff]" />
-                    <span className="text-[10px] uppercase text-purple-400 font-black tracking-widest block mb-0.5">{item.day}</span>
-                    <h4 className="text-sm font-bold text-white uppercase tracking-wider">{item.event}</h4>
-                    <p className="text-xs text-gray-400 mt-1 leading-relaxed whitespace-pre-line font-mono">{item.details}</p>
+                    <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-purple-600 border-2 border-black shadow-[0_0_10px_rgba(168,85,247,0.5)] dark:bg-purple-500 dark:border-black dark:shadow-[0_0_10px_#9e00ff]" />
+                    <span className="text-[10px] uppercase text-purple-700 dark:text-purple-400 font-black tracking-widest block mb-0.5">{item.day}</span>
+                    <h4 className="text-sm font-bold text-[#1a1a1a] dark:text-white uppercase tracking-wider">{item.event}</h4>
+                    <p className="text-xs text-gray-655 dark:text-gray-400 mt-1 leading-relaxed whitespace-pre-line font-mono">{item.details}</p>
                   </div>
                 ))}
               </div>
@@ -719,11 +682,11 @@ export const PremiumShowdown = () => {
       </section>
 
       {/* Pinned Horizontal Bracket Section */}
-      <section ref={sectionPinRef} id="live-bracket-section" className="relative z-10 h-screen w-screen overflow-hidden flex items-center bg-black/60 backdrop-blur-sm border-t-2 border-b-2 border-white/5">
+      <section ref={sectionPinRef} id="live-bracket-section" className="relative z-10 h-screen w-screen overflow-hidden flex items-center bg-white/20 dark:bg-black/60 backdrop-blur-sm border-t-2 border-b-2 border-black/10 dark:border-white/5 transition-all duration-500">
         {/* Adjusted top position and z-index to avoid horizontal header overlaps */}
         <div className="absolute top-6 left-8 md:left-24 z-20">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-cyan-400 font-bold block mb-1">★ Live Standings</span>
-          <h2 className="text-4xl font-extrabold tracking-tighter uppercase text-white">TOURNAMENT BRACKET</h2>
+          <span className="text-[10px] tracking-[0.3em] uppercase text-purple-750 dark:text-cyan-400 font-bold block mb-1">★ Live Standings</span>
+          <h2 className="text-4xl font-extrabold tracking-tighter uppercase text-[#1a1a1a] dark:text-white">TOURNAMENT BRACKET</h2>
         </div>
 
         {/* Increased padding-top to pt-44 to scroll bracket headers safely below absolute title */}
@@ -734,9 +697,9 @@ export const PremiumShowdown = () => {
         >
           {/* QUARTER FINALS */}
           <div className="w-[85vw] md:w-[480px] flex-shrink-0 flex flex-col gap-6">
-            <div className="flex items-center gap-3 border-b border-cyan-500/20 pb-3 mb-2">
-              <span className="w-6 h-6 rounded bg-cyan-950 flex items-center justify-center font-bold text-xs text-cyan-400 border border-cyan-400/40">1/4</span>
-              <h3 className="text-lg font-black uppercase tracking-wider text-cyan-400">Quarter Finals</h3>
+            <div className="flex items-center gap-3 border-b border-black/10 dark:border-cyan-500/20 pb-3 mb-2">
+              <span className="w-6 h-6 rounded bg-purple-100 dark:bg-cyan-950 flex items-center justify-center font-bold text-xs text-purple-700 dark:text-cyan-400 border border-purple-300 dark:border-cyan-400/40">1/4</span>
+              <h3 className="text-lg font-black uppercase tracking-wider text-purple-750 dark:text-cyan-400">Quarter Finals</h3>
             </div>
             
             <div className="flex flex-col gap-4">
@@ -745,25 +708,25 @@ export const PremiumShowdown = () => {
                   key={match.id}
                   onMouseEnter={() => setHoveredMatchId(match.id)}
                   onMouseLeave={() => setHoveredMatchId(null)}
-                  className={`matchup-card p-5 bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-3 relative overflow-hidden group cursor-pointer ${
+                  className={`matchup-card p-5 bg-white dark:bg-slate-955/70 backdrop-blur-xl border-[3px] border-[#1a1a1a] dark:border-white/[0.06] rounded-2xl shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-3 relative overflow-hidden group cursor-pointer ${
                     hoveredMatchId !== null && hoveredMatchId !== match.id ? 'opacity-30 scale-95' : 'opacity-100 scale-100'
-                  } ${hoveredMatchId === match.id ? 'border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.15)] -translate-y-1' : ''}`}
+                  } ${hoveredMatchId === match.id ? 'border-cyan-500 dark:border-cyan-500/40 shadow-[4px_4px_0px_rgba(6,182,212,0.8)] dark:shadow-[0_0_20px_rgba(0,240,255,0.15)] -translate-y-1' : ''}`}
                 >
-                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-500 mb-1">
+                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-550 dark:text-gray-500 mb-1">
                     <span>Match {match.id.toUpperCase()}</span>
                     <span className={`px-2 py-0.5 rounded-full text-black font-extrabold ${match.status === 'completed' ? 'bg-gray-400' : 'bg-cyan-400 animate-pulse'}`}>
                       {match.status}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 font-mono">
                     <div className="flex justify-between items-center">
-                      <span className={`text-xs md:text-sm font-bold ${match.s1 > match.s2 ? 'text-cyan-400 font-extrabold' : 'text-gray-300'}`}>{match.t1}</span>
-                      <span className="text-sm font-black text-white bg-white/5 px-2.5 py-0.5 rounded-lg border border-white/5">{match.s1}</span>
+                      <span className={`text-xs md:text-sm font-bold ${match.s1 > match.s2 ? 'text-purple-750 dark:text-cyan-400 font-extrabold' : 'text-gray-700 dark:text-gray-300'}`}>{match.t1}</span>
+                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s1}</span>
                     </div>
-                    <div className="h-px bg-white/5" />
+                    <div className="h-px bg-black/10 dark:bg-white/5" />
                     <div className="flex justify-between items-center">
-                      <span className={`text-xs md:text-sm font-bold ${match.s2 > match.s1 ? 'text-cyan-400 font-extrabold' : 'text-gray-300'}`}>{match.t2}</span>
-                      <span className="text-sm font-black text-white bg-white/5 px-2.5 py-0.5 rounded-lg border border-white/5">{match.s2}</span>
+                      <span className={`text-xs md:text-sm font-bold ${match.s2 > match.s1 ? 'text-purple-750 dark:text-cyan-400 font-extrabold' : 'text-gray-700 dark:text-gray-300'}`}>{match.t2}</span>
+                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s2}</span>
                     </div>
                   </div>
                 </div>
@@ -773,9 +736,9 @@ export const PremiumShowdown = () => {
 
           {/* SEMI FINALS */}
           <div className="w-[85vw] md:w-[480px] flex-shrink-0 flex flex-col gap-6">
-            <div className="flex items-center gap-3 border-b border-purple-500/20 pb-3 mb-2">
-              <span className="w-6 h-6 rounded bg-purple-950 flex items-center justify-center font-bold text-xs text-purple-400 border border-purple-400/40">1/2</span>
-              <h3 className="text-lg font-black uppercase tracking-wider text-purple-400">Semi Finals</h3>
+            <div className="flex items-center gap-3 border-b border-black/10 dark:border-purple-500/20 pb-3 mb-2">
+              <span className="w-6 h-6 rounded bg-purple-100 dark:bg-purple-950 flex items-center justify-center font-bold text-xs text-purple-700 dark:text-purple-400 border border-purple-300 dark:border-purple-400/40">1/2</span>
+              <h3 className="text-lg font-black uppercase tracking-wider text-purple-750 dark:text-purple-400">Semi Finals</h3>
             </div>
             
             <div className="flex flex-col gap-8 justify-around h-[380px]">
@@ -784,25 +747,25 @@ export const PremiumShowdown = () => {
                   key={match.id}
                   onMouseEnter={() => setHoveredMatchId(match.id)}
                   onMouseLeave={() => setHoveredMatchId(null)}
-                  className={`matchup-card p-5 bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-3 relative overflow-hidden group cursor-pointer ${
+                  className={`matchup-card p-5 bg-white dark:bg-slate-955/70 backdrop-blur-xl border-[3px] border-[#1a1a1a] dark:border-white/[0.06] rounded-2xl shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-3 relative overflow-hidden group cursor-pointer ${
                     hoveredMatchId !== null && hoveredMatchId !== match.id ? 'opacity-30 scale-95' : 'opacity-100 scale-100'
-                  } ${hoveredMatchId === match.id ? 'border-purple-500/40 shadow-[0_0_20px_rgba(217,0,255,0.15)] -translate-y-1' : ''}`}
+                  } ${hoveredMatchId === match.id ? 'border-purple-500 dark:border-purple-500/40 shadow-[4px_4px_0px_rgba(168,85,247,0.8)] dark:shadow-[0_0_20px_rgba(217,0,255,0.15)] -translate-y-1' : ''}`}
                 >
-                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-500 mb-1">
+                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-550 dark:text-gray-500 mb-1">
                     <span>Match {match.id.toUpperCase()}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-black font-extrabold ${match.status === 'completed' ? 'bg-gray-400' : 'bg-[#d900ff] animate-pulse text-white'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-black font-extrabold ${match.status === 'completed' ? 'bg-gray-400' : 'bg-purple-605 dark:bg-[#d900ff] animate-pulse text-white'}`}>
                       {match.status}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 font-mono">
                     <div className="flex justify-between items-center">
-                      <span className={`text-xs md:text-sm font-bold ${match.s1 > match.s2 ? 'text-[#d900ff] font-extrabold' : 'text-gray-300'}`}>{match.t1}</span>
-                      <span className="text-sm font-black text-white bg-white/5 px-2.5 py-0.5 rounded-lg border border-white/5">{match.s1}</span>
+                      <span className={`text-xs md:text-sm font-bold ${match.s1 > match.s2 ? 'text-purple-750 dark:text-[#d900ff] font-extrabold' : 'text-gray-700 dark:text-gray-300'}`}>{match.t1}</span>
+                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s1}</span>
                     </div>
-                    <div className="h-px bg-white/5" />
+                    <div className="h-px bg-black/10 dark:bg-white/5" />
                     <div className="flex justify-between items-center">
-                      <span className={`text-xs md:text-sm font-bold ${match.s2 > match.s1 ? 'text-[#d900ff] font-extrabold' : 'text-gray-300'}`}>{match.t2}</span>
-                      <span className="text-sm font-black text-white bg-white/5 px-2.5 py-0.5 rounded-lg border border-white/5">{match.s2}</span>
+                      <span className={`text-xs md:text-sm font-bold ${match.s2 > match.s1 ? 'text-purple-750 dark:text-[#d900ff] font-extrabold' : 'text-gray-700 dark:text-gray-300'}`}>{match.t2}</span>
+                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s2}</span>
                     </div>
                   </div>
                 </div>
@@ -812,9 +775,9 @@ export const PremiumShowdown = () => {
 
           {/* FINALS */}
           <div className="w-[85vw] md:w-[480px] flex-shrink-0 flex flex-col gap-6">
-            <div className="flex items-center gap-3 border-b border-yellow-500/20 pb-3 mb-2">
-              <span className="w-6 h-6 rounded bg-yellow-950 flex items-center justify-center font-bold text-xs text-yellow-400 border border-yellow-400/40">★</span>
-              <h3 className="text-lg font-black uppercase tracking-wider text-yellow-400">Grand Finals</h3>
+            <div className="flex items-center gap-3 border-b border-black/10 dark:border-yellow-500/20 pb-3 mb-2">
+              <span className="w-6 h-6 rounded bg-purple-100 dark:bg-yellow-950 flex items-center justify-center font-bold text-xs text-yellow-700 dark:text-yellow-400 border border-purple-300 dark:border-yellow-400/40">★</span>
+              <h3 className="text-lg font-black uppercase tracking-wider text-yellow-700 dark:text-yellow-400">Grand Finals</h3>
             </div>
             
             <div className="flex flex-col justify-center h-[380px]">
@@ -823,25 +786,25 @@ export const PremiumShowdown = () => {
                   key={match.id}
                   onMouseEnter={() => setHoveredMatchId(match.id)}
                   onMouseLeave={() => setHoveredMatchId(null)}
-                  className={`matchup-card p-6 bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-4 relative overflow-hidden group cursor-pointer ${
+                  className={`matchup-card p-6 bg-white dark:bg-slate-955/70 backdrop-blur-xl border-[3px] border-[#1a1a1a] dark:border-white/[0.06] rounded-2xl shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-4 relative overflow-hidden group cursor-pointer ${
                     hoveredMatchId !== null && hoveredMatchId !== match.id ? 'opacity-30 scale-95' : 'opacity-100 scale-100'
-                  } ${hoveredMatchId === match.id ? 'border-yellow-500/40 shadow-[0_0_20px_rgba(250,204,21,0.15)] -translate-y-1' : ''}`}
+                  } ${hoveredMatchId === match.id ? 'border-yellow-500 dark:border-yellow-500/40 shadow-[4px_4px_0px_rgba(250,204,21,0.8)] dark:shadow-[0_0_20px_rgba(250,204,21,0.15)] -translate-y-1' : ''}`}
                 >
-                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-500 mb-1">
+                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-550 dark:text-gray-500 mb-1">
                     <span>Championship Match</span>
-                    <span className="px-2 py-0.5 rounded-full text-black font-extrabold bg-yellow-400">
+                    <span className="px-2 py-0.5 rounded-full text-black font-extrabold bg-yellow-450">
                       {match.status}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 font-mono">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm md:text-base font-bold text-gray-300">{match.t1}</span>
-                      <span className="text-sm font-black text-white bg-white/5 px-2.5 py-0.5 rounded-lg border border-white/5">{match.s1}</span>
+                      <span className="text-sm md:text-base font-bold text-gray-700 dark:text-gray-300">{match.t1}</span>
+                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s1}</span>
                     </div>
-                    <div className="h-px bg-white/5" />
+                    <div className="h-px bg-black/10 dark:bg-white/5" />
                     <div className="flex justify-between items-center">
-                      <span className="text-sm md:text-base font-bold text-gray-300">{match.t2}</span>
-                      <span className="text-sm font-black text-white bg-white/5 px-2.5 py-0.5 rounded-lg border border-white/5">{match.s2}</span>
+                      <span className="text-sm md:text-base font-bold text-gray-700 dark:text-gray-300">{match.t2}</span>
+                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s2}</span>
                     </div>
                   </div>
                 </div>
@@ -852,30 +815,30 @@ export const PremiumShowdown = () => {
       </section>
 
       {/* Platform Rule Book & Performance Spec Deck */}
-      <section className="relative z-10 py-24 px-6 md:px-24 bg-gradient-to-t from-black to-slate-950/70 border-t border-white/5">
+      <section className="relative z-10 py-24 px-6 md:px-24 bg-gradient-to-t from-slate-100 to-white/90 dark:from-black dark:to-slate-955/70 border-t border-black/10 dark:border-white/5 transition-all duration-500">
         <div className="max-w-6xl mx-auto">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
             <div className="lg:col-span-5 flex flex-col items-start gap-4">
-              <span className="text-[10px] tracking-[0.3em] uppercase text-cyan-400 font-bold">★ LAN Details</span>
-              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-white leading-none uppercase">
+              <span className="text-[10px] tracking-[0.3em] uppercase text-purple-700 dark:text-cyan-400 font-bold">★ LAN Details</span>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-[#1a1a1a] dark:text-white leading-none uppercase font-display">
                 Zero-Ping Physical Rules
               </h2>
-              <p className="text-gray-400 text-xs md:text-sm font-mono leading-relaxed mt-2 uppercase tracking-wider">
+              <p className="text-gray-750 dark:text-gray-400 text-xs md:text-sm font-mono leading-relaxed mt-2 uppercase tracking-wider">
                 Nova Hub represents the premium offline gaming grid in the country. To maintain integrity, all squads must adhere to the physical check-in and validation protocol.
               </p>
               
               <div className="flex flex-col gap-4 mt-4 w-full">
                 {[
-                  { icon: <MapPin className="w-5 h-5 text-cyan-400" />, title: 'Hardware Validation', detail: 'On-site peripherals check & BIOS integrity check' },
-                  { icon: <Calendar className="w-5 h-5 text-purple-400" />, title: 'Check-In Protocol', detail: 'Bring validation pass & roster IDs' },
-                  { icon: <Clock className="w-5 h-5 text-pink-400" />, title: 'Zero Latency Rule', detail: 'Zero packet drops guaranteed' },
+                  { icon: <MapPin className="w-5 h-5 text-purple-700 dark:text-cyan-400" />, title: 'Hardware Validation', detail: 'On-site peripherals check & BIOS integrity check' },
+                  { icon: <Calendar className="w-5 h-5 text-purple-750 dark:text-purple-400" />, title: 'Check-In Protocol', detail: 'Bring validation pass & roster IDs' },
+                  { icon: <Clock className="w-5 h-5 text-purple-700 dark:text-pink-400" />, title: 'Zero Latency Rule', detail: 'Zero packet drops guaranteed' },
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-4 bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl shadow-lg">
-                    <div className="p-2 bg-white/[0.03] border border-white/10 rounded-lg">{item.icon}</div>
+                  <div key={idx} className="flex items-center gap-4 bg-white dark:bg-white/[0.02] border-[3px] border-[#1a1a1a] dark:border-white/[0.04] p-4 rounded-2xl shadow-[4px_4px_0px_#1a1a1a] dark:shadow-lg">
+                    <div className="p-2 bg-slate-100 dark:bg-white/[0.03] border border-black/10 dark:border-white/10 rounded-lg">{item.icon}</div>
                     <div>
-                      <p className="text-[10px] uppercase text-gray-500 tracking-wider font-bold">{item.title}</p>
-                      <p className="text-xs font-mono font-bold mt-0.5 text-white">{item.detail}</p>
+                      <p className="text-[10px] uppercase text-gray-550 tracking-wider font-bold">{item.title}</p>
+                      <p className="text-xs font-mono font-bold mt-0.5 text-[#1a1a1a] dark:text-white">{item.detail}</p>
                     </div>
                   </div>
                 ))}
@@ -883,21 +846,21 @@ export const PremiumShowdown = () => {
             </div>
 
             {/* Hardware Visual Deck */}
-            <div className="lg:col-span-7 bg-white/[0.01] border border-white/[0.05] p-8 rounded-3xl backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.6)] space-y-6">
-              <h3 className="text-xl font-bold uppercase text-white flex items-center gap-2">
-                <Monitor className="w-5 h-5 text-purple-400" /> BATTLE STATION INTEGRITY PROTOCOL
+            <div className="lg:col-span-7 bg-white dark:bg-white/[0.01] border-[3px] border-[#1a1a1a] dark:border-white/[0.05] p-8 rounded-3xl backdrop-blur-md shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] space-y-6">
+              <h3 className="text-xl font-bold uppercase text-[#1a1a1a] dark:text-white flex items-center gap-2 font-display">
+                <Monitor className="w-5 h-5 text-purple-700 dark:text-purple-400" /> BATTLE STATION INTEGRITY PROTOCOL
               </h3>
-              <p className="text-xs text-gray-400 font-mono uppercase leading-relaxed">
+              <p className="text-xs text-gray-700 dark:text-gray-400 font-mono uppercase leading-relaxed">
                 EVERY NODE CONTAINS PURE COMPETITIVE HARDWARE LINKED DIRECTLY OVER A DEDICATED FIBER NET. WALK-IN OR PRE-BOOKED SLOTS ARE ISOLATED TO PREVENT ROUTING LATENCY.
               </p>
               <div className="grid grid-cols-2 gap-4 text-xs font-mono uppercase">
-                <div className="bg-white/[0.02] p-4 border border-white/5 rounded-xl">
-                  <span className="text-[10px] text-cyan-400 font-bold block mb-1">PRO RIGS</span>
-                  <span>RTX 4090 / i9 CPU</span>
+                <div className="bg-slate-50 dark:bg-white/[0.02] p-4 border-2 border-black/10 dark:border-white/5 rounded-xl">
+                  <span className="text-[10px] text-purple-700 dark:text-cyan-400 font-bold block mb-1">PRO RIGS</span>
+                  <span className="font-bold text-[#1a1a1a] dark:text-white">RTX 4090 / i9 CPU</span>
                 </div>
-                <div className="bg-white/[0.02] p-4 border border-white/5 rounded-xl">
-                  <span className="text-[10px] text-purple-400 font-bold block mb-1">REFRESH RATE</span>
-                  <span>540Hz / 360Hz Panels</span>
+                <div className="bg-slate-50 dark:bg-white/[0.02] p-4 border-2 border-black/10 dark:border-white/5 rounded-xl">
+                  <span className="text-[10px] text-purple-750 dark:text-purple-400 font-bold block mb-1">REFRESH RATE</span>
+                  <span className="font-bold text-[#1a1a1a] dark:text-white">540Hz / 360Hz Panels</span>
                 </div>
               </div>
             </div>
@@ -906,14 +869,14 @@ export const PremiumShowdown = () => {
           {/* Quick FAQ / Technical Specs Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             {[
-              { icon: <Zap className="w-6 h-6 text-yellow-400" />, title: 'Zero Latency LAN', desc: 'Direct local fiber configurations for instant bracket updates and zero packet drops.' },
-              { icon: <Award className="w-6 h-6 text-cyan-400" />, title: 'Ref Payout Sync', desc: 'Auto-syncing score sheet modules connected directly to tournament reward brackets.' },
-              { icon: <Users className="w-6 h-6 text-purple-400" />, title: 'Team Roster Locks', desc: 'Roster coordinates are locked automatically 2 hours prior to bracket scheduling.' }
+              { icon: <Zap className="w-6 h-6 text-yellow-650 dark:text-yellow-400" />, title: 'Zero Latency LAN', desc: 'Direct local fiber configurations for instant bracket updates and zero packet drops.' },
+              { icon: <Award className="w-6 h-6 text-purple-700 dark:text-cyan-400" />, title: 'Ref Payout Sync', desc: 'Auto-syncing score sheet modules connected directly to tournament reward brackets.' },
+              { icon: <Users className="w-6 h-6 text-purple-700 dark:text-purple-400" />, title: 'Team Roster Locks', desc: 'Roster coordinates are locked automatically 2 hours prior to bracket scheduling.' }
             ].map((item, idx) => (
-              <div key={idx} className="p-8 bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] hover:border-cyan-500/20 transition-colors rounded-2xl flex flex-col gap-4 shadow-lg group">
-                <div className="p-3 bg-white/[0.03] border border-white/10 rounded-xl w-max group-hover:scale-110 transition-transform">{item.icon}</div>
-                <h4 className="text-base font-bold uppercase tracking-wider text-white">{item.title}</h4>
-                <p className="text-xs text-gray-400 font-mono leading-relaxed tracking-wide uppercase">{item.desc}</p>
+              <div key={idx} className="p-8 bg-white dark:bg-white/[0.02] backdrop-blur-xl border-[3px] border-[#1a1a1a] dark:border-white/[0.06] hover:border-purple-550/30 dark:hover:border-cyan-500/20 transition-all rounded-2xl flex flex-col gap-4 shadow-[4px_4px_0px_#1a1a1a] dark:shadow-lg group">
+                <div className="p-3 bg-slate-50 dark:bg-white/[0.03] border border-black/10 dark:border-white/10 rounded-xl w-max group-hover:scale-110 transition-transform">{item.icon}</div>
+                <h4 className="text-base font-bold uppercase tracking-wider text-[#1a1a1a] dark:text-white">{item.title}</h4>
+                <p className="text-xs text-gray-650 dark:text-gray-400 font-mono leading-relaxed tracking-wide uppercase">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -921,8 +884,146 @@ export const PremiumShowdown = () => {
         </div>
       </section>
 
-      {/* Nodal Registration Modal Overlay */}
-      <AnimatePresence>
+      {/* SHOWDOWN PASS PLANS */}
+      <section className="relative z-10 py-24 px-6 md:px-24 bg-slate-50 dark:bg-slate-900/60 border-b border-black/10 dark:border-white/5 transition-all duration-500">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+            <span className="text-[10px] tracking-[0.3em] uppercase text-purple-700 dark:text-cyan-400 font-bold block mb-1">★ Arena Membership</span>
+            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-[#1a1a1a] dark:text-white font-display font-black">
+              NOVA ARENA PASSES
+            </h2>
+            <p className="text-gray-700 dark:text-gray-400 text-xs md:text-sm font-mono uppercase leading-relaxed">
+              Unlock the full potential of Nova offline hubs. Pre-purchase verification badges, zero-latency queue overrides, and exclusive physical bracket entries.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+            {/* Plan 1: Rookie */}
+            <div className="bg-white dark:bg-slate-950 border-[3px] border-[#1a1a1a] rounded-3xl p-8 flex flex-col justify-between shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_15px_30px_rgba(0,0,0,0.4)] transition-all duration-300 relative overflow-hidden">
+              <div className="space-y-6">
+                <div>
+                  <span className="text-[9px] uppercase font-bold text-gray-500 tracking-wider">Entry-Level</span>
+                  <h3 className="text-2xl font-black uppercase text-[#1a1a1a] dark:text-white mt-1">ROOKIE PASS</h3>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-black text-[#1a1a1a] dark:text-white">₹0</span>
+                  <span className="text-xs text-gray-550 dark:text-gray-400 font-mono">/ FOREVER</span>
+                </div>
+                <p className="text-xs text-gray-750 dark:text-gray-450 leading-relaxed font-mono uppercase">
+                  Perfect for casual validation squads testing the node setup.
+                </p>
+                <div className="border-t border-black/10 dark:border-white/10 pt-6 space-y-3">
+                  {[
+                    'Single Battle Node Access',
+                    'Standard Bracket Queue',
+                    'Physical Check-in coordination',
+                    'Community Bracket view'
+                  ].map((feat, idx) => (
+                    <div key={idx} className="flex items-center gap-2.5 text-xs text-[#1a1a1a] dark:text-gray-300 font-mono uppercase">
+                      <span className="text-green-600 dark:text-green-400 font-bold">✓</span>
+                      <span>{feat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <button 
+                onClick={() => {
+                  setRegStep(1);
+                  setIsRegModalOpen(true);
+                }}
+                className="mt-8 w-full py-4 bg-white hover:bg-slate-50 border-2 border-black text-black font-black uppercase text-xs tracking-wider transition-all rounded-xl cursor-pointer shadow-[3px_3px_0px_#1a1a1a] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:shadow-none"
+              >
+                Claim Free Pass
+              </button>
+            </div>
+
+            {/* Plan 2: Challenger */}
+            <div className="bg-purple-50 dark:bg-purple-955/20 border-[3px] border-purple-600 rounded-3xl p-8 flex flex-col justify-between shadow-[8px_8px_0px_#7c3aed] dark:shadow-[0_15px_30px_rgba(124,58,237,0.2)] transition-all duration-300 relative overflow-hidden scale-105">
+              <div className="absolute top-0 right-0 bg-purple-600 text-white text-[8px] font-black uppercase px-4 py-1.5 rounded-bl-2xl tracking-widest font-mono">
+                RECOMMENDED
+              </div>
+              <div className="space-y-6">
+                <div>
+                  <span className="text-[9px] uppercase font-black text-purple-700 dark:text-purple-400 tracking-wider">Competitive Grid</span>
+                  <h3 className="text-2xl font-black uppercase text-[#1a1a1a] dark:text-white mt-1">CHALLENGER PASS</h3>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-black text-[#1a1a1a] dark:text-white">₹499</span>
+                  <span className="text-xs text-gray-550 dark:text-gray-400 font-mono">/ MONTH</span>
+                </div>
+                <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed font-mono uppercase">
+                  Fully loaded match synchronization specs for serious tournament contenders.
+                </p>
+                <div className="border-t border-purple-500/20 pt-6 space-y-3">
+                  {[
+                    'All India Nodal Corridor Access',
+                    'Priority Matchmaking Overrides',
+                    'Roster validation key included',
+                    'Monthly Tournament Entry tickets',
+                    'Discord Clan Tag credentials'
+                  ].map((feat, idx) => (
+                    <div key={idx} className="flex items-center gap-2.5 text-xs text-[#1a1a1a] dark:text-gray-300 font-mono uppercase">
+                      <span className="text-purple-600 dark:text-purple-400 font-bold">✓</span>
+                      <span>{feat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <button 
+                onClick={() => {
+                  setRegStep(1);
+                  setIsRegModalOpen(true);
+                }}
+                className="mt-8 w-full py-4 bg-purple-650 hover:bg-purple-700 text-white font-black uppercase text-xs tracking-wider transition-all rounded-xl cursor-pointer shadow-[3px_3px_0px_#1a1a1a] dark:shadow-none hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+              >
+                Engage Challenger Pass
+              </button>
+            </div>
+
+            {/* Plan 3: Elite */}
+            <div className="bg-white dark:bg-slate-950 border-[3px] border-[#1a1a1a] rounded-3xl p-8 flex flex-col justify-between shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_15px_30px_rgba(0,0,0,0.4)] transition-all duration-300 relative overflow-hidden">
+              <div className="space-y-6">
+                <div>
+                  <span className="text-[9px] uppercase font-bold text-yellow-600 dark:text-yellow-400 tracking-wider">Ultimate Tier</span>
+                  <h3 className="text-2xl font-black uppercase text-[#1a1a1a] dark:text-white mt-1">ELITE PASS</h3>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-black text-[#1a1a1a] dark:text-white">₹1,499</span>
+                  <span className="text-xs text-gray-550 dark:text-gray-400 font-mono">/ MONTH</span>
+                </div>
+                <p className="text-xs text-gray-750 dark:text-gray-450 leading-relaxed font-mono uppercase">
+                  VIP access specs, coaching resources, and zero packet routing privileges.
+                </p>
+                <div className="border-t border-black/10 dark:border-white/10 pt-6 space-y-3">
+                  {[
+                    'All Challenger Pass Benefits',
+                    'Zero-Latency Route Privileges',
+                    'LAN Arena Priority Desk slots',
+                    '1-on-1 Pro coaching sessions',
+                    'Custom clan verified badge keys'
+                  ].map((feat, idx) => (
+                    <div key={idx} className="flex items-center gap-2.5 text-xs text-[#1a1a1a] dark:text-gray-300 font-mono uppercase">
+                      <span className="text-yellow-600 dark:text-yellow-400 font-bold">✓</span>
+                      <span>{feat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <button 
+                onClick={() => {
+                  setRegStep(1);
+                  setIsRegModalOpen(true);
+                }}
+                className="mt-8 w-full py-4 bg-cyan-400 hover:bg-cyan-500 text-black border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer rounded-xl flex items-center justify-center gap-1.5 dark:shadow-none"
+              >
+                Go Elite Level
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+          <AnimatePresence>
         {isRegModalOpen && (
           <motion.div 
             initial={{ opacity: 0 }}
@@ -934,7 +1035,7 @@ export const PremiumShowdown = () => {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="relative bg-slate-950/95 border-2 border-cyan-500/50 p-8 md:p-10 rounded-3xl max-w-md w-full shadow-[0_0_40px_rgba(0,240,255,0.3)] space-y-6 text-left text-white font-mono"
+              className="relative bg-white dark:bg-slate-950 border-[3px] border-[#1a1a1a] dark:border-cyan-500/50 p-8 md:p-10 rounded-3xl max-w-md w-full shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_0_40px_rgba(0,240,255,0.3)] space-y-6 text-left text-[#1a1a1a] dark:text-white font-mono"
             >
               {/* Close Button */}
               <button 
@@ -942,49 +1043,49 @@ export const PremiumShowdown = () => {
                   setIsRegModalOpen(false);
                   setRegStep(1);
                 }}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                className="absolute top-4 right-4 text-gray-550 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
 
               {/* Progress Steps Header */}
               {regStep < 3 && (
-                <div className="flex items-center gap-2 border-b border-white/5 pb-4">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${regStep === 1 ? 'bg-cyan-400 text-black shadow-[0_0_8px_#00f0ff]' : 'bg-cyan-950 text-cyan-400 border border-cyan-500/30'}`}>1</div>
-                  <div className="h-0.5 w-8 bg-white/10" />
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${regStep === 2 ? 'bg-cyan-400 text-black shadow-[0_0_8px_#00f0ff]' : 'bg-cyan-950 text-cyan-400 border border-cyan-500/30'}`}>2</div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-auto font-mono">Step {regStep} of 2</span>
+                <div className="flex items-center gap-2 border-b border-black/10 dark:border-white/5 pb-4">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${regStep === 1 ? 'bg-cyan-400 text-black shadow-[0_0_8px_#00f0ff]' : 'bg-purple-100 text-purple-700 dark:bg-cyan-950 dark:text-cyan-400 border border-purple-300 dark:border-cyan-500/30'}`}>1</div>
+                  <div className="h-0.5 w-8 bg-black/10 dark:bg-white/10" />
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${regStep === 2 ? 'bg-cyan-400 text-black shadow-[0_0_8px_#00f0ff]' : 'bg-purple-100 text-purple-700 dark:bg-cyan-950 dark:text-cyan-400 border border-purple-300 dark:border-cyan-500/30'}`}>2</div>
+                  <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-auto font-mono">Step {regStep} of 2</span>
                 </div>
               )}
 
               {regStep === 1 && (
                 <div className="space-y-5">
                   <div>
-                    <h3 className="text-xl font-black uppercase text-cyan-400">CLAN SPECIFICATION</h3>
-                    <p className="text-[10px] text-gray-400 mt-1 uppercase">Enter your official squad info for target node: <span className="text-white font-bold">{selectedCity}</span></p>
+                    <h3 className="text-xl font-black uppercase text-purple-700 dark:text-cyan-400 font-display">CLAN SPECIFICATION</h3>
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 uppercase font-bold">Enter your official squad info for target node: <span className="text-[#1a1a1a] dark:text-white font-black">{selectedCity}</span></p>
                   </div>
 
                   <div className="space-y-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[9px] font-bold uppercase text-cyan-400 tracking-wider">Team Name *</label>
+                      <label className="text-[9px] font-bold uppercase text-purple-750 dark:text-cyan-400 tracking-wider">Team Name *</label>
                       <input 
                         type="text" 
                         placeholder="e.g. Entity Esports"
                         value={teamName}
                         onChange={(e) => setTeamName(e.target.value)}
-                        className="w-full bg-slate-900 border border-white/10 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs text-white font-bold outline-none uppercase"
+                        className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-black/20 dark:border-white/10 focus:border-purple-600 dark:focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs text-[#1a1a1a] dark:text-white font-bold outline-none uppercase"
                       />
                     </div>
                     
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[9px] font-bold uppercase text-cyan-400 tracking-wider">Clan Tag (max 4 chars) *</label>
+                      <label className="text-[9px] font-bold uppercase text-purple-750 dark:text-cyan-400 tracking-wider">Clan Tag (max 4 chars) *</label>
                       <input 
                         type="text" 
                         maxLength={4}
                         placeholder="e.g. ENT"
                         value={clanTag}
                         onChange={(e) => setClanTag(e.target.value)}
-                        className="w-full bg-slate-900 border border-white/10 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs text-white font-bold outline-none uppercase"
+                        className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-black/20 dark:border-white/10 focus:border-purple-600 dark:focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs text-[#1a1a1a] dark:text-white font-bold outline-none uppercase"
                       />
                     </div>
                   </div>
@@ -992,7 +1093,7 @@ export const PremiumShowdown = () => {
                   <button 
                     disabled={!teamName.trim() || !clanTag.trim()}
                     onClick={() => setRegStep(2)}
-                    className="w-full py-3.5 bg-cyan-400 hover:bg-white text-black font-black uppercase text-xs rounded-xl shadow-[0_0_15px_rgba(0,240,255,0.2)] disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center justify-center gap-1 cursor-pointer"
+                    className="w-full py-3.5 bg-cyan-400 hover:bg-cyan-550 text-black font-black uppercase text-xs rounded-xl shadow-[3px_3px_0px_rgba(0,0,0,1)] dark:shadow-[0_0_15px_rgba(0,240,255,0.2)] disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center justify-center gap-1 cursor-pointer"
                   >
                     Proceed to Roster <ChevronRight className="w-4 h-4" />
                   </button>
@@ -1002,8 +1103,8 @@ export const PremiumShowdown = () => {
               {regStep === 2 && (
                 <div className="space-y-5">
                   <div>
-                    <h3 className="text-xl font-black uppercase text-cyan-400">ROSTER VALIDATION</h3>
-                    <p className="text-[10px] text-gray-400 mt-1 uppercase">Define active handles for zero-ping local switch alignment</p>
+                    <h3 className="text-xl font-black uppercase text-purple-700 dark:text-cyan-400 font-display">ROSTER VALIDATION</h3>
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 uppercase font-bold">Define active handles for zero-ping local switch alignment</p>
                   </div>
 
                   <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
@@ -1015,7 +1116,7 @@ export const PremiumShowdown = () => {
                           placeholder="Captain Name"
                           value={captainId}
                           onChange={(e) => setCaptainId(e.target.value)}
-                          className="w-full bg-slate-900 border border-white/10 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-white outline-none"
+                          className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-black/20 dark:border-white/10 focus:border-purple-600 dark:focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-[#1a1a1a] dark:text-white outline-none"
                         />
                       </div>
                       <div className="flex flex-col gap-1">
@@ -1025,7 +1126,7 @@ export const PremiumShowdown = () => {
                           placeholder="Email Address"
                           value={captainEmail}
                           onChange={(e) => setCaptainEmail(e.target.value)}
-                          className="w-full bg-slate-900 border border-white/10 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-white outline-none"
+                          className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-black/20 dark:border-white/10 focus:border-purple-600 dark:focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-[#1a1a1a] dark:text-white outline-none"
                         />
                       </div>
                     </div>
@@ -1042,7 +1143,7 @@ export const PremiumShowdown = () => {
                             newRoster[idx - 1] = e.target.value;
                             setRoster(newRoster);
                           }}
-                          className="w-full bg-slate-900 border border-white/10 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-white outline-none"
+                          className="w-full bg-slate-50 dark:bg-slate-900 border-2 border-black/20 dark:border-white/10 focus:border-purple-600 dark:focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-[#1a1a1a] dark:text-white outline-none"
                         />
                       </div>
                     ))}
@@ -1051,7 +1152,7 @@ export const PremiumShowdown = () => {
                   <div className="flex gap-3">
                     <button 
                       onClick={() => setRegStep(1)}
-                      className="px-4 py-3.5 bg-white/5 hover:bg-white/10 text-white font-black uppercase text-xs rounded-xl border border-white/10 transition-all"
+                      className="px-4 py-3.5 bg-white hover:bg-slate-50 text-black font-black uppercase text-xs rounded-xl border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,1)] dark:bg-white/5 dark:text-white dark:border-white/10 dark:shadow-none transition-all cursor-pointer"
                     >
                       Back
                     </button>
@@ -1062,7 +1163,7 @@ export const PremiumShowdown = () => {
                         setRegPassToken(token);
                         setRegStep(3);
                       }}
-                      className="flex-1 py-3.5 bg-cyan-400 hover:bg-white text-black font-black uppercase text-xs rounded-xl shadow-[0_0_15px_rgba(0,240,255,0.2)] disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center justify-center gap-1 cursor-pointer"
+                      className="flex-1 py-3.5 bg-cyan-400 hover:bg-cyan-555 text-black border-2 border-black font-black uppercase text-xs rounded-xl shadow-[3px_3px_0px_rgba(0,0,0,1)] dark:shadow-[0_0_15px_rgba(0,240,255,0.2)] disabled:opacity-40 disabled:pointer-events-none transition-all flex items-center justify-center gap-1 cursor-pointer"
                     >
                       Generate Access Pass
                     </button>
@@ -1072,28 +1173,28 @@ export const PremiumShowdown = () => {
 
               {regStep === 3 && (
                 <div className="space-y-6 text-center">
-                  <div className="bg-green-500/10 border border-green-500/30 w-max mx-auto p-3 rounded-full shadow-[0_0_15px_rgba(34,197,94,0.15)] text-green-400 flex items-center justify-center">
+                  <div className="bg-green-550/10 border border-green-500/30 w-max mx-auto p-3 rounded-full shadow-[0_0_15px_rgba(34,197,94,0.15)] text-green-600 dark:text-green-400 flex items-center justify-center">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
 
                   <div>
-                    <h3 className="text-xl font-black uppercase text-green-400 tracking-wide font-display">LAN CORRIDOR GRANTED</h3>
-                    <p className="text-[10px] text-gray-400 mt-1 uppercase">Roster successfully validated for physical nodal access</p>
+                    <h3 className="text-xl font-black uppercase text-green-600 dark:text-green-400 tracking-wide font-display">LAN CORRIDOR GRANTED</h3>
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 uppercase font-bold">Roster successfully validated for physical nodal access</p>
                   </div>
 
                   {/* Pass Ticket Details Card */}
-                  <div className="bg-white/[0.02] border border-white/10 p-5 rounded-2xl space-y-4 text-left font-mono">
-                    <div className="flex justify-between border-b border-white/5 pb-2 text-[10px] uppercase font-bold text-gray-500">
+                  <div className="bg-slate-50 dark:bg-white/[0.02] border-2 border-black/10 dark:border-white/10 p-5 rounded-2xl space-y-4 text-left font-mono">
+                    <div className="flex justify-between border-b border-black/5 dark:border-white/5 pb-2 text-[10px] uppercase font-bold text-gray-550 dark:text-gray-500">
                       <span>Node Target</span>
-                      <span className="text-white font-black">{selectedCity}</span>
+                      <span className="text-[#1a1a1a] dark:text-white font-black">{selectedCity}</span>
                     </div>
-                    <div className="flex justify-between border-b border-white/5 pb-2 text-[10px] uppercase font-bold text-gray-500">
+                    <div className="flex justify-between border-b border-black/5 dark:border-white/5 pb-2 text-[10px] uppercase font-bold text-gray-550 dark:text-gray-500">
                       <span>Clan Team</span>
-                      <span className="text-cyan-400 font-black">{teamName} [{clanTag}]</span>
+                      <span className="text-purple-700 dark:text-cyan-400 font-black">{teamName} [{clanTag}]</span>
                     </div>
-                    <div className="flex justify-between border-b border-white/5 pb-2 text-[10px] uppercase font-bold text-gray-500">
+                    <div className="flex justify-between border-b border-black/5 dark:border-white/5 pb-2 text-[10px] uppercase font-bold text-gray-550 dark:text-gray-500">
                       <span>Nodal Pass Token</span>
-                      <span className="text-purple-400 font-black select-text">{regPassToken}</span>
+                      <span className="text-purple-700 dark:text-purple-400 font-black select-text">{regPassToken}</span>
                     </div>
                     
                     {/* Simulated QR Code SVG */}
@@ -1127,7 +1228,7 @@ export const PremiumShowdown = () => {
                       setRoster(['', '', '', '', '']);
                       setRegStep(1);
                     }}
-                    className="w-full py-3.5 bg-green-550 hover:bg-white border border-green-550 text-white hover:text-black font-black uppercase text-xs rounded-xl shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all cursor-pointer"
+                    className="w-full py-3.5 bg-green-500 hover:bg-green-600 border-2 border-black text-white hover:text-black font-black uppercase text-xs rounded-xl shadow-[3px_3px_0px_rgba(0,0,0,1)] dark:bg-green-550 dark:border-green-550 dark:shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all cursor-pointer"
                   >
                     Confirm & Dismiss Pass
                   </button>
