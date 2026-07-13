@@ -952,7 +952,7 @@ export const PremiumShowdown = () => {
             </div>
 
             {/* Plan 2: Challenger */}
-            <div className="bg-purple-50 dark:bg-purple-955/20 border-[3px] border-purple-600 rounded-3xl p-8 flex flex-col justify-between shadow-[8px_8px_0px_#7c3aed] dark:shadow-[0_15px_30px_rgba(124,58,237,0.2)] transition-all duration-300 relative overflow-hidden scale-105">
+            <div className="bg-purple-50 dark:bg-[#1e0a3c] border-[3px] border-purple-600 rounded-3xl p-8 flex flex-col justify-between shadow-[8px_8px_0px_#7c3aed] dark:shadow-[0_15px_30px_rgba(124,58,237,0.35)] transition-all duration-300 relative overflow-hidden scale-105">
               <div className="absolute top-0 right-0 bg-purple-600 text-white text-[8px] font-black uppercase px-4 py-1.5 rounded-bl-2xl tracking-widest font-mono">
                 RECOMMENDED
               </div>
@@ -988,7 +988,7 @@ export const PremiumShowdown = () => {
                   setRegStep(1);
                   setIsRegModalOpen(true);
                 }}
-                className="mt-8 w-full py-4 bg-purple-650 hover:bg-purple-700 text-white font-black uppercase text-xs tracking-wider transition-all rounded-xl cursor-pointer shadow-[3px_3px_0px_#1a1a1a] dark:shadow-none hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+                className="mt-8 w-full py-4 bg-purple-700 hover:bg-purple-800 text-white font-black uppercase text-xs tracking-wider transition-all rounded-xl cursor-pointer shadow-[3px_3px_0px_#1a1a1a] dark:shadow-none hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
               >
                 Engage Challenger Pass
               </button>
