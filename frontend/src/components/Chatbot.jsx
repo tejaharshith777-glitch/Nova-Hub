@@ -165,9 +165,13 @@ const Chatbot = ({ apiBaseUrl }) => {
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[400px] h-[500px] bg-white dark:bg-slate-900 text-[#1a1a1a] dark:text-white border-[3px] border-[#1a1a1a] dark:border-white/20 shadow-[8px_8px_0px_rgba(26,26,26,1)] dark:shadow-[8px_8px_0px_rgba(255,255,255,0.15)] rounded-2xl flex flex-col overflow-hidden font-mono"
           >
-            {/* Header */}
+            {/* Header — click logo area to close */}
             <div className="bg-[#1a1a1a] text-white p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsOpen(false)}
+                title="Click to close"
+                className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer text-left"
+              >
                 <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-1.5 rounded-lg border border-white/20">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
@@ -177,7 +181,7 @@ const Chatbot = ({ apiBaseUrl }) => {
                   </h3>
                   <p className="text-[10px] text-white/60">Powered by Gemini 2.5 Flash</p>
                 </div>
-              </div>
+              </button>
               <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1.5 rounded-md transition-colors">
                 <X className="w-5 h-5" />
               </button>
