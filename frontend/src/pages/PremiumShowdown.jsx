@@ -114,6 +114,7 @@ export const PremiumShowdown = () => {
   const horizontalScrollRef = useRef(null);
   const sectionPinRef = useRef(null);
   const dashboardSectionRef = useRef(null);
+  const canvasRef = useRef(null);
 
   // Selector states
   const [selectedCity, setSelectedCity] = useState('bengaluru');
@@ -122,6 +123,72 @@ export const PremiumShowdown = () => {
 
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
   const tileLayerRef = useRef(null);
+
+  // Falling blue/cyan particle snow animation loop
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
+    let width = canvas.width = canvas.offsetWidth || window.innerWidth;
+    let height = canvas.height = canvas.offsetHeight || window.innerHeight;
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = canvas.offsetWidth || window.innerWidth;
+      height = canvas.height = canvas.offsetHeight || window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const particles = [];
+    const particleCount = 100;
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 2.5 + 0.8,
+        vy: Math.random() * 1.5 + 0.5,
+        vx: Math.random() * 0.8 - 0.4
+      });
+    }
+
+    const draw = () => {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+      // Website theme-responsive cyan/blue particles
+      ctx.fillStyle = isDark ? 'rgba(6, 182, 212, 0.45)' : 'rgba(37, 99, 235, 0.4)';
+      ctx.beginPath();
+      for (let i = 0; i < particleCount; i++) {
+        const p = particles[i];
+        ctx.moveTo(p.x, p.y);
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+
+        // Update positions
+        p.y += p.vy;
+        p.x += p.vx;
+
+        // Reset when falling out of bounds
+        if (p.y > height) {
+          particles[i].x = Math.random() * width;
+          particles[i].y = -10;
+        }
+        if (p.x > width) {
+          particles[i].x = 0;
+        } else if (p.x < 0) {
+          particles[i].x = width;
+        }
+      }
+      ctx.fill();
+      animationId = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationId);
+    };
+  }, [isDark]);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -351,7 +418,20 @@ export const PremiumShowdown = () => {
       {/* Cyber Overlay Background Grid */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03] dark:opacity-10 transition-all duration-500 bg-[linear-gradient(rgba(18,18,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(18,18,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px]" />
            {/* SECTION 1: SYSTEM CALIBRATION GATE (Center Showcase) */}
-      <section className="relative z-10 min-h-[90vh] flex flex-col items-center justify-center text-center px-6">
+      <section className="relative z-10 min-h-[90vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+        {/* Sunlit Rolling Hills Background Image Backdrop (Cooldock style) */}
+        <div 
+          className="absolute inset-0 w-full h-full z-0 bg-cover bg-center transition-all duration-700 opacity-95 dark:opacity-40 select-none pointer-events-none mix-blend-multiply dark:mix-blend-normal"
+          style={{ 
+            backgroundImage: "url('/rolling_hills_hero.png')",
+          }}
+        />
+        {/* Soft bottom transition gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#c4e4e3] dark:to-[#040408] z-0 pointer-events-none transition-colors duration-500" />
+        
+        {/* Falling Blue/Cyan Snow Particles Canvas */}
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0 mix-blend-screen" />
+
         {/* target HUD brackets */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-l border-t border-purple-500/20 dark:border-cyan-500/20 pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[300px] border-r border-b border-purple-500/20 dark:border-purple-550/20 pointer-events-none" />
@@ -418,26 +498,26 @@ export const PremiumShowdown = () => {
         </div>
 
         {/* Center Main Text Typography Block */}
-        <div className="relative z-10 space-y-6 max-w-3xl">
-          <div className="inline-flex items-center gap-2 border border-purple-500/30 dark:border-cyan-500/30 px-4 py-1.5 rounded-full bg-purple-50 dark:bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-purple-700 dark:text-cyan-400 font-bold uppercase animate-pulse">
-            <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-cyan-400" /> Regional Node Registry: Active
+        <div className="relative z-10 space-y-6 max-w-4xl">
+          <div className="inline-flex items-center gap-2 border border-white/20 dark:border-cyan-500/30 px-4 py-1.5 rounded-full bg-white/15 dark:bg-cyan-950/20 backdrop-blur-md text-[9px] tracking-[0.3em] text-white dark:text-cyan-400 font-bold uppercase animate-pulse shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-white dark:text-cyan-400" /> Regional Node Registry: Active
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tight text-[#1a1a1a] dark:text-white font-display">
-            NOVA REGIONAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 dark:from-cyan-400 dark:via-purple-500 dark:to-pink-500">OFFICES</span>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] dark:drop-shadow-[0_4px_24px_rgba(0,240,255,0.15)] font-display leading-none select-none">
+            NOVA REGIONAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-white to-cyan-100 dark:from-cyan-400 dark:via-purple-400 dark:to-pink-400">OFFICES</span>
           </h1>
 
-          <p className="text-gray-700 dark:text-gray-400 text-xs md:text-sm font-mono tracking-wider max-w-2xl mx-auto uppercase">
+          <p className="text-white/95 dark:text-gray-300 text-xs md:text-sm font-mono tracking-wider max-w-2xl mx-auto uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] leading-relaxed">
             Initialize regional check-in sequence. Syncing offline registration offices and coordinator coordinates for team roster verification. Note: Offline offices do not conduct matches.
           </p>
 
           {/* Scroll Down Indicator */}
           <div className="pt-16 flex flex-col items-center justify-center gap-2">
-            <span className="text-[9px] font-bold text-purple-700 dark:text-cyan-400 uppercase tracking-[0.25em] animate-pulse">
+            <span className="text-[9px] font-bold text-white dark:text-cyan-400 uppercase tracking-[0.25em] animate-pulse drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
               Scroll to Engage Regional Registration Network
             </span>
-            <div className="w-6 h-10 border-2 border-purple-500/30 dark:border-cyan-500/30 rounded-full p-1 flex justify-center">
-              <div className="w-1.5 h-2.5 bg-purple-600 dark:bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]" />
+            <div className="w-6 h-10 border-2 border-white/30 dark:border-cyan-500/30 rounded-full p-1 flex justify-center backdrop-blur-sm">
+              <div className="w-1.5 h-2.5 bg-white dark:bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]" />
             </div>
           </div>
         </div>
