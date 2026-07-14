@@ -1212,7 +1212,7 @@ export const PremiumShowdown = () => {
                     </div>
                     
                     {/* Simulated QR Code SVG */}
-                    <div className="bg-white p-2 rounded-xl w-32 h-32 mx-auto">
+                    <div className="!bg-white p-2 rounded-xl w-32 h-32 mx-auto">
                       <svg className="w-full h-full text-black" viewBox="0 0 100 100" fill="currentColor">
                         <path d="M0,0 h30 v30 h-30 z M5,5 v20 h20 v-20 z M10,10 h10 v10 h-10 z" />
                         <path d="M70,0 h30 v30 h-30 z M75,5 v20 h20 v-20 z M80,10 h10 v10 h-10 z" />

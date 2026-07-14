@@ -356,9 +356,9 @@ const TournamentDetails = ({ user }) => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white border-[3px] border-[#1a1a1a] rounded-[2rem] p-8 shadow-[8px_8px_0px_rgba(26,26,26,1)] sticky top-32"
+              className="bg-white dark:bg-[#121420] border-[3px] border-[#1a1a1a] dark:border-white/20 rounded-[2rem] p-8 shadow-[8px_8px_0px_rgba(26,26,26,1)] dark:shadow-[8px_8px_0px_rgba(255,255,255,0.15)] text-[#1a1a1a] dark:text-white sticky top-32 transition-colors"
             >
-              <div className="flex items-center gap-3 mb-8 pb-6 border-b-2 border-[#1a1a1a]/10">
+              <div className="flex items-center gap-3 mb-8 pb-6 border-b-2 border-[#1a1a1a]/10 dark:border-white/10">
                 <Trophy className="w-6 h-6 text-yellow-500" />
                 <h2 className="text-xl font-display italic font-bold">Past Winners</h2>
               </div>
@@ -366,15 +366,15 @@ const TournamentDetails = ({ user }) => {
               <div className="space-y-6">
                 {data.pastTournaments.map((past, idx) => (
                   <div key={idx} className="group relative">
-                    <div className="text-[10px] font-mono text-[#1a1a1a]/50 uppercase tracking-widest mb-2">{past.name} • {past.date}</div>
-                    <div className="bg-gray-50 border-2 border-[#1a1a1a]/10 rounded-xl p-4 group-hover:border-[#1a1a1a] group-hover:bg-[#fcebb6]/30 transition-colors">
+                    <div className="text-[10px] font-mono text-[#1a1a1a]/50 dark:text-white/50 uppercase tracking-widest mb-2">{past.name} • {past.date}</div>
+                    <div className="bg-gray-50 dark:bg-[#0f111a] border-2 border-[#1a1a1a]/10 dark:border-white/10 rounded-xl p-4 group-hover:border-[#1a1a1a] dark:group-hover:border-white/30 group-hover:bg-[#fcebb6]/30 dark:group-hover:bg-yellow-900/10 transition-colors">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-bold text-[#1a1a1a]/60">Winner</span>
-                        <span className="font-bold font-display text-[#1a1a1a]">{past.winner} 🏆</span>
+                        <span className="text-xs font-bold text-[#1a1a1a]/60 dark:text-white/60">Winner</span>
+                        <span className="font-bold font-display text-[#1a1a1a] dark:text-white">{past.winner} 🏆</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs font-bold text-[#1a1a1a]/60">Runner Up</span>
-                        <span className="font-bold text-[#1a1a1a]/80 text-sm">{past.runnerUp}</span>
+                        <span className="text-xs font-bold text-[#1a1a1a]/60 dark:text-white/60">Runner Up</span>
+                        <span className="font-bold text-[#1a1a1a]/80 dark:text-white/80 text-sm">{past.runnerUp}</span>
                       </div>
                     </div>
                   </div>

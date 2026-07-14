@@ -193,7 +193,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
             {/* Interactive Mock QR Code */}
             <div 
               onClick={simulatePayment}
-              className="relative w-44 h-44 mx-auto bg-white border-[3px] border-black p-3 shadow-[4px_4px_0px_rgba(26,26,26,1)] overflow-hidden flex items-center justify-center group cursor-pointer"
+              className="relative w-44 h-44 mx-auto !bg-white border-[3px] border-black p-3 shadow-[4px_4px_0px_rgba(26,26,26,1)] overflow-hidden flex items-center justify-center group cursor-pointer"
               title="Click QR Code to Pay"
             >
               {/* Moving scanner laser line */}
@@ -301,7 +301,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
                   type="text"
                   readOnly
                   value={`${window.location.origin}/tournament/${tournament._id}?invite=${inviteToken}`}
-                  className="w-full bg-gray-50 border border-black/15 py-1 px-2.5 text-xs outline-none font-semibold truncate select-text"
+                  className="w-full bg-gray-50 dark:!bg-slate-900 border border-black/15 dark:border-white/10 py-1.5 px-2.5 text-xs outline-none font-semibold truncate select-text text-slate-800 dark:!text-slate-200"
                 />
                 <button
                   onClick={() => handleCopyLink(inviteToken)}
@@ -374,7 +374,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
       <form onSubmit={handleRegisterClick} className="space-y-8">
         
         {/* SQUAD METADATA */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-b-[2px] border-black/10 pb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-b-[2px] border-black/10 dark:border-white/10 pb-6">
           <div className="flex flex-col gap-2">
             <label htmlFor="teamName" className="text-[10px] font-bold uppercase opacity-80">Clan Team Name *</label>
             <input
@@ -385,7 +385,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
               placeholder="e.g. Bangalore Strikers"
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
-              className="w-full border-b-[3px] border-black bg-transparent outline-none py-1.5 font-mono text-sm font-bold placeholder-[#1a1a1a]/40"
+              className="w-full border-b-[3px] border-black dark:border-white/30 bg-transparent outline-none py-1.5 font-mono text-sm font-bold !text-[#1a1a1a] dark:!text-[#f3f4f6] placeholder-black/40 dark:placeholder-white/40"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -398,7 +398,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
               placeholder="e.g. Dev R."
               value={captainName}
               onChange={(e) => setCaptainName(e.target.value)}
-              className="w-full border-b-[3px] border-black bg-transparent outline-none py-1.5 font-mono text-sm font-bold placeholder-[#1a1a1a]/40"
+              className="w-full border-b-[3px] border-black dark:border-white/30 bg-transparent outline-none py-1.5 font-mono text-sm font-bold !text-[#1a1a1a] dark:!text-[#f3f4f6] placeholder-black/40 dark:placeholder-white/40"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -411,23 +411,23 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
               placeholder="e.g. cap@novahub.com"
               value={captainEmail}
               onChange={(e) => setCaptainEmail(e.target.value)}
-              className="w-full border-b-[3px] border-black bg-transparent outline-none py-1.5 font-mono text-sm font-bold placeholder-[#1a1a1a]/40"
+              className="w-full border-b-[3px] border-black dark:border-white/30 bg-transparent outline-none py-1.5 font-mono text-sm font-bold !text-[#1a1a1a] dark:!text-[#f3f4f6] placeholder-black/40 dark:placeholder-white/40"
             />
           </div>
         </div>
 
         {/* PLAYER SLOTS */}
         <div>
-          <span className="text-[10px] font-bold uppercase text-black/60 block mb-4">Player Roster Slots ({teamSize} required)</span>
+          <span className="text-[10px] font-bold uppercase text-black/60 dark:text-white/60 block mb-4">Player Roster Slots ({teamSize} required)</span>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {roster.map((member, idx) => (
-              <div key={idx} className="bg-white/40 border-2 border-black p-4 rounded-xl flex flex-col gap-2 relative">
-                <span className="absolute -top-3 -left-2.5 bg-white border border-black text-[9px] font-black uppercase px-2 shadow-[1px_1px_0px_rgba(26,26,26,1)]">
+              <div key={idx} className="bg-white/40 dark:bg-black/30 border-2 border-black dark:border-white/20 p-4 rounded-xl flex flex-col gap-2 relative">
+                <span className="absolute -top-3 -left-2.5 bg-white dark:bg-slate-900 border border-black dark:border-white/20 text-[9px] font-black uppercase px-2 shadow-[1px_1px_0px_rgba(26,26,26,1)] dark:shadow-[1px_1px_0px_rgba(255,255,255,0.1)]">
                   Slot #{idx + 1}
                 </span>
                 
                 <div className="flex flex-col gap-1 mt-1.5">
-                  <label htmlFor={`member-name-${idx}`} className="text-[9px] font-black uppercase opacity-60">Player Name</label>
+                  <label htmlFor={`member-name-${idx}`} className="text-[9px] font-black uppercase text-[#1a1a1a]/60 dark:text-white/60">Player Name</label>
                   <input
                     id={`member-name-${idx}`}
                     name={`memberName-${idx}`}
@@ -436,12 +436,12 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
                     placeholder="Full Name"
                     value={member.name}
                     onChange={(e) => handleMemberChange(idx, 'name', e.target.value)}
-                    className="bg-transparent border-b border-black outline-none font-mono text-xs font-bold"
+                    className="bg-transparent border-b border-black dark:border-white/30 outline-none font-mono text-xs font-bold !text-[#1a1a1a] dark:!text-[#f3f4f6] placeholder-black/40 dark:placeholder-white/40"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1 mt-1">
-                  <label htmlFor={`member-gameId-${idx}`} className="text-[9px] font-black uppercase opacity-60">
+                  <label htmlFor={`member-gameId-${idx}`} className="text-[9px] font-black uppercase text-[#1a1a1a]/60 dark:text-white/60">
                     {isEsports ? 'Game ID / Handle' : 'Player Card ID / Roll'}
                   </label>
                   <input
@@ -452,7 +452,7 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
                     placeholder="e.g. Gamer#1337"
                     value={member.gameId}
                     onChange={(e) => handleMemberChange(idx, 'gameId', e.target.value)}
-                    className="bg-transparent border-b border-black outline-none font-mono text-xs font-bold"
+                    className="bg-transparent border-b border-black dark:border-white/30 outline-none font-mono text-xs font-bold !text-[#1a1a1a] dark:!text-[#f3f4f6] placeholder-black/40 dark:placeholder-white/40"
                   />
                 </div>
               </div>
