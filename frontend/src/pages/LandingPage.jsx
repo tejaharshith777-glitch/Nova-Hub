@@ -136,10 +136,76 @@ const mockSportsList = [
   { id: '5', title: 'Local Tennis League', type: 'Tennis', slots: '4/8 Slots Taken', fee: '₹1,200', venue: 'KSLTA Court 3', bg: '#dcfce7' }
 ];
 
+const FAQ_ITEMS = [
+  {
+    id: "faq1",
+    question: "What is Nova Hub?",
+    answer: "Nova Hub is a unified community sports and esports dashboard built for tournament discovery, real-time brackets, team registration, and player stats."
+  },
+  {
+    id: "faq2",
+    question: "Is Nova Hub free to use?",
+    answer: "Yes, Nova Hub is free for players to explore events, register rosters, and track matches. Tournament hosts can access premium administration dashboards."
+  },
+  {
+    id: "faq3",
+    question: "Does Nova Hub organize physical tournaments?",
+    answer: "Yes, we coordinate local sports bookings, manage offline check-ins, and schedule matches at physical arenas, turf zones, and esports centers."
+  },
+  {
+    id: "faq4",
+    question: "Does Nova Hub need special permissions?",
+    answer: "We only request standard authentication for team captains and optional location access to show local physical tournament radars near you."
+  },
+  {
+    id: "faq5",
+    question: "What can I add to my team roster?",
+    answer: "You can add 3-5 active player handles, game IDs, or physical student/player card IDs depending on the tournament's specific guidelines."
+  },
+  {
+    id: "faq6",
+    question: "Can I customize my hosted tournament?",
+    answer: "Absolutely! Hosts can define custom bracket types (single/double elimination), set entry fees, write custom guidelines, and schedule match times."
+  },
+  {
+    id: "faq7",
+    question: "Can I register my clan under multiple sports?",
+    answer: "Yes, you can register different rosters under the same clan/team name for football, cricket, basketball, or online esports leagues."
+  },
+  {
+    id: "faq8",
+    question: "Does Nova Hub sync brackets in real-time?",
+    answer: "Yes, match scores, standings, and automated bracket advancements are synced live to player radars, dashboards, and streams instantly."
+  },
+  {
+    id: "faq9",
+    question: "Which games and sports are supported?",
+    answer: "We support physical sports (Cricket, Football, Badminton, Basketball) and major esports platforms (Valorant, BGMI, Free Fire, and general PC/Mobile gaming)."
+  },
+  {
+    id: "faq10",
+    question: "Can I check-in offline with a digital pass?",
+    answer: "Yes! Each successful registration generates a unique Roster Verification Pass with a QR code and gate details for seamless physical entry."
+  },
+  {
+    id: "faq11",
+    question: "Is my player data and handle private?",
+    answer: "Roster details and verification tokens are encrypted, ensuring only tournament admins and team captains have access to invite codes."
+  },
+  {
+    id: "faq12",
+    question: "Will more tournament templates be added?",
+    answer: "Yes, custom round-robin templates, league standings boards, and automated team coordinator notifications are actively in development."
+  }
+];
+
 export const LandingPage = ({ onOpenAuth, user }) => {
   const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('WELCOME');
+  const [openFaq, setOpenFaq] = useState({});
+
+  const toggleFaq = (id) => setOpenFaq(prev => ({ ...prev, [id]: !prev[id] }));
 
   const servicesContainerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -174,6 +240,7 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         { id: 'journey', name: 'START JOURNEY' },
         { id: 'team', name: 'THE TEAM' },
         { id: 'case-study', name: 'CASE STUDY' },
+        { id: 'faq', name: 'FAQ' },
         { id: 'testimonials', name: 'REVIEWS' },
         { id: 'contact', name: 'CONTACT DESK' },
         { id: 'services', name: 'OUR SERVICES' }
@@ -962,6 +1029,79 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           FRAME 5.5: FEATURED CAROUSEL + GAMING BRANDS
          ========================================== */}
       <FeaturedCarousel />
+
+      {/* ==========================================
+          FRAME 5.8: FREQUENTLY ASKED QUESTIONS (FAQ)
+         ========================================== */}
+      <section id="faq" className="py-24 max-w-6xl mx-auto px-8 relative z-10 border-t border-[#1a1a1a]/10">
+        <div className="text-center mb-16">
+          <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 dark:text-white/50 mb-3">
+            <span className="w-5 h-[2px] bg-[#1a1a1a]/30 dark:bg-white/30 inline-block" />FAQ
+          </span>
+          <h2 className="text-4xl md:text-5xl font-black italic font-display text-[#1a1a1a] dark:text-white mb-6 leading-tight">
+            Frequently Asked <span className="text-[#e86c3f]">Questions</span>
+          </h2>
+          <p className="text-xs font-mono text-[#1a1a1a]/70 dark:text-white/70 uppercase tracking-widest max-w-2xl mx-auto leading-relaxed">
+            Everything you need to know about Nova Hub, your useful community dashboard for local events, brackets, and team registrations.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Column 1 */}
+          <div className="space-y-4">
+            {FAQ_ITEMS.slice(0, 6).map((item) => (
+              <div 
+                key={item.id} 
+                className="bg-white dark:bg-[#121420] border-[3px] border-[#1a1a1a] dark:border-white/20 rounded-2xl p-5 shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_rgba(26,26,26,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,0.15)] cursor-pointer"
+                onClick={() => toggleFaq(item.id)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 shrink-0 rounded-md bg-[#1a1a1a] dark:bg-white/10 text-white flex items-center justify-center font-bold text-xs select-none">
+                    <span className={`transition-transform duration-300 inline-block font-sans font-bold text-base ${openFaq[item.id] ? 'rotate-[135deg] text-yellow-400' : 'rotate-0'}`}>
+                      +
+                    </span>
+                  </div>
+                  <h3 className="font-display font-bold text-sm md:text-base text-[#1a1a1a] dark:text-white select-none">
+                    {item.question}
+                  </h3>
+                </div>
+                {openFaq[item.id] && (
+                  <p className="mt-4 text-xs md:text-sm font-mono text-[#1a1a1a]/85 dark:text-white/85 border-t border-[#1a1a1a]/10 dark:border-white/10 pt-4 leading-relaxed animate-slide-in">
+                    {item.answer}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Column 2 */}
+          <div className="space-y-4">
+            {FAQ_ITEMS.slice(6).map((item) => (
+              <div 
+                key={item.id} 
+                className="bg-white dark:bg-[#121420] border-[3px] border-[#1a1a1a] dark:border-white/20 rounded-2xl p-5 shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_rgba(26,26,26,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,0.15)] cursor-pointer"
+                onClick={() => toggleFaq(item.id)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 shrink-0 rounded-md bg-[#1a1a1a] dark:bg-white/10 text-white flex items-center justify-center font-bold text-xs select-none">
+                    <span className={`transition-transform duration-300 inline-block font-sans font-bold text-base ${openFaq[item.id] ? 'rotate-[135deg] text-yellow-400' : 'rotate-0'}`}>
+                      +
+                    </span>
+                  </div>
+                  <h3 className="font-display font-bold text-sm md:text-base text-[#1a1a1a] dark:text-white select-none">
+                    {item.question}
+                  </h3>
+                </div>
+                {openFaq[item.id] && (
+                  <p className="mt-4 text-xs md:text-sm font-mono text-[#1a1a1a]/85 dark:text-white/85 border-t border-[#1a1a1a]/10 dark:border-white/10 pt-4 leading-relaxed animate-slide-in">
+                    {item.answer}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ==========================================
           FRAME 6: TESTIMONIALS
