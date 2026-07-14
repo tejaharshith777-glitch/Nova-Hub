@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useJsApiLoader, GoogleMap, MarkerF, InfoWindowF } from '@react-google-maps/api';
 import { MapPin, Compass, Trophy, Navigation, ShieldAlert, Award, Globe, Users } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Pastel color classes list for cards
 const pastelBgClasses = ['bg-[#baffc9]', 'bg-[#ffdfba]', 'bg-[#cffafe]', 'bg-[#ffb3ba]', 'bg-[#fcebb6]', 'bg-[#fce4fb]'];
@@ -102,6 +103,7 @@ const MOCK_TOURNAMENTS = [
 ];
 
 export const TournamentRadar = () => {
+  const navigate = useNavigate();
   const [coords, setCoords] = useState({ latitude: 12.9784, longitude: 77.5960 }); // Default Bangalore
   const [locationName, setLocationName] = useState('Bangalore (Default Coords)');
   const [geoLoading, setGeoLoading] = useState(true);
@@ -110,6 +112,51 @@ export const TournamentRadar = () => {
   const [radius, setRadius] = useState(100); // Default radius filter is 100km
   const [selectedPin, setSelectedPin] = useState(null);
   const [mapCenter, setMapCenter] = useState({ lat: 12.9784, lng: 77.5960 });
+  const [dbTournaments, setDbTournaments] = useState([]);
+
+  useEffect(() => {
+    const fetchDbTournaments = async () => {
+      const apiBaseUrl = import.meta.env.VITE_API_URL || '';
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/tournaments`);
+        if (res.ok) {
+          const data = await res.json();
+          // Transform db tournaments to fit radar pins
+          const mapped = data.map((t) => {
+            // Give them realistic coordinates around Bangalore if not set
+            const baseLat = 12.9784;
+            const baseLng = 77.5960;
+            // Generate deterministic coords based on title hash so they stay in the same place
+            let hash = 0;
+            for (let i = 0; i < t.title.length; i++) {
+              hash = t.title.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const offsetLat = ((hash % 100) / 1000) * (hash > 0 ? 1 : -1);
+            const offsetLng = (((hash >> 4) % 100) / 1000) * (hash > 0 ? -1 : 1);
+
+            return {
+              id: t._id,
+              title: t.title,
+              gameName: t.gameName,
+              venueType: t.venueType,
+              venueAddress: t.venueType === 'offline' ? (t.venueDetails?.physicalAddress || 'Ground Venue') : 'Online Server',
+              latitude: t.venueType === 'offline' ? (t.venueDetails?.latitude || (baseLat + offsetLat)) : null,
+              longitude: t.venueType === 'offline' ? (t.venueDetails?.longitude || (baseLng + offsetLng)) : null,
+              entryFee: t.entryFee || 0,
+              prizePool: t.prizePool || 0,
+              slotsFilled: t.registeredTeams?.length || 0,
+              maxSlots: t.maxTeams,
+              isDynamic: true
+            };
+          });
+          setDbTournaments(mapped);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch database tournaments for radar:", err);
+      }
+    };
+    fetchDbTournaments();
+  }, []);
 
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
@@ -151,7 +198,7 @@ export const TournamentRadar = () => {
   }, []);
 
   // Calculate distances and process tournaments
-  const processedTournaments = MOCK_TOURNAMENTS.map((t) => {
+  const processedTournaments = [...dbTournaments, ...MOCK_TOURNAMENTS].map((t) => {
     if (t.venueType === 'online') {
       return { ...t, distance: 0 }; // Online has no physical distance
     }
@@ -313,10 +360,16 @@ export const TournamentRadar = () => {
                       <h4 className="font-black uppercase border-b border-[#1a1a1a]/20 pb-1 mb-1.5">{selectedPin.title}</h4>
                       <p className="font-bold opacity-80 mb-1">{selectedPin.gameName} Tournament</p>
                       <p className="opacity-60 mb-2">{selectedPin.venueAddress}</p>
-                      <div className="flex justify-between font-black text-red-500">
+                      <div className="flex justify-between font-black text-red-500 mb-2">
                         <span>Distance:</span>
                         <span>{selectedPin.distance ? `${selectedPin.distance.toFixed(1)} km` : 'TBD'}</span>
                       </div>
+                      <button 
+                        onClick={() => navigate(`/tournament/${selectedPin.id}`)}
+                        className="w-full py-1.5 bg-yellow-200 hover:bg-yellow-300 text-black border border-black font-black uppercase text-[9px] rounded shadow-[1px_1px_0px_rgba(0,0,0,1)] text-center cursor-pointer"
+                      >
+                        View Details
+                      </button>
                     </div>
                   </InfoWindowF>
                 )}
@@ -458,6 +511,7 @@ export const TournamentRadar = () => {
 
                   <button 
                     disabled={isFull}
+                    onClick={() => navigate(`/tournament/${t.id}`)}
                     className={`w-full py-2.5 rounded-xl border-[2.5px] border-[#1a1a1a] font-black text-[10px] uppercase shadow-[2.5px_2.5px_0px_rgba(26,26,26,1)] hover:shadow-none hover:translate-x-[2.5px] hover:translate-y-[2.5px] transition-all cursor-pointer ${
                       isFull 
                         ? 'bg-[#1a1a1a]/10 text-[#1a1a1a]/30 shadow-none cursor-not-allowed translate-x-[2.5px] translate-y-[2.5px]'

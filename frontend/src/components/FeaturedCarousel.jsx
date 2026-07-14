@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -84,7 +84,7 @@ const FeatureCard = ({ card, navigate }) => (
         <button 
           onClick={() => navigate(`/tournament/${ROUTE_MAP[card.id] || card.id}`)}
           className="text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg hover:scale-105 transition-all relative" 
-          style={{ background: card.accent, color:"#fff" }}
+          style={{ background: card.accent, color:"#090d16" }}
         >
           {card.cta}
         </button>
@@ -100,10 +100,74 @@ export const FeaturedCarousel = () => {
   const dragStartX = useRef(0);
   const dragScrollLeft = useRef(0);
 
+  const [liveCards, setLiveCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLiveTournaments = async () => {
+      const apiBaseUrl = import.meta.env.VITE_API_URL || '';
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/tournaments`);
+        if (res.ok) {
+          const tournaments = await res.json();
+          // Transform db tournaments to Featured Cards shape
+          const categoryColors = {
+            esports: { gradient: 'linear-gradient(135deg,#2d1b69,#1a0a3e)', accent: '#c084fc', emoji: '🎮' },
+            sports: { gradient: 'linear-gradient(135deg,#1e3a5f,#0a2240)', accent: '#4fc3f7', emoji: '⚽' },
+            racing: { gradient: 'linear-gradient(135deg,#3b0000,#1a0000)', accent: '#f87171', emoji: '🏎️' },
+            academic: { gradient: 'linear-gradient(135deg,#0a2e1a,#163b20)', accent: '#4ade80', emoji: '🎓' }
+          };
+
+          const dynamicCards = tournaments.map((t) => {
+            const colors = categoryColors[t.category] || { gradient: 'linear-gradient(135deg,#1a1a1a,#2d2d2d)', accent: '#e86c3f', emoji: '🏆' };
+            const spotOccupied = t.registeredTeams?.length || 0;
+            const spotsRemaining = t.maxTeams - spotOccupied;
+            
+            // Pick image based on category or game
+            let cardImage = "/college_esports_card.png";
+            if (t.gameName?.toLowerCase().includes("cricket")) cardImage = "/cricket_card.jpg";
+            else if (t.gameName?.toLowerCase().includes("foot")) cardImage = "/football_card.jpg";
+            else if (t.gameName?.toLowerCase().includes("val")) cardImage = "/valorant_card.png";
+            else if (t.gameName?.toLowerCase().includes("apex")) cardImage = "/veloce_card.png";
+            else if (t.gameName?.toLowerCase().includes("basket") || t.gameName?.toLowerCase().includes("hoop")) cardImage = "/basketball_card.png";
+            else if (t.gameName?.toLowerCase().includes("pubg") || t.gameName?.toLowerCase().includes("bgmi")) cardImage = "/pubg_card.png";
+            else if (t.gameName?.toLowerCase().includes("cycle")) cardImage = "/cycle_card.jpg";
+            else if (t.gameName?.toLowerCase().includes("free")) cardImage = "/freefire_card.jpg";
+            else if (t.gameName?.toLowerCase().includes("bike") || t.gameName?.toLowerCase().includes("moto")) cardImage = "/motogp_card.png";
+
+            return {
+              id: t._id,
+              badge: t.venueType === 'online' ? 'Online' : 'Offline',
+              gradient: colors.gradient,
+              accent: colors.accent,
+              emoji: colors.emoji,
+              sport: t.gameName,
+              title: t.title,
+              subtitle: `Format: ${t.format} · Slots left: ${spotsRemaining}/${t.maxTeams}`,
+              meta: `Prize Pool: ₹${t.prizePool} · Entry: ${t.entryFee === 0 ? 'FREE' : `₹${t.entryFee}`}`,
+              cta: t.status === 'open' ? 'Register Now' : t.status.toUpperCase(),
+              spots: `${spotOccupied}/${t.maxTeams} Slots`,
+              image: cardImage,
+              isDynamic: true
+            };
+          });
+          setLiveCards(dynamicCards);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch live tournaments for carousel:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLiveTournaments();
+  }, []);
+
   const scrollBy = (dir) => { if (trackRef.current) trackRef.current.scrollBy({ left: dir * 288, behavior:"smooth" }); };
   const onMouseDown = (e) => { isDragging.current = true; dragStartX.current = e.pageX - trackRef.current.offsetLeft; dragScrollLeft.current = trackRef.current.scrollLeft; if (trackRef.current) trackRef.current.style.cursor = "grabbing"; };
   const onMouseMove = (e) => { if (!isDragging.current) return; e.preventDefault(); const x = e.pageX - trackRef.current.offsetLeft; trackRef.current.scrollLeft = dragScrollLeft.current - (x - dragStartX.current); };
   const stopDrag = () => { isDragging.current = false; if (trackRef.current) trackRef.current.style.cursor = "grab"; };
+
+  const allCards = [...liveCards, ...FEATURED_CARDS];
 
   return (
     <section className="py-20 relative z-10 overflow-hidden border-t border-[#1a1a1a]/10">
@@ -111,7 +175,7 @@ export const FeaturedCarousel = () => {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
             <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1a1a1a]/50 mb-3">
-              <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />Featured Tournaments
+              <span className="w-5 h-[2px] bg-[#1a1a1a]/30 inline-block" />Featured & Live Tournaments
             </span>
             <h2 className="text-4xl md:text-5xl font-black italic text-[#1a1a1a] leading-tight font-display">
               <span className="text-[#e86c3f]">Featured</span> on Nova Hub
@@ -128,7 +192,7 @@ export const FeaturedCarousel = () => {
       </div>
 
       <div ref={trackRef} className="flex gap-5 overflow-x-auto hide-scrollbar pl-6 md:pl-8 pr-6 pb-4 select-none" style={{ cursor:"grab", scrollSnapType:"x mandatory" }} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={stopDrag} onMouseLeave={stopDrag}>
-        {FEATURED_CARDS.map((card) => (<div key={card.id} style={{ scrollSnapAlign:"start" }}><FeatureCard card={card} navigate={navigate} /></div>))}
+        {allCards.map((card, index) => (<div key={card.id || index} style={{ scrollSnapAlign:"start" }}><FeatureCard card={card} navigate={navigate} /></div>))}
         <div className="flex-shrink-0 w-2" />
       </div>
 
