@@ -964,20 +964,20 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                     <div className="flex flex-col gap-8 text-left">
                       {/* Section 1: Playing History */}
                       <div>
-                        <h3 className="text-lg font-black uppercase mb-4 flex items-center gap-2 border-b-2 border-black pb-2 text-black dark:text-white">
+                        <h3 className="text-lg font-black uppercase mb-4 flex items-center gap-2 border-b-2 border-[#1a1a1a] dark:border-white/10 pb-2 text-[#1a1a1a] dark:text-white">
                           <Trophy className="w-5 h-5 text-yellow-500" /> Games Registered & Paid (To Play)
                         </h3>
 
                         {joinedGames.length === 0 ? (
-                          <div className="bg-[#bde3fb] border-[3px] border-black p-6 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] text-center">
-                            <p className="text-xs font-bold text-black opacity-75">You have not registered for any upcoming games as a player yet.</p>
+                          <div className="bg-[#bde3fb] dark:bg-[#0b1a29]/80 border-[3px] border-[#1a1a1a] dark:border-white/15 p-6 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-none text-center">
+                            <p className="text-xs font-bold text-[#1a1a1a]/80 dark:text-white/80">You have not registered for any upcoming games as a player yet.</p>
                           </div>
                         ) : (
                           <div className="grid grid-cols-1 gap-4">
                             {joinedGames.map((t, idx) => (
                               <div 
                                 key={t._id || idx}
-                                className="bg-white hover:bg-yellow-50 border-[3px] border-black p-5 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer text-black"
+                                className="bg-white dark:bg-[#121420] hover:bg-yellow-50 dark:hover:bg-yellow-950/20 border-[3px] border-[#1a1a1a] dark:border-white/10 p-5 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-none flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer text-[#1a1a1a] dark:text-[#f3f4f6]"
                                 onClick={() => navigate(`/tournament/${t._id}`)}
                               >
                                 <div>
@@ -997,7 +997,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); navigate(`/tournament/${t._id}`); }}
-                                  className="bg-yellow-200 hover:bg-yellow-300 border-2 border-black px-4 py-2 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all interactive-target cursor-pointer"
+                                  className="bg-yellow-200 hover:bg-yellow-300 border-2 border-[#1a1a1a] px-4 py-2 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all interactive-target cursor-pointer text-slate-950"
                                 >
                                   Enter Lobby
                                 </button>
@@ -1009,20 +1009,20 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
                       {/* Section 2: Hosting History */}
                       <div>
-                        <h3 className="text-lg font-black uppercase mb-4 flex items-center gap-2 border-b-2 border-black pb-2 text-black dark:text-white">
+                        <h3 className="text-lg font-black uppercase mb-4 flex items-center gap-2 border-b-2 border-[#1a1a1a] dark:border-white/10 pb-2 text-[#1a1a1a] dark:text-white">
                           <Zap className="w-5 h-5 text-purple-500 animate-pulse" /> Tournaments Hosted By Me
                         </h3>
 
                         {hostedGames.length === 0 ? (
-                          <div className="bg-[#fce4fb] border-[3px] border-black p-6 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] text-center">
-                            <p className="text-xs font-bold text-black opacity-75">You have not hosted or created any event listings yet.</p>
+                          <div className="bg-[#fce4fb] dark:bg-[#271026]/80 border-[3px] border-[#1a1a1a] dark:border-white/15 p-6 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-none text-center">
+                            <p className="text-xs font-bold text-[#1a1a1a]/80 dark:text-white/80">You have not hosted or created any event listings yet.</p>
                           </div>
                         ) : (
                           <div className="grid grid-cols-1 gap-4">
                             {hostedGames.map((t, idx) => (
                               <div 
                                 key={t._id || idx}
-                                className="bg-white hover:bg-purple-50 border-[3px] border-black p-5 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer text-black"
+                                className="bg-white dark:bg-[#121420] hover:bg-purple-50 dark:hover:bg-purple-950/20 border-[3px] border-[#1a1a1a] dark:border-white/10 p-5 rounded-2xl shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-none flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer text-[#1a1a1a] dark:text-[#f3f4f6]"
                                 onClick={() => navigate(`/tournament/${t._id}`)}
                               >
                                 <div>
@@ -1040,7 +1040,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); navigate(`/tournament/${t._id}`); }}
-                                  className="bg-purple-500 hover:bg-purple-600 text-white border-2 border-black px-4 py-2 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all interactive-target cursor-pointer"
+                                  className="bg-purple-500 hover:bg-purple-600 text-white border-2 border-[#1a1a1a] px-4 py-2 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all interactive-target cursor-pointer"
                                 >
                                   Manage Brackets
                                 </button>

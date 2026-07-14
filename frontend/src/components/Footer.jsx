@@ -225,7 +225,7 @@ const Footer = () => {
 
         {/* Bottom fade out */}
         <div
-          className="absolute bottom-0 left-0 w-full pointer-events-none"
+          className="absolute bottom-0 left-0 w-full pointer-events-none dark:hidden"
           style={{
             zIndex: 5,
             height: '48px',

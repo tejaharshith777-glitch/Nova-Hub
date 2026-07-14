@@ -105,6 +105,28 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get specific tournament details
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // MOCK DB MODE
+    if (process.env.USE_MOCK_DB === 'true') {
+      const tournament = tournamentsDb.find(t => t._id === id);
+      if (!tournament) return res.status(404).json({ message: 'Tournament not found' });
+      return res.status(200).json(tournament);
+    }
+
+    // MONGOOSE DB FLOW
+    const tournament = await Tournament.findById(id).populate('hostId', 'username email');
+    if (!tournament) return res.status(404).json({ message: 'Tournament not found' });
+
+    res.status(200).json(tournament);
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving tournament details', error: err.message });
+  }
+});
+
 // Get tournament matches
 router.get('/:id/matches', async (req, res) => {
   try {

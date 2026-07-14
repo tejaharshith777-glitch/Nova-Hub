@@ -321,16 +321,16 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
 
             {/* Venue & Lobby credentials */}
             <div className="bg-yellow-100 border-[3px] border-[#1a1a1a] p-6 shadow-[4px_4px_0px_rgba(26,26,26,1)] rounded-xl space-y-2">
-              <span className="text-[10px] font-black uppercase text-yellow-700 block">Match Gateway Pass</span>
+              <span className="text-[10px] font-black uppercase text-yellow-700 dark:text-yellow-400 block">Match Gateway Pass</span>
               {successData.venuePass?.type === 'online' ? (
                 <div className="text-xs space-y-1">
-                  <p className="font-bold flex items-center gap-1.5"><Globe className="w-4 h-4 text-blue-500" /> Server Region: <span className="font-black text-black">{successData.venuePass.region}</span></p>
+                  <p className="font-bold flex items-center gap-1.5"><Globe className="w-4 h-4 text-blue-500" /> Server Region: <span className="font-black text-[#1a1a1a]">{successData.venuePass.region}</span></p>
                   <p className="font-bold">Lobby Code: <span className="font-black text-red-500 select-text">{successData.venuePass.code}</span></p>
                 </div>
               ) : (
                 <div className="text-xs space-y-1">
-                  <p className="font-bold flex items-center gap-1.5"><MapPin className="w-4 h-4 text-red-500" /> Physical Venue: <span className="font-black text-black">{successData.venuePass.address}</span></p>
-                  <p className="font-bold">Stadium Gate / Hall: <span className="font-black text-black">{successData.venuePass.room}</span></p>
+                  <p className="font-bold flex items-center gap-1.5"><MapPin className="w-4 h-4 text-red-500" /> Physical Venue: <span className="font-black text-[#1a1a1a]">{successData.venuePass.address}</span></p>
+                  <p className="font-bold">Stadium Gate / Hall: <span className="font-black text-[#1a1a1a]">{successData.venuePass.room}</span></p>
                 </div>
               )}
             </div>

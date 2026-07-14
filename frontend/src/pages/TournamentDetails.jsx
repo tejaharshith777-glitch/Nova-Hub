@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Activity, Trophy, CalendarDays, Users } from 'lucide-react';
+import { ArrowLeft, Activity, Trophy, CalendarDays, Users, Globe, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const tournamentData = {
@@ -245,34 +245,136 @@ const tournamentData = {
 const TournamentDetails = ({ user }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const data = tournamentData[id];
+  
+  // Try static mock data first
+  const staticData = tournamentData[id];
+  
+  const [data, setData] = useState(staticData || null);
+  const [loading, setLoading] = useState(!staticData);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [id]);
+    
+    // If it's in the static mock list, just use that and don't load from API
+    if (staticData) {
+      setData(staticData);
+      setLoading(false);
+      setError(null);
+      return;
+    }
 
-  if (!data) {
+    // Dynamic database tournament loading
+    const fetchTournament = async () => {
+      setLoading(true);
+      setError(null);
+      const apiBaseUrl = import.meta.env.VITE_API_URL || '';
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/tournaments/${id}`);
+        if (!res.ok) {
+          throw new Error('Tournament details not found on server.');
+        }
+        const tournament = await res.json();
+        
+        // Map dynamic Mongoose schema structure to our page display requirements
+        const categoryColors = {
+          esports: { bg: 'bg-[#ff4655]', text: 'text-[#ff4655]', emoji: '🎮' },
+          sports: { bg: 'bg-[#3cc85a]', text: 'text-[#3cc85a]', emoji: '⚽' },
+          racing: { bg: 'bg-[#ef4444]', text: 'text-[#ef4444]', emoji: '🏎️' },
+          academic: { bg: 'bg-[#cffafe]', text: 'text-blue-600', emoji: '🎓' }
+        };
+        const activeDesign = categoryColors[tournament.category] || { bg: 'bg-[#4ade80]', text: 'text-green-600', emoji: '🏆' };
+
+        // Fetch matches for this tournament to render live matchup cards
+        let liveMatches = [];
+        try {
+          const matchRes = await fetch(`${apiBaseUrl}/api/tournaments/${id}/matches`);
+          if (matchRes.ok) {
+            const matches = await matchRes.json();
+            // Convert database match schema structure to UI match cards
+            liveMatches = matches.map((m, idx) => {
+              const team1Name = m.team1Id?.teamName || m.team1Id || 'TBD';
+              const team2Name = m.team2Id?.teamName || m.team2Id || 'TBD';
+              const scoreText = m.status === 'finished' 
+                ? `${m.scores?.team1Kills || 0} - ${m.scores?.team2Kills || 0}`
+                : m.status === 'live' 
+                  ? `${m.scores?.team1Kills || 0} vs ${m.scores?.team2Kills || 0} (LIVE)`
+                  : 'Scheduled';
+              return {
+                name: `Round ${m.roundNumber} - Match ${idx + 1}`,
+                status: m.status.toUpperCase(),
+                team1: team1Name,
+                team2: team2Name,
+                score: scoreText,
+                time: m.status === 'live' ? 'Ongoing' : m.status === 'finished' ? 'Finished' : 'Scheduled'
+              };
+            });
+          }
+        } catch (matchErr) {
+          console.warn("Failed to fetch dynamic matches list:", matchErr);
+        }
+
+        const mappedData = {
+          title: tournament.title,
+          tags: [tournament.category, tournament.gameName, tournament.venueType],
+          color: activeDesign.bg,
+          textColor: activeDesign.text,
+          emoji: activeDesign.emoji,
+          gameDetails: tournament.rules || 'No rules specified by the organizer.',
+          liveTournaments: liveMatches.length > 0 ? liveMatches : [
+            { name: 'Initial Registration', status: tournament.status.toUpperCase(), team1: 'Registrations', team2: 'Open', score: `${tournament.registeredTeams?.length || 0}/${tournament.maxTeams}`, time: 'Slots Filled' }
+          ],
+          pastTournaments: []
+        };
+        
+        setData(mappedData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTournament();
+  }, [id, staticData]);
+
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#c4e4e3] font-mono flex-col gap-4">
-        <h1 className="text-2xl font-bold">Tournament Not Found</h1>
-        <button onClick={() => navigate('/')} className="px-4 py-2 bg-[#1a1a1a] text-white rounded-full">Go Back</button>
+      <div className="min-h-screen flex items-center justify-center bg-[#c4e4e3] dark:bg-[#090b11] font-mono flex-col gap-4 text-[#1a1a1a] dark:text-[#f3f4f6]">
+        <div className="border-[3px] border-[#1a1a1a] dark:border-white/20 bg-yellow-200 dark:bg-yellow-950/20 p-4 font-bold uppercase tracking-wider hard-shadow text-black dark:text-yellow-400">
+          Loading Tournament Details...
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#c4e4e3] dark:bg-[#090b11] font-mono flex-col gap-4 text-[#1a1a1a] dark:text-[#f3f4f6]">
+        <h1 className="text-2xl font-bold uppercase">{error || "Tournament Not Found"}</h1>
+        <button 
+          onClick={() => navigate('/')} 
+          className="px-6 py-3 bg-[#1a1a1a] hover:bg-[#333] dark:bg-white dark:hover:bg-slate-200 text-white dark:text-black font-black uppercase text-xs rounded-full border-2 border-[#1a1a1a] dark:border-white/10 transition-colors"
+        >
+          Go Back
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#c4e4e3] text-[#1a1a1a] font-mono selection:bg-black selection:text-white pb-24">
+    <div className="min-h-screen bg-[#c4e4e3] dark:bg-[#090b11] text-[#1a1a1a] dark:text-[#f3f4f6] font-mono selection:bg-black selection:text-white pb-24 transition-colors duration-300">
       {/* Navbar Minimal */}
-      <nav className="p-6 md:p-8 flex items-center justify-between sticky top-0 bg-[#c4e4e3]/90 backdrop-blur-md z-50 border-b border-[#1a1a1a]/10">
+      <nav className="p-6 md:p-8 flex items-center justify-between sticky top-0 bg-[#c4e4e3]/90 dark:bg-[#090b11]/90 backdrop-blur-md z-50 border-b border-[#1a1a1a]/10 dark:border-white/5">
         <button 
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 font-bold hover:gap-3 transition-all px-4 py-2 bg-white/50 rounded-full border-2 border-[#1a1a1a]"
+          className="flex items-center gap-2 font-bold hover:gap-3 transition-all px-4 py-2 bg-white/50 dark:bg-white/5 text-[#1a1a1a] dark:text-white rounded-full border-2 border-[#1a1a1a] dark:border-white/20"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Home
         </button>
         <div 
           onClick={() => navigate('/')}
-          className="bg-[#0f1117] border-[2.5px] border-[#1a1a1a] px-3.5 py-1.5 rounded-full flex items-center gap-3 transition-all duration-200 hover:scale-[1.03] shadow-[3px_3px_0px_rgba(26,26,26,1)] select-none cursor-pointer"
+          className="bg-[#0f1117] border-[2.5px] border-[#1a1a1a] dark:border-white/20 px-3.5 py-1.5 rounded-full flex items-center gap-3 transition-all duration-200 hover:scale-[1.03] shadow-[3px_3px_0px_rgba(26,26,26,1)] dark:shadow-[3px_3px_0px_rgba(255,255,255,0.15)] select-none cursor-pointer"
         >
           <img
             src="/sports_flower_icon.png"
@@ -292,21 +394,21 @@ const TournamentDetails = ({ user }) => {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col md:flex-row gap-8 items-start mb-16"
         >
-          <div className={`w-32 h-32 md:w-48 md:h-48 rounded-[2rem] flex items-center justify-center text-6xl md:text-8xl shadow-[8px_8px_0px_0px_rgba(26,26,26,1)] border-[4px] border-[#1a1a1a] ${data.color} shrink-0`}>
+          <div className={`w-32 h-32 md:w-48 md:h-48 rounded-[2rem] flex items-center justify-center text-6xl md:text-8xl shadow-[8px_8px_0px_0px_rgba(26,26,26,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.15)] border-[4px] border-[#1a1a1a] dark:border-white/20 ${data.color} shrink-0`}>
             {data.emoji}
           </div>
           <div className="flex-1">
             <div className="flex flex-wrap gap-2 mb-4">
               {data.tags.map(tag => (
-                <span key={tag} className="px-3 py-1 bg-white border-2 border-[#1a1a1a] rounded-full text-[10px] uppercase tracking-widest font-bold">
+                <span key={tag} className="px-3 py-1 bg-white dark:bg-slate-900 border-2 border-[#1a1a1a] dark:border-white/20 text-[#1a1a1a] dark:text-white rounded-full text-[10px] uppercase tracking-widest font-bold">
                   {tag}
                 </span>
               ))}
             </div>
-            <h1 className="text-5xl md:text-7xl font-display font-black italic mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-display font-black italic mb-6 leading-tight text-[#1a1a1a] dark:text-white">
               {data.title}
             </h1>
-            <p className="text-sm md:text-base font-mono opacity-80 max-w-2xl leading-relaxed bg-white/50 p-6 rounded-2xl border border-white">
+            <p className="text-sm md:text-base font-mono opacity-80 max-w-2xl leading-relaxed bg-white/50 dark:bg-white/[0.03] p-6 rounded-2xl border border-white dark:border-white/5 text-[#1a1a1a] dark:text-white/90">
               {data.gameDetails}
             </p>
           </div>
@@ -323,7 +425,7 @@ const TournamentDetails = ({ user }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-[#1a1a1a] text-white p-8 rounded-[2rem] shadow-2xl relative overflow-hidden"
+              className="bg-[#1a1a1a] dark:bg-[#121420] border-[3px] border-transparent dark:border-white/10 text-white p-8 rounded-[2rem] shadow-2xl relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
               
@@ -337,7 +439,7 @@ const TournamentDetails = ({ user }) => {
               </div>
 
               {data.liveTournaments.map((match, idx) => (
-                <div key={idx} className="bg-white/10 border border-white/20 rounded-2xl p-6 backdrop-blur-sm">
+                <div key={idx} className="bg-white/10 dark:bg-white/[0.02] border border-white/20 dark:border-white/5 rounded-2xl p-6 backdrop-blur-sm">
                   <div className="flex justify-between items-center mb-6 text-[10px] font-mono tracking-widest uppercase text-white/50">
                     <span>{match.name}</span>
                     <span>{match.time}</span>
@@ -346,7 +448,7 @@ const TournamentDetails = ({ user }) => {
                     <div className="text-right flex-1">
                       <div className="text-xl md:text-2xl font-black font-display">{match.team1}</div>
                     </div>
-                    <div className={`px-4 py-2 ${data.color} text-[#1a1a1a] rounded-lg font-black text-xl md:text-2xl min-w-[120px] text-center shadow-inner`}>
+                    <div className={`px-4 py-2 ${data.color} text-slate-950 rounded-lg font-black text-xl md:text-2xl min-w-[120px] text-center shadow-inner`}>
                       {match.score}
                     </div>
                     <div className="text-left flex-1">
@@ -364,13 +466,13 @@ const TournamentDetails = ({ user }) => {
               transition={{ delay: 0.2 }}
               className="grid grid-cols-1 md:grid-cols-2 gap-4"
             >
-              <button onClick={() => navigate(user ? '/dashboard?tab=join' : '/?auth=true')} className="bg-[#baffc9] border-[3px] border-[#1a1a1a] p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition-transform shadow-[4px_4px_0px_rgba(26,26,26,1)]">
-                <Users className="w-8 h-8" />
-                <span className="font-bold font-display uppercase text-xl">Register Team</span>
+              <button onClick={() => navigate(user ? '/dashboard?tab=join' : '/?auth=true')} className="bg-[#baffc9] dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-500/30 border-[3px] border-[#1a1a1a] p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition-transform shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] text-slate-950">
+                <Users className="w-8 h-8 text-slate-950 dark:text-emerald-400" />
+                <span className="font-bold font-display uppercase text-xl text-slate-950 dark:text-emerald-400">Register Team</span>
               </button>
-              <button onClick={() => navigate(user ? '/dashboard?tab=host' : '/?auth=true')} className="bg-[#fcebb6] border-[3px] border-[#1a1a1a] p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition-transform shadow-[4px_4px_0px_rgba(26,26,26,1)]">
-                <CalendarDays className="w-8 h-8" />
-                <span className="font-bold font-display uppercase text-xl">Host Match</span>
+              <button onClick={() => navigate(user ? '/dashboard?tab=host' : '/?auth=true')} className="bg-[#fcebb6] dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-500/30 border-[3px] border-[#1a1a1a] p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition-transform shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] text-slate-950">
+                <CalendarDays className="w-8 h-8 text-slate-950 dark:text-amber-400" />
+                <span className="font-bold font-display uppercase text-xl text-slate-950 dark:text-amber-400">Host Match</span>
               </button>
             </motion.div>
 
@@ -394,7 +496,7 @@ const TournamentDetails = ({ user }) => {
                   <div key={idx} className="group relative">
                     <div className="text-[10px] font-mono text-[#1a1a1a]/50 dark:text-white/50 uppercase tracking-widest mb-2">{past.name} • {past.date}</div>
                     <div className="bg-gray-50 dark:bg-[#0f111a] border-2 border-[#1a1a1a]/10 dark:border-white/10 rounded-xl p-4 group-hover:border-[#1a1a1a] dark:group-hover:border-white/30 group-hover:bg-[#fcebb6]/30 dark:group-hover:bg-yellow-900/10 transition-colors">
-                      <div className="flex justify-between items-center mb-2">
+                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-bold text-[#1a1a1a]/60 dark:text-white/60">Winner</span>
                         <span className="font-bold font-display text-[#1a1a1a] dark:text-white">{past.winner} 🏆</span>
                       </div>
