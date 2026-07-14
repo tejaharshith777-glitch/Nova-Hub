@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, Trophy, Sparkles, Pin, Compass, Info, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
@@ -15,7 +15,15 @@ const ScrollParallaxHeading = ({ children, className, axis = "x", speed = 30, di
   });
 
   const transformValue = useTransform(scrollYProgress, [0, 1], [direction * -speed, direction * speed]);
-  const style = axis === "y" ? { y: transformValue } : { x: transformValue };
+  
+  // Smooth out the scroll motion using a spring transition (inertia takes ~1 second to settle)
+  const smoothTransform = useSpring(transformValue, {
+    stiffness: 60,
+    damping: 25,
+    mass: 1
+  });
+
+  const style = axis === "y" ? { y: smoothTransform } : { x: smoothTransform };
 
   return (
     <motion.h2 ref={ref} style={style} className={className}>

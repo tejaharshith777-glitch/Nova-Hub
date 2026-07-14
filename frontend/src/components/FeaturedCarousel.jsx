@@ -3,17 +3,17 @@ import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const FEATURED_CARDS = [
-  { id:"f1", badge:"Free", gradient:"linear-gradient(135deg,#1e3a5f,#0a2240)", accent:"#4fc3f7", emoji:"🏏", sport:"Cricket", title:"Summer Cricket Open", subtitle:"50+ slots · Stipend Rs.10,000 · CTC upto Rs.8 LPA", meta:"Eligibility: Open for all", cta:"Register FREE", spots:"6/8 Slots" },
-  { id:"f2", badge:"Online Free", gradient:"linear-gradient(135deg,#2d1b69,#1a0a3e)", accent:"#c084fc", emoji:"🎯", sport:"Valorant", title:"India Top 10 Clubs Valorant 2026", subtitle:"Can your club reach the national stage?", meta:"Club Orientations 2026", cta:"Register Now", spots:"12/16 Teams" },
-  { id:"f3", badge:"Register Now", gradient:"linear-gradient(135deg,#1a1a1a,#2d2d2d)", accent:"#e86c3f", emoji:"⚽", sport:"Football", title:"Reinvent with Accenture City Cup", subtitle:"Spend weekends exploring local turf arenas", meta:"Lead drills on weekdays", cta:"Register Submit", spots:"3/4 Teams" },
-  { id:"f4", badge:"Register Now", gradient:"linear-gradient(135deg,#0a2e1a,#163b20)", accent:"#4ade80", emoji:"🏆", sport:"Multi-Sport", title:"Rise Up With Pep Stars", subtitle:"Your gateway to a career in FMCG sector", meta:"INR 6 LPA · 5000 Micro Internships", cta:"Apply Now", spots:"28/32 Slots" },
-  { id:"f5", badge:"Free", gradient:"linear-gradient(135deg,#3b0000,#1a0000)", accent:"#f87171", emoji:"🏎️", sport:"Car Racing", title:"Veloce Grand Prix Series", subtitle:"Time-trial format. No wall riding allowed.", meta:"Prize Pool: Rs.10,000 | Entry: Rs.50", cta:"Join Race", spots:"4/4 Slots" },
-  { id:"f6", badge:"Free Entry", gradient:"linear-gradient(135deg,#003a5c,#001e3a)", accent:"#00b4d8", emoji:"🏀", sport:"Basketball", title:"Downtown Hoops Challenge", subtitle:"Groups plus knockout. Local court booking.", meta:"YMCA Court 1 · Open for all ages", cta:"Book Slot", spots:"3/8 Teams" },
-  { id:"f7", badge:"Online", gradient:"linear-gradient(135deg,#2a1800,#1a0a00)", accent:"#f97316", emoji:"🔫", sport:"BGMI", title:"BGMI Battlegrounds Pro", subtitle:"Battle royale squads. Anti-cheat enforced.", meta:"Prize Pool: Rs.15,000 | Asia East", cta:"Enroll Team", spots:"8/16 Squads" },
-  { id:"f8", badge:"GPS Tracked", gradient:"linear-gradient(135deg,#001a08,#002a10)", accent:"#22c55e", emoji:"🚴", sport:"Cycling", title:"Tour de Nova Cycling Classic", subtitle:"GPS tracking live. Helmets mandatory.", meta:"Sector 4 Velodrome · Prize: Rs.20,000", cta:"Register Rider", spots:"2/4 Riders" },
-  { id:"f9", badge:"Free Fire", gradient:"linear-gradient(135deg,#2a1800,#3a2200)", accent:"#eab308", emoji:"🔥", sport:"Free Fire", title:"Garena Free Fire Champions Cup", subtitle:"Squads of 4. Ranked match qualifier.", meta:"Prize Pool: Rs.25,000 | Season 9", cta:"Join Squad", spots:"6/16 Squads" },
-  { id:"f10", badge:"Offline", gradient:"linear-gradient(135deg,#200020,#1a0030)", accent:"#a855f7", emoji:"🏍️", sport:"Bike Racing", title:"MRF Moto GP Challenge", subtitle:"Physical race event. Safety gear mandatory.", meta:"Hyderabad Track · Entry: Rs.200", cta:"Register Bike", spots:"7/12 Riders" },
-  { id:"f11", badge:"Online", gradient:"linear-gradient(135deg,#0f1923,#1e3a5f)", accent:"#38bdf8", emoji:"🎮", sport:"COD Mobile", title:"Call of Duty Mobile Invitational", subtitle:"5v5 competitive ranked matches online.", meta:"Prize: Rs.18,000 | India Server", cta:"Enroll Now", spots:"5/8 Teams" },
+  { id:"f1", badge:"Free", gradient:"linear-gradient(135deg,#1e3a5f,#0a2240)", accent:"#4fc3f7", emoji:"🏏", sport:"Cricket", title:"Summer Cricket Open", subtitle:"50+ slots · Stipend Rs.10,000 · CTC upto Rs.8 LPA", meta:"Eligibility: Open for all", cta:"Register FREE", spots:"6/8 Slots", image: "/cricket_card.jpg" },
+  { id:"f2", badge:"Online Free", gradient:"linear-gradient(135deg,#2d1b69,#1a0a3e)", accent:"#c084fc", emoji:"🎯", sport:"Valorant", title:"India Top 10 Clubs Valorant 2026", subtitle:"Can your club reach the national stage?", meta:"Club Orientations 2026", cta:"Register Now", spots:"12/16 Teams", image: "/valorant_card.png" },
+  { id:"f3", badge:"Register Now", gradient:"linear-gradient(135deg,#1a1a1a,#2d2d2d)", accent:"#e86c3f", emoji:"⚽", sport:"Football", title:"Reinvent with Accenture City Cup", subtitle:"Spend weekends exploring local turf arenas", meta:"Lead drills on weekdays", cta:"Register Submit", spots:"3/4 Teams", image: "/football_card.jpg" },
+  { id:"f4", badge:"Register Now", gradient:"linear-gradient(135deg,#0a2e1a,#163b20)", accent:"#4ade80", emoji:"🏆", sport:"Multi-Sport", title:"Rise Up With Pep Stars", subtitle:"Your gateway to a career in FMCG sector", meta:"INR 6 LPA · 5000 Micro Internships", cta:"Apply Now", spots:"28/32 Slots", image: "/college_esports_card.png" },
+  { id:"f5", badge:"Free", gradient:"linear-gradient(135deg,#3b0000,#1a0000)", accent:"#f87171", emoji:"🏎️", sport:"Car Racing", title:"Veloce Grand Prix Series", subtitle:"Time-trial format. No wall riding allowed.", meta:"Prize Pool: Rs.10,000 | Entry: Rs.50", cta:"Join Race", spots:"4/4 Slots", image: "/veloce_card.png" },
+  { id:"f6", badge:"Free Entry", gradient:"linear-gradient(135deg,#003a5c,#001e3a)", accent:"#00b4d8", emoji:"🏀", sport:"Basketball", title:"Downtown Hoops Challenge", subtitle:"Groups plus knockout. Local court booking.", meta:"YMCA Court 1 · Open for all ages", cta:"Book Slot", spots:"3/8 Teams", image: "/basketball_card.png" },
+  { id:"f7", badge:"Online", gradient:"linear-gradient(135deg,#2a1800,#1a0a00)", accent:"#f97316", emoji:"🔫", sport:"BGMI", title:"BGMI Battlegrounds Pro", subtitle:"Battle royale squads. Anti-cheat enforced.", meta:"Prize Pool: Rs.15,000 | Asia East", cta:"Enroll Team", spots:"8/16 Squads", image: "/pubg_card.png" },
+  { id:"f8", badge:"GPS Tracked", gradient:"linear-gradient(135deg,#001a08,#002a10)", accent:"#22c55e", emoji:"🚴", sport:"Cycling", title:"Tour de Nova Cycling Classic", subtitle:"GPS tracking live. Helmets mandatory.", meta:"Sector 4 Velodrome · Prize: Rs.20,000", cta:"Register Rider", spots:"2/4 Riders", image: "/cycle_card.jpg" },
+  { id:"f9", badge:"Free Fire", gradient:"linear-gradient(135deg,#2a1800,#3a2200)", accent:"#eab308", emoji:"🔥", sport:"Free Fire", title:"Garena Free Fire Champions Cup", subtitle:"Squads of 4. Ranked match qualifier.", meta:"Prize Pool: Rs.25,000 | Season 9", cta:"Join Squad", spots:"6/16 Squads", image: "/freefire_card.jpg" },
+  { id:"f10", badge:"Offline", gradient:"linear-gradient(135deg,#200020,#1a0030)", accent:"#a855f7", emoji:"🏍️", sport:"Bike Racing", title:"MRF Moto GP Challenge", subtitle:"Physical race event. Safety gear mandatory.", meta:"Hyderabad Track · Entry: Rs.200", cta:"Register Bike", spots:"7/12 Riders", image: "/motogp_card.png" },
+  { id:"f11", badge:"Online", gradient:"linear-gradient(135deg,#0f1923,#1e3a5f)", accent:"#38bdf8", emoji:"🎮", sport:"COD Mobile", title:"Call of Duty Mobile Invitational", subtitle:"5v5 competitive ranked matches online.", meta:"Prize: Rs.18,000 | India Server", cta:"Enroll Now", spots:"5/8 Teams", image: "/pubg_card.png" },
 ];
 
 const COMPANIES = [
@@ -46,30 +46,49 @@ const ROUTE_MAP = {
 };
 
 const FeatureCard = ({ card, navigate }) => (
-  <div className="relative flex-shrink-0 w-64 rounded-2xl overflow-hidden group cursor-pointer border border-white/10 hover:border-white/25 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl" style={{ background: card.gradient, minHeight: 344 }}>
-    <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full opacity-25 blur-3xl pointer-events-none group-hover:opacity-40 transition-opacity" style={{ background: card.accent }} />
-    <div className="flex items-center justify-between px-5 pt-5 pb-2">
-      <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border" style={{ color: card.accent, borderColor: card.accent+"50", background: card.accent+"18" }}>{card.badge}</span>
-      <button className="w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"><Heart className="w-3.5 h-3.5 text-white/60" strokeWidth={2} /></button>
-    </div>
-    <div className="flex items-center justify-center py-6 relative">
-      <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-xl border border-white/10 group-hover:scale-110 transition-transform duration-300" style={{ background: card.accent+"20" }}>{card.emoji}</div>
-      <span className="absolute bottom-1 right-5 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: card.accent+"25", color: card.accent }}>{card.sport}</span>
-    </div>
-    <div className="px-5 pb-2">
-      <h3 className="text-white font-black text-sm leading-snug mb-2 line-clamp-2">{card.title}</h3>
-      <p className="text-white/55 text-[11px] leading-relaxed mb-1.5">{card.subtitle}</p>
-      <p className="text-[10px] font-black" style={{ color: card.accent }}>{card.meta}</p>
-    </div>
-    <div className="px-5 pb-5 pt-3 flex items-center justify-between border-t border-white/10 mt-3">
-      <span className="text-[10px] text-white/40">{card.spots}</span>
-      <button 
-        onClick={() => navigate(`/tournament/${ROUTE_MAP[card.id] || card.id}`)}
-        className="text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg hover:scale-105 hover:brightness-110 transition-all z-10 relative" 
-        style={{ background: card.accent, color:"#fff" }}
-      >
-        {card.cta}
-      </button>
+  <div className="relative flex-shrink-0 w-64 rounded-2xl overflow-hidden group cursor-pointer border border-[#1a1a1a] dark:border-white/10 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300" style={{ minHeight: 360 }}>
+    {/* Card background image with fallback gradient */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.03]" 
+      style={{ 
+        backgroundImage: card.image ? `url(${card.image})` : card.gradient,
+        backgroundPosition: 'center'
+      }} 
+    />
+    
+    {/* Dark gradient overlay to ensure text readability and branding */}
+    <div className="absolute inset-0 bg-gradient-to-t from-[#0e0f19] via-[#0e0f19]/70 to-black/35 z-0 transition-opacity duration-300 group-hover:opacity-90" />
+
+    {/* Content overlay */}
+    <div className="relative z-10 flex flex-col justify-between h-full min-h-[360px] p-5">
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border border-white/20 bg-black/40" style={{ color: card.accent }}>
+          {card.badge}
+        </span>
+        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+          <Heart className="w-3.5 h-3.5 text-white/60" strokeWidth={2} />
+        </button>
+      </div>
+
+      <div className="flex-1 flex flex-col justify-end pt-12">
+        <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 w-max mb-2" style={{ color: card.accent }}>
+          {card.sport}
+        </span>
+        <h3 className="text-white font-black text-sm leading-snug mb-1 line-clamp-2 font-display">{card.title}</h3>
+        <p className="text-white/60 text-[10px] leading-relaxed mb-2 font-mono">{card.subtitle}</p>
+        <p className="text-[10px] font-black font-mono" style={{ color: card.accent }}>{card.meta}</p>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-white/10 mt-3 pt-3">
+        <span className="text-[9px] font-bold text-white/40 font-mono">{card.spots}</span>
+        <button 
+          onClick={() => navigate(`/tournament/${ROUTE_MAP[card.id] || card.id}`)}
+          className="text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg hover:scale-105 transition-all relative" 
+          style={{ background: card.accent, color:"#fff" }}
+        >
+          {card.cta}
+        </button>
+      </div>
     </div>
   </div>
 );

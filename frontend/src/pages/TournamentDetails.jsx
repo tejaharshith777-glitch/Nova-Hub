@@ -213,6 +213,32 @@ const tournamentData = {
     pastTournaments: [
       { name: 'Collegiate Open 2025', winner: 'SRM Esports', runnerUp: 'VIT Gamers', date: 'June 2025' }
     ]
+  },
+  multi: {
+    title: 'Rise Up With Pep Stars',
+    tags: ['multi-sport', 'career', 'stipend'],
+    color: 'bg-[#4ade80]', textColor: 'text-green-600', emoji: '🏆',
+    type: 'physical',
+    gameDetails: 'Your gateway to a career in the FMCG sector. Multi-sport talent showcase featuring track & field events, basketball coordinates, and table tennis matches. Talent scouts from top global brands will be on-site for immediate evaluations.',
+    liveTournaments: [
+      { name: 'Table Tennis Finals', status: 'LIVE', team1: 'A. Kumar', team2: 'S. Singh', score: '2-1 (11-9, 8-11, 11-7)', time: 'Set 4' }
+    ],
+    pastTournaments: [
+      { name: 'Pep Stars S1', winner: 'Apex Club', runnerUp: 'Vanguard Orgs', date: 'August 2025' }
+    ]
+  },
+  codm: {
+    title: 'Call of Duty Mobile Invitational',
+    tags: ['esports', '5v5', 'mobile', 'fps'],
+    color: 'bg-[#38bdf8]', textColor: 'text-blue-500', emoji: '🎮',
+    type: 'online',
+    gameDetails: '5v5 competitive Search and Destroy tournament. Anti-cheat client check required for all participating rosters. Open qualifiers leading into double-elimination brackets.',
+    liveTournaments: [
+      { name: 'Semifinals - Match 1', status: 'LIVE', team1: 'Team Soul', team2: 'GodLike', score: '5 - 3', time: 'Round 9' }
+    ],
+    pastTournaments: [
+      { name: 'CODM Open S1', winner: 'Team Soul', runnerUp: 'Synergy Esports', date: 'April 2025' }
+    ]
   }
 };
 
