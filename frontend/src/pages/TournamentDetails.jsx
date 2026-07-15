@@ -374,7 +374,7 @@ const TournamentDetails = ({ user }) => {
         </button>
         <div 
           onClick={() => { window.location.href = '/'; }}
-          className="bg-[#0f1117] border-[2.5px] border-[#1a1a1a] dark:border-white/20 px-3.5 py-1.5 rounded-full flex items-center gap-3 transition-all duration-200 hover:scale-[1.03] shadow-[3px_3px_0px_rgba(26,26,26,1)] dark:shadow-[3px_3px_0px_rgba(255,255,255,0.15)] select-none cursor-pointer"
+          className="bg-[#0f1117] border-[2.5px] border-[#1a1a1a] dark:border-white/20 px-6 py-1.5 rounded-full flex items-center gap-5 transition-all duration-200 hover:scale-[1.03] shadow-[3px_3px_0px_rgba(26,26,26,1)] dark:shadow-[3px_3px_0px_rgba(255,255,255,0.15)] select-none cursor-pointer"
         >
           <img
             src="/sports_flower_icon.png"
