@@ -13,7 +13,13 @@ export const TournamentList = ({ tournaments = [], onSelectEvent, user }) => {
       {tournaments.map((t, idx) => {
         const registeredCount = t.registeredTeams?.length || 0;
         const isFull = registeredCount >= t.maxTeams;
-        const isJoined = t.registeredTeams?.some(team => team.captainEmail === user?.email);
+        const regsSaved = localStorage.getItem('novahub_mock_registrations');
+        const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+        const isJoined = mockRegs.some(r => r.tournamentId === (t._id || t.id)) || 
+                         t.registeredTeams?.some(team => 
+                           (user?.email && team.captainEmail === user.email) || 
+                           (user?.username && team.captainName?.toLowerCase() === user.username.toLowerCase())
+                         );
         const cardBgClass = pastelBgClasses[idx % pastelBgClasses.length];
 
         return (
