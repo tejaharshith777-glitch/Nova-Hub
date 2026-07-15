@@ -138,6 +138,25 @@ export const TeamRosterForm = ({ tournament, apiBaseUrl, user, onSuccess }) => {
 
       const data = await res.json();
       if (res.ok) {
+        // Save in localStorage so Dashboard and JoinEventPage can load and merge it immediately
+        const mockReg = {
+          teamName,
+          captainName,
+          captainEmail,
+          roster: roster.map(m => ({ name: m.name.trim(), gameId: m.gameId.trim() })),
+          registrationToken: data.registrationToken || ('TOKEN-' + Math.random().toString(36).substring(2, 9).toUpperCase()),
+          rulesAccepted: true
+        };
+        const savedRegs = localStorage.getItem('novahub_mock_registrations');
+        const currentRegs = savedRegs ? JSON.parse(savedRegs) : [];
+        if (!currentRegs.some(r => r.tournamentId === (tournament._id || tournament.id) && r.team?.captainEmail === captainEmail)) {
+          currentRegs.push({
+            tournamentId: tournament._id || tournament.id,
+            team: mockReg
+          });
+          localStorage.setItem('novahub_mock_registrations', JSON.stringify(currentRegs));
+        }
+
         setSuccessData(data);
       } else {
         setErrorMsg(data.message || 'Server rejected team roster parameters.');

@@ -276,7 +276,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
 
   useEffect(() => {
     fetchTournamentsList();
-  }, [fetchTournamentsList]);
+  }, [fetchTournamentsList, activeTab]);
 
   // Sync page view and active tab dynamically when URL search parameter (tabParam) changes
   useEffect(() => {
