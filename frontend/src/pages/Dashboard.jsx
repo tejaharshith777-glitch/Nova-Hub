@@ -278,6 +278,29 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
     fetchTournamentsList();
   }, [fetchTournamentsList, activeTab]);
 
+  // Re-merge localStorage registrations whenever the user views history or my-tournaments
+  // This ensures registrations saved right before tab-switch are always visible
+  useEffect(() => {
+    if (activeTab === 'history' || activeTab === 'my-tournaments') {
+      const regsSaved = localStorage.getItem('novahub_mock_registrations');
+      const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+      if (mockRegs.length === 0) return;
+      setTournaments(prev => prev.map(t => {
+        const matchingRegs = mockRegs.filter(r => r.tournamentId === (t._id || t.id));
+        if (matchingRegs.length > 0) {
+          const currentTeams = t.registeredTeams || [];
+          const localTeams = matchingRegs.map(r => r.team).filter(lt =>
+            !currentTeams.some(ct => ct.teamName === lt.teamName || ct.captainEmail === lt.captainEmail)
+          );
+          if (localTeams.length > 0) {
+            return { ...t, registeredTeams: [...currentTeams, ...localTeams] };
+          }
+        }
+        return t;
+      }));
+    }
+  }, [activeTab]);
+
   // Sync page view and active tab dynamically when URL search parameter (tabParam) changes
   useEffect(() => {
     if (tabParam === 'host') {

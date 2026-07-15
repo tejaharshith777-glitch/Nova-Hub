@@ -347,7 +347,74 @@
   color: rgba(243, 244, 246, 0.4) !important;
 }
 
+/* ─── Additional Dark Mode Text Color Overrides ─────────────────── */
+/* text-black → white in dark mode */
+.dark .text-black {
+  color: #f3f4f6 !important;
+}
 
+/* text-gray-* → visible light grays in dark mode */
+.dark .text-gray-400 { color: rgba(209, 213, 219, 0.65) !important; }
+.dark .text-gray-500 { color: rgba(209, 213, 219, 0.85) !important; }
+.dark .text-gray-600 { color: rgba(209, 213, 219, 0.8) !important; }
+.dark .text-gray-700 { color: rgba(209, 213, 219, 0.9) !important; }
+.dark .text-gray-800 { color: rgba(243, 244, 246, 0.95) !important; }
+.dark .text-gray-900 { color: #f3f4f6 !important; }
 
+/* text-slate-* → white in dark mode */
+.dark .text-slate-950 { color: #f3f4f6 !important; }
+.dark .text-slate-900 { color: #f3f4f6 !important; }
+.dark .text-slate-800 { color: #e5e7eb !important; }
+.dark .text-slate-700 { color: #d1d5db !important; }
+.dark .text-slate-600 { color: rgba(209, 213, 219, 0.85) !important; }
+.dark .text-slate-500 { color: rgba(209, 213, 219, 0.7) !important; }
+
+/* Placeholder text for transparent bg search inputs */
+.dark [class*="placeholder-[#1a1a1a]"]::placeholder {
+  color: rgba(243, 244, 246, 0.4) !important;
+}
+
+/* ─── Tournament Card Pastel Backgrounds: force readable text ────── */
+.dark .bg-\[\#baffc9\] { color: #c6f5d4 !important; }
+.dark .bg-\[\#ffdfba\] { color: #f5e4cc !important; }
+.dark .bg-\[\#cffafe\] { color: #cff4f8 !important; }
+.dark .bg-\[\#ffb3ba\] { color: #f5d0d3 !important; }
+.dark .bg-\[\#fcebb6\] { color: #f0dfaa !important; }
+.dark .bg-\[\#bde3fb\] { color: #c9e7f9 !important; }
+.dark .bg-\[\#dcfce7\] { color: #c6f5d4 !important; }
+.dark .bg-\[\#fef08a\] { color: #f0e48c !important; }
+.dark .bg-\[\#e8f0fe\] { color: #d4e0f9 !important; }
+.dark .bg-\[\#fecdd3\] { color: #f5cad1 !important; }
+.dark .bg-\[\#fce4fb\] { color: #f0c8ef !important; }
+
+/* ─── Badge chip readability in dark mode ────────────────────────── */
+.dark .bg-green-200 {
+  background-color: #052e16 !important;
+  color: #86efac !important;
+  border-color: rgba(134, 239, 172, 0.3) !important;
+}
+.dark .bg-purple-200 {
+  background-color: #2e1065 !important;
+  color: #d8b4fe !important;
+  border-color: rgba(216, 180, 254, 0.3) !important;
+}
+.dark .bg-red-50  { background-color: #1c0606 !important; }
+.dark .bg-purple-50 { background-color: #150a2a !important; }
+.dark .bg-yellow-50 { background-color: #0b0c13 !important; }
+
+/* ─── Keep icon colors vivid in dark mode ────────────────────────── */
+.dark .text-red-500   { color: #f87171 !important; }
+.dark .text-red-600   { color: #ef4444 !important; }
+.dark .text-blue-500  { color: #60a5fa !important; }
+.dark .text-green-700 { color: #4ade80 !important; }
+.dark .text-yellow-500 { color: #fbbf24 !important; }
+.dark .text-yellow-600 { color: #f59e0b !important; }
+.dark .text-purple-500 { color: #a855f7 !important; }
+.dark .text-purple-600 { color: #9333ea !important; }
+
+/* ─── Filter bar background fix ─────────────────────────────────── */
+.dark .bg-white {
+  background-color: #121420 !important;
+}
 
 
