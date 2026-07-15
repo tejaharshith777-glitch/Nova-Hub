@@ -13,7 +13,7 @@ const FEATURED_CARDS = [
   { id:"f8", badge:"GPS Tracked", gradient:"linear-gradient(135deg,#001a08,#002a10)", accent:"#22c55e", emoji:"🚴", sport:"Cycling", title:"Tour de Nova Cycling Classic", subtitle:"GPS tracking live. Helmets mandatory.", meta:"Sector 4 Velodrome · Prize: Rs.20,000", cta:"Register Rider", spots:"2/4 Riders", image: "/cycle_card.jpg" },
   { id:"f9", badge:"Free Fire", gradient:"linear-gradient(135deg,#2a1800,#3a2200)", accent:"#eab308", emoji:"🔥", sport:"Free Fire", title:"Garena Free Fire Champions Cup", subtitle:"Squads of 4. Ranked match qualifier.", meta:"Prize Pool: Rs.25,000 | Season 9", cta:"Join Squad", spots:"6/16 Squads", image: "/freefire_card.jpg" },
   { id:"f10", badge:"Offline", gradient:"linear-gradient(135deg,#200020,#1a0030)", accent:"#a855f7", emoji:"🏍️", sport:"Bike Racing", title:"MRF Moto GP Challenge", subtitle:"Physical race event. Safety gear mandatory.", meta:"Hyderabad Track · Entry: Rs.200", cta:"Register Bike", spots:"7/12 Riders", image: "/motogp_card.png" },
-  { id:"f11", badge:"Online", gradient:"linear-gradient(135deg,#0f1923,#1e3a5f)", accent:"#38bdf8", emoji:"🎮", sport:"COD Mobile", title:"Call of Duty Mobile Invitational", subtitle:"5v5 competitive ranked matches online.", meta:"Prize: Rs.18,000 | India Server", cta:"Enroll Now", spots:"5/8 Teams", image: "/pubg_card.png" },
+  { id:"f11", badge:"Online", gradient:"linear-gradient(135deg,#0f1923,#1e3a5f)", accent:"#38bdf8", emoji:"🎮", sport:"COD Mobile", title:"Call of Duty Mobile Invitational", subtitle:"5v5 competitive ranked matches online.", meta:"Prize: Rs.18,000 | India Server", cta:"Enroll Now", spots:"5/8 Teams", image: "/cod_card.png" },
 ];
 
 const COMPANIES = [
