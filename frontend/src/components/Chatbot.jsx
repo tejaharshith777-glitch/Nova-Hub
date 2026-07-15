@@ -198,17 +198,46 @@ const Chatbot = ({ apiBaseUrl }) => {
           background-size: 200% auto;
           animation: gemini-shimmer 1.5s infinite linear;
         }
+        /* Mobile: chat takes full screen */
+        @media (max-width: 639px) {
+          .chatbot-window {
+            inset: 0 !important;
+            bottom: 0 !important;
+            right: 0 !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100vw !important;
+            height: 100dvh !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+          }
+        }
       `}</style>
 
-      {/* Chat Toggle Button */}
+      {/* Mobile dark backdrop when chat is open */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 z-40 bg-black/50 sm:hidden"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Chat Toggle Button — bottom-right, responsive sizing */}
       {!isOpen && (
         <motion.button
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-[60] p-4 gemini-gradient-bg text-white rounded-full shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] border-2 border-[#1a1a1a] dark:border-white/20 flex items-center justify-center group"
+          className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[60] p-3.5 sm:p-4 gemini-gradient-bg text-white rounded-full shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] border-2 border-[#1a1a1a] dark:border-white/20 flex items-center justify-center group"
         >
-          <Sparkles className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />
+          <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:rotate-12 transition-transform" />
           <span className="absolute -top-1.5 -right-1.5 bg-yellow-400 text-[8px] text-black font-black px-1.5 py-0.5 rounded uppercase border border-black animate-bounce shadow-md">
             Gemini
           </span>
@@ -219,13 +248,29 @@ const Chatbot = ({ apiBaseUrl }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            key="chatbot"
+            initial={{ opacity: 0, y: 50, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[400px] h-[500px] bg-white dark:bg-slate-900 text-[#1a1a1a] dark:text-white border-[3px] border-[#1a1a1a] dark:border-white/20 shadow-[8px_8px_0px_rgba(26,26,26,1)] dark:shadow-[8px_8px_0px_rgba(255,255,255,0.15)] rounded-2xl flex flex-col overflow-hidden font-mono"
+            exit={{ opacity: 0, y: 50, scale: 0.92 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+            className={`
+              chatbot-window
+              fixed z-50
+              bg-white dark:bg-slate-900
+              text-[#1a1a1a] dark:text-white
+              border-[3px] border-[#1a1a1a] dark:border-white/20
+              shadow-[8px_8px_0px_rgba(26,26,26,1)] dark:shadow-[8px_8px_0px_rgba(255,255,255,0.15)]
+              rounded-2xl flex flex-col overflow-hidden font-mono
+              bottom-0 right-0 left-0
+              w-full h-[100dvh]
+              sm:bottom-6 sm:right-6 sm:left-auto sm:top-auto
+              sm:w-[400px] sm:h-[520px]
+              md:w-[420px] md:h-[560px]
+              lg:w-[440px] lg:h-[580px]
+            `}
           >
             {/* Header */}
-            <div className="gemini-gradient-bg text-white p-4 flex items-center justify-between border-b-[3px] border-[#1a1a1a] dark:border-white/20">
+            <div className="gemini-gradient-bg text-white px-4 py-3.5 sm:p-4 flex items-center justify-between border-b-[3px] border-[#1a1a1a] dark:border-white/20 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="bg-white/20 p-1.5 rounded-lg backdrop-blur-md border border-white/20">
                   <Sparkles className="w-5 h-5 text-white animate-pulse" />
@@ -237,13 +282,17 @@ const Chatbot = ({ apiBaseUrl }) => {
                   <p className="text-[10px] text-white/80 font-mono">Nova Hub Assistant</p>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1.5 rounded-md transition-colors">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="hover:bg-white/20 p-2 rounded-md transition-colors"
+                aria-label="Close chat"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Chat Area */}
-            <div className="flex-1 bg-gray-50 dark:bg-slate-950 p-4 overflow-y-auto flex flex-col gap-4">
+            {/* Chat Messages Area */}
+            <div className="flex-1 bg-gray-50 dark:bg-slate-950 p-3 sm:p-4 overflow-y-auto flex flex-col gap-3 sm:gap-4">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.sender === 'ai' && (
@@ -251,9 +300,9 @@ const Chatbot = ({ apiBaseUrl }) => {
                       <Sparkles className="w-3 h-3 text-white" />
                     </div>
                   )}
-                  <div className={`max-w-[75%] p-3 text-xs leading-relaxed ${
-                    msg.sender === 'user' 
-                      ? 'bg-[#c4e4e3] dark:bg-cyan-950/40 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-xl rounded-tr-sm text-[#1a1a1a] dark:text-white font-semibold' 
+                  <div className={`max-w-[80%] sm:max-w-[75%] p-3 text-xs leading-relaxed ${
+                    msg.sender === 'user'
+                      ? 'bg-[#c4e4e3] dark:bg-cyan-950/40 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-xl rounded-tr-sm text-[#1a1a1a] dark:text-white font-semibold'
                       : 'bg-white dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-xl rounded-tl-sm text-[#1a1a1a] dark:text-white shadow-sm'
                   }`}>
                     {renderMessageText(msg.text)}
@@ -277,7 +326,7 @@ const Chatbot = ({ apiBaseUrl }) => {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-white dark:bg-slate-900 border-t-[3px] border-[#1a1a1a] dark:border-white/20">
+            <div className="p-3 sm:p-4 bg-white dark:bg-slate-900 border-t-[3px] border-[#1a1a1a] dark:border-white/20 shrink-0">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -285,12 +334,12 @@ const Chatbot = ({ apiBaseUrl }) => {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                   placeholder="Ask Gemini about tournaments..."
-                  className="flex-1 bg-gray-100 dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-lg px-3 py-2 text-xs text-[#1a1a1a] dark:text-white placeholder-gray-550 dark:placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-slate-750 transition-colors"
+                  className="flex-1 bg-gray-100 dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-lg px-3 py-2.5 sm:py-2 text-xs text-[#1a1a1a] dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-slate-700 transition-colors"
                 />
                 <button
                   onClick={handleSend}
                   disabled={!inputValue.trim() || isTyping}
-                  className="bg-[#e86c3f] hover:bg-[#d45b30] disabled:bg-gray-400 border-[2px] border-[#1a1a1a] dark:border-white/20 text-white p-2 rounded-lg transition-colors flex items-center justify-center cursor-pointer"
+                  className="bg-[#e86c3f] hover:bg-[#d45b30] disabled:bg-gray-400 border-[2px] border-[#1a1a1a] dark:border-white/20 text-white p-2.5 sm:p-2 rounded-lg transition-colors flex items-center justify-center cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
                 </button>
