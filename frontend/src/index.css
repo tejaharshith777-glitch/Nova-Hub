@@ -330,6 +330,23 @@
   }
 }
 
+/* Dark mode form control overrides for readable text */
+.dark input,
+.dark select,
+.dark textarea {
+  color: #f3f4f6 !important;
+  background-color: #121420 !important;
+}
+
+.dark option {
+  background-color: #121420 !important;
+  color: #f3f4f6 !important;
+}
+
+.dark input::placeholder {
+  color: rgba(243, 244, 246, 0.4) !important;
+}
+
 
 
 
