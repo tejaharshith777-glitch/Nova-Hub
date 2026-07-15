@@ -589,6 +589,8 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [platformFilter, setPlatformFilter] = useState('All');
+  const [venueTypeFilter, setVenueTypeFilter] = useState('All');
+  const [gameFilter, setGameFilter] = useState('All');
   const [customLocationSearch, setCustomLocationSearch] = useState('');
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
   
@@ -921,7 +923,10 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
     );
   };
 
-  // 1. Process Physical (Offline) Tournaments with distances
+  // Get unique game names for the dropdown filter
+  const uniqueGames = ['All', ...new Set(tournaments.map(t => t.gameName))];
+
+  // Process all physical tournaments for their distances (used by map)
   const physicalTournaments = tournaments
     .filter(t => t.venueType === 'offline')
     .map(t => {
@@ -932,25 +937,53 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
         t.venueDetails?.longitude
       );
       return { ...t, distance };
-    })
-    .filter(searchFilter)
-    .filter(t => showAllPhysical || radius === 'all' || t.distance === null || t.distance <= radius)
-    .sort((a, b) => {
-      if (a.distance === null) return 1;
-      if (b.distance === null) return -1;
-      return a.distance - b.distance;
     });
 
-  // 2. Process Esports (Online) Tournaments
-  const esportsTournaments = tournaments
-    .filter(t => t.venueType === 'online')
-    .filter(searchFilter)
-    .filter(t => platformFilter === 'All' || t.venueDetails?.platform === platformFilter)
-    .sort((a, b) => {
-      const regA = a.venueDetails?.serverRegion || '';
-      const regB = b.venueDetails?.serverRegion || '';
-      return regA.localeCompare(regB);
-    });
+  // Consolidate both physical (with distances) and online tournaments
+  const processedTournaments = tournaments.map(t => {
+    if (t.venueType === 'offline') {
+      const distance = getDistance(
+        coords.latitude,
+        coords.longitude,
+        t.venueDetails?.latitude,
+        t.venueDetails?.longitude
+      );
+      return { ...t, distance };
+    }
+    return { ...t, distance: null };
+  });
+
+  // Filter all tournaments based on the unified filters
+  const filteredTournaments = processedTournaments.filter(t => {
+    // 1. Search term filter
+    if (!searchFilter(t)) return false;
+
+    // 2. Venue type filter (online/offline)
+    if (venueTypeFilter !== 'All' && t.venueType !== venueTypeFilter) return false;
+
+    // 3. Game filter
+    if (gameFilter !== 'All' && t.gameName !== gameFilter) return false;
+
+    // 4. Platform filter (PC/Console/Mobile)
+    if (platformFilter !== 'All' && t.venueDetails?.platform !== platformFilter) return false;
+
+    // 5. Proximity radius filter (applies only to offline events unless showAllPhysical is checked)
+    if (t.venueType === 'offline' && !showAllPhysical && radius !== 'all') {
+      if (t.distance !== null && t.distance > radius) return false;
+    }
+
+    return true;
+  });
+
+  // Group filtered tournaments "game wisely" (by gameName)
+  const tournamentsByGame = {};
+  filteredTournaments.forEach(t => {
+    const game = t.gameName || 'Other';
+    if (!tournamentsByGame[game]) {
+      tournamentsByGame[game] = [];
+    }
+    tournamentsByGame[game].push(t);
+  });
 
   if (selectedEvent) {
     return (
@@ -1135,7 +1168,7 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
       </div>
 
       {/* FILTER SEARCH TIMELINE BAR & PLATFORM FILTER */}
-      <div className="w-full bg-white border-[3px] border-[#1a1a1a] p-4 rounded-xl shadow-[4px_4px_0px_rgba(26,26,26,1)] mb-8 flex flex-col md:flex-row items-stretch md:items-center gap-4">
+      <div className="w-full bg-white border-[3px] border-[#1a1a1a] p-4 rounded-xl shadow-[4px_4px_0px_rgba(26,26,26,1)] mb-8 flex flex-col xl:flex-row items-stretch xl:items-center gap-4">
         <div className="flex-1 flex items-center gap-3">
           <Search className="w-5 h-5 text-[#1a1a1a]/60" />
           <input 
@@ -1148,20 +1181,52 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
             className="w-full bg-transparent border-none outline-none font-mono text-sm font-bold placeholder-[#1a1a1a]/40 py-1"
           />
         </div>
-        <div className="border-t-2 md:border-t-0 md:border-l-2 border-[#1a1a1a]/15 pt-3 md:pt-0 md:pl-4 flex items-center gap-2">
-          <span className="text-xs font-black uppercase whitespace-nowrap">Platform:</span>
-          <select
-            id="platform-filter-select"
-            name="platformFilter"
-            value={platformFilter}
-            onChange={(e) => setPlatformFilter(e.target.value)}
-            className="bg-transparent border-b-[2px] border-black outline-none font-mono text-xs font-bold interactive-target cursor-pointer"
-          >
-            <option value="All">All Platforms</option>
-            <option value="PC">PC Only</option>
-            <option value="Console">Console Only</option>
-            <option value="Mobile">Mobile Only</option>
-          </select>
+        <div className="flex flex-wrap items-center gap-4 border-t-2 xl:border-t-0 xl:border-l-2 border-[#1a1a1a]/15 pt-3 xl:pt-0 xl:pl-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-black uppercase whitespace-nowrap">Game:</span>
+            <select
+              id="game-filter-select"
+              name="gameFilter"
+              value={gameFilter}
+              onChange={(e) => setGameFilter(e.target.value)}
+              className="bg-transparent border-b-[2px] border-black outline-none font-mono text-xs font-bold interactive-target cursor-pointer"
+            >
+              {uniqueGames.map(game => (
+                <option key={game} value={game}>{game}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-black uppercase whitespace-nowrap">Format:</span>
+            <select
+              id="venue-type-filter-select"
+              name="venueTypeFilter"
+              value={venueTypeFilter}
+              onChange={(e) => setVenueTypeFilter(e.target.value)}
+              className="bg-transparent border-b-[2px] border-black outline-none font-mono text-xs font-bold interactive-target cursor-pointer"
+            >
+              <option value="All">All Formats</option>
+              <option value="online">Online Only</option>
+              <option value="offline">Offline / Location</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-black uppercase whitespace-nowrap">Platform:</span>
+            <select
+              id="platform-filter-select"
+              name="platformFilter"
+              value={platformFilter}
+              onChange={(e) => setPlatformFilter(e.target.value)}
+              className="bg-transparent border-b-[2px] border-black outline-none font-mono text-xs font-bold interactive-target cursor-pointer"
+            >
+              <option value="All">All Platforms</option>
+              <option value="PC">PC Only</option>
+              <option value="Console">Console Only</option>
+              <option value="Mobile">Mobile Only</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -1183,46 +1248,26 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
 
       {/* DYNAMIC LISTINGS TIMELINE */}
       <div className="w-full space-y-12 mb-16">
-        
-        {/* PHYSICAL TOURNAMENTS SECTION */}
-        <div>
-          <h3 className="text-xl font-black uppercase border-b-[3px] border-[#1a1a1a] pb-2 mb-6 flex items-center gap-2">
-            📍 Physical Tournaments Near You
-          </h3>
-          {physicalTournaments.length > 0 ? (
-            <TournamentList 
-              tournaments={physicalTournaments} 
-              onSelectEvent={setSelectedEvent} 
-              user={user}
-            />
-          ) : (
-            <div className="w-full bg-white border-[3px] border-[#1a1a1a] rounded-xl p-8 text-center shadow-[4px_4px_0px_rgba(26,26,26,1)]">
-              <Compass className="w-10 h-10 mx-auto text-[#1a1a1a]/40 mb-3" />
-              <p className="text-sm font-bold uppercase opacity-60">No physical tournaments in range.</p>
-              <p className="text-xs opacity-50 mt-1">Try broadening your proximity radius slider or click "Show All" / select "Guntur" above.</p>
+        {Object.keys(tournamentsByGame).length > 0 ? (
+          Object.keys(tournamentsByGame).map((game) => (
+            <div key={game} className="space-y-4">
+              <h3 className="text-xl font-black uppercase border-b-[3px] border-[#1a1a1a] pb-2 mb-6 flex items-center gap-2 text-[#1a1a1a] dark:text-white">
+                🏆 {game} Tournaments ({tournamentsByGame[game].length})
+              </h3>
+              <TournamentList 
+                tournaments={tournamentsByGame[game]} 
+                onSelectEvent={setSelectedEvent} 
+                user={user}
+              />
             </div>
-          )}
-        </div>
-
-        {/* ESPORTS TOURNAMENTS SECTION */}
-        <div>
-          <h3 className="text-xl font-black uppercase border-b-[3px] border-[#1a1a1a] pb-2 mb-6 flex items-center gap-2">
-            🎮 Global Esports Leagues
-          </h3>
-          {esportsTournaments.length > 0 ? (
-            <TournamentList 
-              tournaments={esportsTournaments} 
-              onSelectEvent={setSelectedEvent} 
-              user={user}
-            />
-          ) : (
-            <div className="w-full bg-white border-[3px] border-[#1a1a1a] rounded-xl p-8 text-center shadow-[4px_4px_0px_rgba(26,26,26,1)]">
-              <Compass className="w-10 h-10 mx-auto text-[#1a1a1a]/40 mb-3" />
-              <p className="text-sm font-bold uppercase opacity-60">No esports matches found.</p>
-            </div>
-          )}
-        </div>
-
+          ))
+        ) : (
+          <div className="w-full bg-white border-[3px] border-[#1a1a1a] rounded-xl p-12 text-center shadow-[4px_4px_0px_rgba(26,26,26,1)]">
+            <Compass className="w-10 h-10 mx-auto text-[#1a1a1a]/40 mb-3 animate-spin" />
+            <p className="text-sm font-bold uppercase opacity-60">No matching tournaments found.</p>
+            <p className="text-xs opacity-50 mt-1">Try resetting your filters or broadening your proximity radius.</p>
+          </div>
+        )}
       </div>
     </div>
   );
