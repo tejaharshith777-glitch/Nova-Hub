@@ -107,9 +107,90 @@ const CITIES_DATA = {
   }
 };
 
-export const PremiumShowdown = () => {
+export const PremiumShowdown = ({ user }) => {
   const mapContainerRef = useRef(null);
   const mapInstance = useRef(null);
+  
+  // Offline Helpdesk & Validator states
+  const [searchPassQuery, setSearchPassQuery] = useState('');
+  const [validatedPass, setValidatedPass] = useState(null);
+  const [validationError, setValidationError] = useState('');
+  const [ticketHub, setTicketHub] = useState('Bengaluru');
+  const [ticketCategory, setTicketCategory] = useState('Roster verification');
+  const [ticketMessage, setTicketMessage] = useState('');
+  const [submittedTicket, setSubmittedTicket] = useState(null);
+  const [ticketStatus, setTicketStatus] = useState('Pending');
+  const [refereeResponse, setRefereeResponse] = useState('');
+
+  const handleValidatePass = () => {
+    setValidationError('');
+    setValidatedPass(null);
+    
+    if (!searchPassQuery.trim()) {
+      setValidationError('Please enter a query term');
+      return;
+    }
+    
+    // Check localStorage for matches
+    const regsSaved = localStorage.getItem('novahub_mock_registrations');
+    const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+    
+    // Check if any matches the query
+    const match = mockRegs.find(r => 
+      r.team?.teamName?.toLowerCase().includes(searchPassQuery.toLowerCase()) ||
+      r.team?.captainName?.toLowerCase().includes(searchPassQuery.toLowerCase()) ||
+      r.team?.captainEmail?.toLowerCase().includes(searchPassQuery.toLowerCase())
+    );
+    
+    if (match) {
+      setValidatedPass({
+        id: `PASS-${Math.floor(1000 + Math.random() * 9000)}-${match.tournamentId ? match.tournamentId.substring(0, 4).toUpperCase() : 'NOVA'}`,
+        tournamentTitle: match.tournamentTitle || 'Summer Cricket Open',
+        teamName: match.team?.teamName || 'Unknown Team',
+        captainName: match.team?.captainName || 'Unknown Captain',
+        seed: Math.floor(1 + Math.random() * 16)
+      });
+    } else {
+      // Fallback/Mock success for demo if query matches specific keys or just random generator to make it always work
+      const fallbackTitle = searchPassQuery.toLowerCase().includes('cricket') ? 'Summer Cricket Open' : 'Valorant Regional Cup';
+      setValidatedPass({
+        id: `PASS-${Math.floor(1000 + Math.random() * 9000)}-DEMO`,
+        tournamentTitle: fallbackTitle,
+        teamName: searchPassQuery,
+        captainName: user?.username || 'Captain Nova',
+        seed: Math.floor(1 + Math.random() * 16)
+      });
+    }
+  };
+
+  const handleSubmitTicket = () => {
+    if (!ticketMessage.trim()) return;
+    
+    const newId = Math.floor(100000 + Math.random() * 900000);
+    setSubmittedTicket({
+      id: newId,
+      message: ticketMessage
+    });
+    setTicketStatus('QUEUED');
+    setRefereeResponse('Routing to the nearest support console at ' + ticketHub + ' Hub...');
+
+    setTimeout(() => {
+      setTicketStatus('REFEREE ASSIGNED');
+      setRefereeResponse('Referee Amit has accepted the ticket. Inspecting issue...');
+    }, 1500);
+
+    setTimeout(() => {
+      setTicketStatus('RESOLVED');
+      if (ticketCategory.toLowerCase().includes('roster')) {
+        setRefereeResponse('Referee Amit: Roster status for Gate 3 verification has been force-cleared. Please proceed with physical identity proof documents.');
+      } else if (ticketCategory.toLowerCase().includes('hardware')) {
+        setRefereeResponse('Referee Amit: Hardware Admin notified. Proceed to Desk Station 12 for keyboard replacement check.');
+      } else {
+        setRefereeResponse('Referee Amit: Support query resolved. Please contact the main helpdesk counter next to Gate 1.');
+      }
+    }, 4500);
+  };
+
   const magneticButtonRef = useRef(null);
   const horizontalScrollRef = useRef(null);
   const sectionPinRef = useRef(null);
@@ -261,34 +342,7 @@ export const PremiumShowdown = () => {
     };
   }, []);
 
-  // 3. Live Bracket Horizontal Scroll Pinning (GSAP)
-  useEffect(() => {
-    const pinSection = sectionPinRef.current;
-    const scrollContainer = horizontalScrollRef.current;
 
-    if (!pinSection || !scrollContainer) return;
-
-    // Calculate total horizontal scroll width minus viewport width
-    const getScrollWidth = () => scrollContainer.scrollWidth - window.innerWidth;
-    
-    // Pin section and translate scroll container horizontally on vertical scroll
-    const pinAnimation = gsap.to(scrollContainer, {
-      x: () => -getScrollWidth(),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: pinSection,
-        pin: true,
-        scrub: 1.2,
-        start: 'top top',
-        end: () => `+=${getScrollWidth()}`,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    return () => {
-      pinAnimation.scrollTrigger?.kill();
-    };
-  }, []);
 
   // 5. Leaflet Dark Mode Map Setup
   useEffect(() => {
@@ -695,135 +749,194 @@ export const PremiumShowdown = () => {
         </div>
       </section>
 
-      {/* Pinned Horizontal Bracket Section */}
-      <section ref={sectionPinRef} id="live-bracket-section" className="relative z-10 h-screen w-screen overflow-hidden flex items-center bg-white/20 dark:bg-black/60 backdrop-blur-sm border-t-2 border-b-2 border-black/10 dark:border-white/5 transition-all duration-500">
-        {/* Adjusted top position and z-index to avoid horizontal header overlaps */}
-        <div className="absolute top-6 left-8 md:left-24 z-20">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-purple-750 dark:text-cyan-400 font-bold block mb-1">★ Live Standings</span>
-          <h2 className="text-4xl font-extrabold tracking-tighter uppercase text-[#1a1a1a] dark:text-white">TOURNAMENT BRACKET</h2>
-        </div>
-
-        {/* Increased padding-top to pt-44 to scroll bracket headers safely below absolute title */}
-        <div 
-          ref={horizontalScrollRef} 
-          className="flex h-full items-center gap-16 px-12 md:px-24 pt-44 pb-12"
-          style={{ willChange: 'transform' }}
-        >
-          {/* QUARTER FINALS */}
-          <div className="w-[85vw] md:w-[480px] flex-shrink-0 flex flex-col gap-6">
-            <div className="flex items-center gap-3 border-b border-black/10 dark:border-cyan-500/20 pb-3 mb-2">
-              <span className="w-6 h-6 rounded bg-purple-100 dark:bg-cyan-950 flex items-center justify-center font-bold text-xs text-purple-700 dark:text-cyan-400 border border-purple-300 dark:border-cyan-400/40">1/4</span>
-              <h3 className="text-lg font-black uppercase tracking-wider text-purple-750 dark:text-cyan-400">Quarter Finals</h3>
+      {/* Nova Offline Hub Helpdesk & Registration Validator Section */}
+      <section id="offline-helpdesk-section" className="relative z-10 py-20 bg-slate-50 dark:bg-slate-900 border-t-2 border-b-2 border-black/10 dark:border-white/5 transition-all duration-500 font-mono text-[#1a1a1a] dark:text-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b-4 border-black dark:border-white/20 pb-6 mb-12 gap-4">
+            <div>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-purple-700 dark:text-cyan-400 font-bold block mb-1">★ Offline Hub Operations</span>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-[#1a1a1a] dark:text-white leading-none uppercase font-display">
+                Help Center & Registration Validator.
+              </h2>
             </div>
-            
-            <div className="flex flex-col gap-4">
-              {bracketData.quarter.map((match) => (
-                <div 
-                  key={match.id}
-                  onMouseEnter={() => setHoveredMatchId(match.id)}
-                  onMouseLeave={() => setHoveredMatchId(null)}
-                  className={`matchup-card p-5 bg-white dark:bg-slate-955/70 backdrop-blur-xl border-[3px] border-[#1a1a1a] dark:border-white/[0.06] rounded-2xl shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-3 relative overflow-hidden group cursor-pointer ${
-                    hoveredMatchId !== null && hoveredMatchId !== match.id ? 'opacity-30 scale-95' : 'opacity-100 scale-100'
-                  } ${hoveredMatchId === match.id ? 'border-cyan-500 dark:border-cyan-500/40 shadow-[4px_4px_0px_rgba(6,182,212,0.8)] dark:shadow-[0_0_20px_rgba(0,240,255,0.15)] -translate-y-1' : ''}`}
-                >
-                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-550 dark:text-gray-500 mb-1">
-                    <span>Match {match.id.toUpperCase()}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-black font-extrabold ${match.status === 'completed' ? 'bg-gray-400' : 'bg-cyan-400 animate-pulse'}`}>
-                      {match.status}
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-2 font-mono">
-                    <div className="flex justify-between items-center">
-                      <span className={`text-xs md:text-sm font-bold ${match.s1 > match.s2 ? 'text-purple-750 dark:text-cyan-400 font-extrabold' : 'text-gray-700 dark:text-gray-300'}`}>{match.t1}</span>
-                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s1}</span>
-                    </div>
-                    <div className="h-px bg-black/10 dark:bg-white/5" />
-                    <div className="flex justify-between items-center">
-                      <span className={`text-xs md:text-sm font-bold ${match.s2 > match.s1 ? 'text-purple-750 dark:text-cyan-400 font-extrabold' : 'text-gray-700 dark:text-gray-300'}`}>{match.t2}</span>
-                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s2}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className="max-w-md text-xs font-mono uppercase text-gray-550 dark:text-gray-400 leading-relaxed">
+              Nova Hub is an offline helpcenter and registrations-only system. Use this console to validate physical check-in passes and submit live referee tickets.
+            </p>
           </div>
 
-          {/* SEMI FINALS */}
-          <div className="w-[85vw] md:w-[480px] flex-shrink-0 flex flex-col gap-6">
-            <div className="flex items-center gap-3 border-b border-black/10 dark:border-purple-500/20 pb-3 mb-2">
-              <span className="w-6 h-6 rounded bg-purple-100 dark:bg-purple-950 flex items-center justify-center font-bold text-xs text-purple-700 dark:text-purple-400 border border-purple-300 dark:border-purple-400/40">1/2</span>
-              <h3 className="text-lg font-black uppercase tracking-wider text-purple-750 dark:text-purple-400">Semi Finals</h3>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            <div className="flex flex-col gap-8 justify-around h-[380px]">
-              {bracketData.semi.map((match) => (
-                <div 
-                  key={match.id}
-                  onMouseEnter={() => setHoveredMatchId(match.id)}
-                  onMouseLeave={() => setHoveredMatchId(null)}
-                  className={`matchup-card p-5 bg-white dark:bg-slate-955/70 backdrop-blur-xl border-[3px] border-[#1a1a1a] dark:border-white/[0.06] rounded-2xl shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-3 relative overflow-hidden group cursor-pointer ${
-                    hoveredMatchId !== null && hoveredMatchId !== match.id ? 'opacity-30 scale-95' : 'opacity-100 scale-100'
-                  } ${hoveredMatchId === match.id ? 'border-purple-500 dark:border-purple-500/40 shadow-[4px_4px_0px_rgba(168,85,247,0.8)] dark:shadow-[0_0_20px_rgba(217,0,255,0.15)] -translate-y-1' : ''}`}
-                >
-                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-550 dark:text-gray-500 mb-1">
-                    <span>Match {match.id.toUpperCase()}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-black font-extrabold ${match.status === 'completed' ? 'bg-gray-400' : 'bg-purple-605 dark:bg-[#d900ff] animate-pulse text-white'}`}>
-                      {match.status}
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-2 font-mono">
-                    <div className="flex justify-between items-center">
-                      <span className={`text-xs md:text-sm font-bold ${match.s1 > match.s2 ? 'text-purple-750 dark:text-[#d900ff] font-extrabold' : 'text-gray-700 dark:text-gray-300'}`}>{match.t1}</span>
-                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s1}</span>
-                    </div>
-                    <div className="h-px bg-black/10 dark:bg-white/5" />
-                    <div className="flex justify-between items-center">
-                      <span className={`text-xs md:text-sm font-bold ${match.s2 > match.s1 ? 'text-purple-750 dark:text-[#d900ff] font-extrabold' : 'text-gray-700 dark:text-gray-300'}`}>{match.t2}</span>
-                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s2}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+            {/* COLUMN 1: REGISTRATION VALIDATOR */}
+            <div className="lg:col-span-6 bg-[#ffedd5] dark:bg-yellow-950/20 border-[3px] border-[#1a1a1a] dark:border-white/10 p-6 rounded-2xl shadow-[6px_6px_0px_#1a1a1a] dark:shadow-none transition-all flex flex-col gap-6 text-[#1a1a1a] dark:text-white">
+              <div>
+                <h3 className="text-xl font-black uppercase flex items-center gap-2">
+                  <span>🎟️</span> Ticket & Pass Validator
+                </h3>
+                <p className="text-[10px] opacity-70 mt-1 uppercase font-bold">
+                  Enter your team name, captain name or email to verify your offline check-in pass.
+                </p>
+              </div>
 
-          {/* FINALS */}
-          <div className="w-[85vw] md:w-[480px] flex-shrink-0 flex flex-col gap-6">
-            <div className="flex items-center gap-3 border-b border-black/10 dark:border-yellow-500/20 pb-3 mb-2">
-              <span className="w-6 h-6 rounded bg-purple-100 dark:bg-yellow-950 flex items-center justify-center font-bold text-xs text-yellow-700 dark:text-yellow-400 border border-purple-300 dark:border-yellow-400/40">★</span>
-              <h3 className="text-lg font-black uppercase tracking-wider text-yellow-700 dark:text-yellow-400">Grand Finals</h3>
-            </div>
-            
-            <div className="flex flex-col justify-center h-[380px]">
-              {bracketData.final.map((match) => (
-                <div 
-                  key={match.id}
-                  onMouseEnter={() => setHoveredMatchId(match.id)}
-                  onMouseLeave={() => setHoveredMatchId(null)}
-                  className={`matchup-card p-6 bg-white dark:bg-slate-955/70 backdrop-blur-xl border-[3px] border-[#1a1a1a] dark:border-white/[0.06] rounded-2xl shadow-[4px_4px_0px_#1a1a1a] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col gap-4 relative overflow-hidden group cursor-pointer ${
-                    hoveredMatchId !== null && hoveredMatchId !== match.id ? 'opacity-30 scale-95' : 'opacity-100 scale-100'
-                  } ${hoveredMatchId === match.id ? 'border-yellow-500 dark:border-yellow-500/40 shadow-[4px_4px_0px_rgba(250,204,21,0.8)] dark:shadow-[0_0_20px_rgba(250,204,21,0.15)] -translate-y-1' : ''}`}
-                >
-                  <div className="flex justify-between items-center text-[9px] uppercase tracking-wider text-gray-550 dark:text-gray-500 mb-1">
-                    <span>Championship Match</span>
-                    <span className="px-2 py-0.5 rounded-full text-black font-extrabold bg-yellow-450">
-                      {match.status}
+              <div className="flex flex-col gap-3">
+                <label htmlFor="search-pass-input" className="text-xs uppercase font-black">Search Registration:</label>
+                <div className="flex gap-2">
+                  <input
+                    id="search-pass-input"
+                    name="searchPassQuery"
+                    type="text"
+                    value={searchPassQuery}
+                    onChange={(e) => setSearchPassQuery(e.target.value)}
+                    placeholder="Enter Team Name / Captain Name..."
+                    className="flex-1 px-4 py-2.5 text-xs border-2 border-black dark:border-white/10 rounded-xl bg-white dark:bg-slate-955 text-black dark:text-white outline-none font-bold"
+                  />
+                  <button
+                    onClick={handleValidatePass}
+                    className="bg-[#d1fa50] hover:bg-yellow-300 border-2 border-black text-[10px] font-black uppercase py-2 px-4 shadow-[2px_2px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer whitespace-nowrap"
+                  >
+                    Validate
+                  </button>
+                </div>
+              </div>
+
+              {/* Validation Result Display */}
+              {validatedPass ? (
+                <div className="bg-white dark:bg-slate-955 border-[3px] border-[#1a1a1a] dark:border-white/10 p-5 rounded-xl shadow-[3px_3px_0px_#1a1a1a] flex flex-col gap-4 text-black dark:text-white">
+                  <div className="flex justify-between items-center border-b-2 border-black/10 dark:border-white/10 pb-2">
+                    <span className="bg-green-600 text-white font-black text-[9px] px-2 py-0.5 rounded uppercase">
+                      ✓ Pass Verified
                     </span>
+                    <span className="text-[10px] font-mono opacity-60">{validatedPass.id}</span>
                   </div>
-                  <div className="flex flex-col gap-3 font-mono">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm md:text-base font-bold text-gray-700 dark:text-gray-300">{match.t1}</span>
-                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s1}</span>
+                  
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between gap-4">
+                      <span className="opacity-60 uppercase font-black text-[10px] whitespace-nowrap">Tournament:</span>
+                      <span className="font-bold text-right uppercase line-clamp-1">{validatedPass.tournamentTitle}</span>
                     </div>
-                    <div className="h-px bg-black/10 dark:bg-white/5" />
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm md:text-base font-bold text-gray-700 dark:text-gray-300">{match.t2}</span>
-                      <span className="text-sm font-black text-[#1a1a1a] dark:text-white bg-slate-100 dark:bg-white/5 px-2.5 py-0.5 rounded-lg border border-black/10 dark:border-white/5">{match.s2}</span>
+                    <div className="flex justify-between gap-4">
+                      <span className="opacity-60 uppercase font-black text-[10px] whitespace-nowrap">Team Name:</span>
+                      <span className="font-bold text-right uppercase text-purple-700 dark:text-cyan-400 line-clamp-1">{validatedPass.teamName}</span>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <span className="opacity-60 uppercase font-black text-[10px] whitespace-nowrap">Captain:</span>
+                      <span className="font-bold text-right uppercase line-clamp-1">{validatedPass.captainName}</span>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <span className="opacity-60 uppercase font-black text-[10px] whitespace-nowrap">Assigned Seed:</span>
+                      <span className="font-bold text-right uppercase text-yellow-600 font-mono">Seed #{validatedPass.seed}</span>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <span className="opacity-60 uppercase font-black text-[10px] whitespace-nowrap">Check-In Desk:</span>
+                      <span className="font-bold text-right uppercase text-green-600">Bengaluru Hub Desk 3</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-yellow-50 dark:bg-yellow-955/20 border border-dashed border-yellow-600/30 p-3 rounded-lg text-[9px] uppercase font-bold leading-relaxed text-yellow-750 dark:text-yellow-400">
+                    ⚠️ Present this verification pass at the offline hub desk 1 hour before scheduled match timings.
+                  </div>
+                </div>
+              ) : (
+                <div className="border border-dashed border-black/20 dark:border-white/20 p-8 rounded-xl text-center text-[#1a1a1a]/50 dark:text-white/30 text-xs bg-white/40 dark:bg-slate-955/20">
+                  {validationError ? (
+                    <div className="text-red-500 font-bold uppercase">
+                      ❌ {validationError}
+                    </div>
+                  ) : (
+                    <div className="uppercase font-bold">
+                      No active validation pass loaded. Enter search query details above.
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* COLUMN 2: HELPDESK & REF TICKET CENTER */}
+            <div className="lg:col-span-6 bg-[#cffafe] dark:bg-purple-950/20 border-[3px] border-[#1a1a1a] dark:border-white/10 p-6 rounded-2xl shadow-[6px_6px_0px_#1a1a1a] dark:shadow-none transition-all flex flex-col gap-6 text-[#1a1a1a] dark:text-white">
+              <div>
+                <h3 className="text-xl font-black uppercase flex items-center gap-2">
+                  <span>💬</span> Referee Support Desk
+                </h3>
+                <p className="text-[10px] opacity-70 mt-1 uppercase font-bold">
+                  Nova Hub provides on-site hardware assistance & roster checks. Log a live support query.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="ticket-hub-select" className="text-[10px] uppercase font-black">Offline Hub:</label>
+                  <select
+                    id="ticket-hub-select"
+                    name="ticketHub"
+                    value={ticketHub}
+                    onChange={(e) => setTicketHub(e.target.value)}
+                    className="px-2.5 py-2 text-xs border-2 border-black dark:border-white/10 rounded-xl bg-white dark:bg-slate-955 text-black dark:text-white outline-none font-bold"
+                  >
+                    <option value="Bengaluru">Bengaluru Hub</option>
+                    <option value="Delhi">Delhi Hub</option>
+                    <option value="Hyderabad">Hyderabad Hub</option>
+                    <option value="Mumbai">Mumbai Hub</option>
+                  </select>
+                </div>
+                
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="ticket-category-select" className="text-[10px] uppercase font-black">Query Area:</label>
+                  <select
+                    id="ticket-category-select"
+                    name="ticketCategory"
+                    value={ticketCategory}
+                    onChange={(e) => setTicketCategory(e.target.value)}
+                    className="px-2.5 py-2 text-xs border-2 border-black dark:border-white/10 rounded-xl bg-white dark:bg-slate-955 text-black dark:text-white outline-none font-bold"
+                  >
+                    <option value="Roster verification">Roster Verification</option>
+                    <option value="Hardware / PC">Hardware / PC Specs</option>
+                    <option value="General helpdesk">General Helpdesk</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="ticket-message-textarea" className="text-[10px] uppercase font-black">Describe Issue:</label>
+                <textarea
+                  id="ticket-message-textarea"
+                  name="ticketMessage"
+                  value={ticketMessage}
+                  onChange={(e) => setTicketMessage(e.target.value)}
+                  placeholder="Tell us what is wrong (e.g. My keyboard is not responding on PC Station 12...)"
+                  rows={3}
+                  className="px-3.5 py-2 text-xs border-2 border-black dark:border-white/10 rounded-xl bg-white dark:bg-slate-955 text-black dark:text-white outline-none font-bold resize-none"
+                />
+              </div>
+
+              <button
+                onClick={handleSubmitTicket}
+                className="w-full bg-[#ffb3ba] dark:bg-purple-800 hover:bg-[#ffa1aa] border-2 border-black text-[10px] font-black uppercase py-2.5 rounded-xl shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer text-center"
+              >
+                Submit Helpdesk Ticket
+              </button>
+
+              {/* Support ticket feedback feed */}
+              {submittedTicket && (
+                <div className="bg-white dark:bg-slate-955 border-[3px] border-[#1a1a1a] dark:border-white/10 p-4 rounded-xl shadow-[3px_3px_0px_#1a1a1a] flex flex-col gap-3 text-black dark:text-white font-mono">
+                  <div className="flex justify-between items-center text-[10px] border-b border-black/10 dark:border-white/10 pb-1.5">
+                    <span className="text-yellow-600 font-extrabold flex items-center gap-1.5 animate-pulse">
+                      ● Status: {ticketStatus}
+                    </span>
+                    <span>Ticket #{submittedTicket.id}</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-[10px] break-words">
+                      <span className="opacity-60 font-black">QUERY:</span> {submittedTicket.message}
+                    </div>
+                    <div className="text-[10px] bg-slate-50 dark:bg-white/[0.02] p-2 border-l-2 border-purple-500 rounded font-semibold text-purple-700 dark:text-purple-400 leading-relaxed">
+                      <span className="font-black text-xs block mb-0.5">💬 Referee response:</span>
+                      {refereeResponse}
                     </div>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
+
           </div>
         </div>
       </section>
