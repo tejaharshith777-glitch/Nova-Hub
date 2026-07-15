@@ -166,7 +166,7 @@ const Chatbot = ({ apiBaseUrl }) => {
 
       if (line.trim().startsWith('•')) {
         return (
-          <li key={i} className="list-disc list-inside ml-2 my-1 text-slate-700 dark:text-slate-350">
+          <li key={i} className="list-disc list-inside ml-2 my-1 text-slate-700 dark:text-slate-300">
             {typeof parsedLine === 'string' ? parsedLine.replace('•', '').trim() : parsedLine}
           </li>
         );

@@ -1034,9 +1034,9 @@ export const PremiumShowdown = ({ user }) => {
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-black text-[#1a1a1a] dark:text-white">₹0</span>
-                  <span className="text-xs text-gray-550 dark:text-gray-400 font-mono">/ FOREVER</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">/ FOREVER</span>
                 </div>
-                <p className="text-xs text-gray-750 dark:text-gray-450 leading-relaxed font-mono uppercase">
+                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed font-mono uppercase">
                   Perfect for casual validation squads testing the node setup.
                 </p>
                 <div className="border-t border-black/10 dark:border-white/10 pt-6 space-y-3">
@@ -1058,7 +1058,7 @@ export const PremiumShowdown = ({ user }) => {
                   setRegStep(1);
                   setIsRegModalOpen(true);
                 }}
-                className="mt-8 w-full py-4 bg-[#ffffff] hover:bg-slate-50 border-2 border-[#1a1a1a] text-[#1a1a1a] dark:bg-[#f8fafc] dark:hover:bg-slate-200 dark:text-[#090b11] dark:border-transparent font-black uppercase text-xs tracking-wider transition-all rounded-xl cursor-pointer shadow-[3px_3px_0px_#1a1a1a] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:shadow-none"
+                className="mt-8 w-full py-4 bg-[#ffffff] hover:bg-slate-50 border-2 border-[#1a1a1a] text-[#1a1a1a] dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white dark:border-white/30 font-black uppercase text-xs tracking-wider transition-all rounded-xl cursor-pointer shadow-[3px_3px_0px_#1a1a1a] dark:shadow-[3px_3px_0px_rgba(255,255,255,0.15)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:shadow-none"
               >
                 Claim Free Pass
               </button>
