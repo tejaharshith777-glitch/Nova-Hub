@@ -7,7 +7,15 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-[#c4e4e3] dark:bg-[#07090d] border-b-[3px] border-[#1a1a1a] dark:border-white/10 py-4 px-6 md:px-12 flex justify-between items-center shadow-sm transition-colors duration-300">
-      <Link to="/" className="flex items-center group interactive-target" onClick={() => setIsMobileOpen(false)}>
+      <a
+        href="/"
+        className="flex items-center group interactive-target"
+        onClick={(e) => {
+          e.preventDefault();
+          setIsMobileOpen(false);
+          window.location.href = '/';
+        }}
+      >
         <div className="bg-[#0f1117] border-[2.5px] border-[#1a1a1a] dark:border-white/20 px-3.5 py-1.5 rounded-full flex items-center gap-3 transition-all duration-200 hover:scale-[1.03] shadow-[3px_3px_0px_rgba(26,26,26,1)] dark:shadow-[3px_3px_0px_rgba(255,255,255,0.15)] select-none">
           <img
             src="/sports_flower_icon.png"
@@ -18,7 +26,7 @@ const Navbar = ({ user, handleLogout, handleRoleToggle, setIsAuthOpen }) => {
             NOVA <span className="text-gray-400 font-normal opacity-80">//</span> <span className="text-yellow-400 underline decoration-[3px] decoration-yellow-400 underline-offset-[5px]">HUB</span>
           </span>
         </div>
-      </Link>
+      </a>
 
       {/* Desktop Navigation */}
       <nav className="flex items-center gap-6 text-xs font-bold uppercase tracking-wider hidden md:flex text-[#1a1a1a] dark:text-gray-300 transition-colors">
