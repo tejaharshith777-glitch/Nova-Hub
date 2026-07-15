@@ -412,10 +412,11 @@ router.post('/create', authenticateToken, async (req, res) => {
   }
 });
 
-// Join Tournament (Participant only)
+// Join Tournament (Participant & Demo)
 router.post('/:id/join', authenticateToken, async (req, res) => {
   try {
-    if (req.user.role !== 'participant') {
+    // In mock mode allow any role (host or participant) for demo purposes
+    if (process.env.USE_MOCK_DB !== 'true' && req.user.role !== 'participant') {
       return res.status(403).json({ message: 'Only participant profiles can join competitions.' });
     }
 

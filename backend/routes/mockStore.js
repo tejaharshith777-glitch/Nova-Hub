@@ -545,7 +545,7 @@ export const tournamentsDb = [
     title: 'League of Legends Champions Cup',
     category: 'esports',
     gameName: 'League of Legends',
-    rules: '5v5 Tournament draft mode on Summoner\'s Rift.',
+    rules: "5v5 Tournament draft mode on Summoner's Rift.",
     venueType: 'online',
     venueDetails: { serverRegion: 'Europe West', lobbyCode: 'LBY-LOL32', platform: 'PC' },
     format: 'single-elimination',
@@ -555,5 +555,172 @@ export const tournamentsDb = [
     entryFee: 200,
     status: 'open',
     registeredTeams: []
+  },
+
+  // --- HYDERABAD (17.3850, 78.4867) ---
+  {
+    _id: 'mock-t-hyd-cricket',
+    title: 'Hyderabad Premier Cricket League',
+    category: 'sports',
+    gameName: 'Cricket',
+    rules: 'Pink ball T20. Strictly 20-overs per side. Powerplay rules apply.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Rajiv Gandhi International Cricket Stadium, Uppal, Hyderabad', pinCode: '500039', stadiumHall: 'North Stand Net', latitude: 17.4063, longitude: 78.5560 },
+    format: 'round-robin',
+    maxTeams: 8,
+    teamSize: 11,
+    prizePool: 100000,
+    entryFee: 800,
+    status: 'ongoing',
+    registeredTeams: [
+      { _id: 'rt-hyd-1', teamName: 'Hyderabad Chargers', captainName: 'Ravi Kumar', captainEmail: 'ravi@chargers.in', roster: [{ name: 'Ravi Kumar', gameId: 'RK01' }, { name: 'Suresh Babu', gameId: 'SB02' }], registrationToken: 'REG-HYD001', rulesAccepted: true },
+      { _id: 'rt-hyd-2', teamName: 'Deccan Warriors', captainName: 'Pradeep Rao', captainEmail: 'pradeep@dw.in', roster: [{ name: 'Pradeep Rao', gameId: 'PR01' }, { name: 'Kiran Reddy', gameId: 'KR02' }], registrationToken: 'REG-HYD002', rulesAccepted: true }
+    ]
+  },
+  {
+    _id: 'mock-t-hyd-football',
+    title: 'Hyderabad City Football Cup',
+    category: 'sports',
+    gameName: 'Football',
+    rules: '7-a-side. ISL rules adapted for local tournament format.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Gachibowli Stadium, Hyderabad', pinCode: '500032', stadiumHall: 'Turf 1', latitude: 17.4237, longitude: 78.3498 },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 7,
+    prizePool: 45000,
+    entryFee: 300,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-hyd-bgmi',
+    title: 'Hyderabad BGMI Open Championship',
+    category: 'esports',
+    gameName: 'BGMI',
+    rules: 'Mobile devices only. Emulators banned. 4-man squads.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Asia South', lobbyCode: 'LBY-BGM22', platform: 'Mobile' },
+    format: 'battle-royale-matrix',
+    maxTeams: 20,
+    teamSize: 4,
+    prizePool: 55000,
+    entryFee: 100,
+    status: 'ongoing',
+    registeredTeams: [
+      { _id: 'rt-bgmi-1', teamName: 'Clutch Squad', captainName: 'Arjun Mehta', captainEmail: 'arjun@clutch.gg', roster: [{ name: 'Arjun Mehta', gameId: 'ARJUN99' }, { name: 'Dev Sharma', gameId: 'DEV44' }], registrationToken: 'REG-BGMI01', rulesAccepted: true },
+      { _id: 'rt-bgmi-2', teamName: 'Phoenix Rising', captainName: 'Rohan Das', captainEmail: 'rohan@phoenix.gg', roster: [{ name: 'Rohan Das', gameId: 'RD007' }, { name: 'Priya Gupta', gameId: 'PG77' }], registrationToken: 'REG-BGMI02', rulesAccepted: true },
+      { _id: 'rt-bgmi-3', teamName: 'Nova Wolves', captainName: 'Tejas', captainEmail: 'tejas@nova.gg', roster: [{ name: 'Tejas', gameId: 'TEJAS01' }, { name: 'Sameer', gameId: 'SAM09' }], registrationToken: 'REG-BGMI03', rulesAccepted: true }
+    ]
+  },
+
+  // --- CHENNAI (13.0827, 80.2707) ---
+  {
+    _id: 'mock-t-chn-cricket',
+    title: 'Chennai Premier Cricket Showdown',
+    category: 'sports',
+    gameName: 'Cricket',
+    rules: 'Leather ball T20. Approved equipment only.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'MA Chidambaram Stadium Practice Ground, Chennai', pinCode: '600028', stadiumHall: 'Outer Net Area', latitude: 13.0628, longitude: 80.2786 },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 11,
+    prizePool: 80000,
+    entryFee: 600,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-chn-chess',
+    title: 'Chennai Chess Blitz Masters',
+    category: 'esports',
+    gameName: 'Chess',
+    rules: 'FIDE blitz rules. 5+3 time control. Rated games only.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Global', lobbyCode: 'LBY-CHESS01', platform: 'PC' },
+    format: 'round-robin',
+    maxTeams: 16,
+    teamSize: 1,
+    prizePool: 20000,
+    entryFee: 0,
+    status: 'ongoing',
+    registeredTeams: [
+      { _id: 'rt-chess-1', teamName: 'R. Pragg', captainName: 'R. Praggnanandhaa', captainEmail: 'pragg@chess.in', roster: [{ name: 'R. Praggnanandhaa', gameId: 'PRAGG2900' }], registrationToken: 'REG-CHESS01', rulesAccepted: true },
+      { _id: 'rt-chess-2', teamName: 'G. Viswanathan', captainName: 'Viswanathan Anand', captainEmail: 'vishy@chess.in', roster: [{ name: 'Viswanathan Anand', gameId: 'VISHY2800' }], registrationToken: 'REG-CHESS02', rulesAccepted: true }
+    ]
+  },
+  {
+    _id: 'mock-t-chn-valorant',
+    title: 'Chennai Valorant City Cup',
+    category: 'esports',
+    gameName: 'Valorant',
+    rules: 'PC only. Anti-cheat Vanguard must be active during match.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Asia South', lobbyCode: 'LBY-VAL55', platform: 'PC' },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 5,
+    prizePool: 35000,
+    entryFee: 150,
+    status: 'open',
+    registeredTeams: []
+  },
+
+  // --- PUNE (18.5204, 73.8567) ---
+  {
+    _id: 'mock-t-pune-badminton',
+    title: 'Pune Badminton State Open',
+    category: 'sports',
+    gameName: 'Badminton',
+    rules: 'BAI sanctioned event. Yonex Mavis 350 shuttle mandatory.',
+    venueType: 'offline',
+    venueDetails: { physicalAddress: 'Balewadi Sports Complex, Pune', pinCode: '411045', stadiumHall: 'Court 5', latitude: 18.5679, longitude: 73.7794 },
+    format: 'single-elimination',
+    maxTeams: 16,
+    teamSize: 2,
+    prizePool: 25000,
+    entryFee: 100,
+    status: 'open',
+    registeredTeams: []
+  },
+  {
+    _id: 'mock-t-pune-cs2',
+    title: 'Pune CS2 Invitational',
+    category: 'esports',
+    gameName: 'CS2',
+    rules: '5v5 Competitive. VAC verification required. No stand-ins.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Asia South', lobbyCode: 'LBY-CS2PUNE', platform: 'PC' },
+    format: 'single-elimination',
+    maxTeams: 8,
+    teamSize: 5,
+    prizePool: 50000,
+    entryFee: 200,
+    status: 'open',
+    registeredTeams: []
+  },
+
+  // --- COMPLETED TOURNAMENT (Shows bracket winner) ---
+  {
+    _id: 'mock-t-completed-1',
+    title: 'All India Valorant Spring Cup 2025',
+    category: 'esports',
+    gameName: 'Valorant',
+    rules: 'VCT India rules. Double elimination bracket. Spring 2025 edition.',
+    venueType: 'online',
+    venueDetails: { serverRegion: 'Asia South', lobbyCode: 'CLOSED', platform: 'PC' },
+    format: 'double-elimination',
+    maxTeams: 8,
+    teamSize: 5,
+    prizePool: 75000,
+    entryFee: 250,
+    status: 'completed',
+    registeredTeams: [
+      { _id: 'rt-vct-1', teamName: 'GodLike Esports', captainName: 'Clutchy', captainEmail: 'clutchy@gl.gg', roster: [{ name: 'Clutchy', gameId: 'GL_C01' }, { name: 'Xeta', gameId: 'GL_X02' }], registrationToken: 'REG-VCTW01', rulesAccepted: true },
+      { _id: 'rt-vct-2', teamName: 'Entity Esports', captainName: 'Lightningfast', captainEmail: 'lf@entity.gg', roster: [{ name: 'Lightningfast', gameId: 'ENT_LF1' }, { name: 'Zyxen', gameId: 'ENT_Z2' }], registrationToken: 'REG-VCTW02', rulesAccepted: true },
+      { _id: 'rt-vct-3', teamName: 'Velocity Gaming', captainName: 'ScreaM_IN', captainEmail: 'scream@velo.gg', roster: [{ name: 'ScreaM_IN', gameId: 'VEL_S1' }, { name: 'Aegis', gameId: 'VEL_A2' }], registrationToken: 'REG-VCTW03', rulesAccepted: true },
+      { _id: 'rt-vct-4', teamName: 'Global Esports', captainName: 'Ace', captainEmail: 'ace@global.gg', roster: [{ name: 'Ace', gameId: 'GLB_A1' }, { name: 'Bolt', gameId: 'GLB_B2' }], registrationToken: 'REG-VCTW04', rulesAccepted: true }
+    ]
   }
 ];
