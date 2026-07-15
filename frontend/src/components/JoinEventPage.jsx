@@ -641,15 +641,51 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
     }
     try {
       const res = await fetch(`${apiBaseUrl}/api/tournaments`, { credentials: 'include' });
+      let list = [];
       if (res.ok) {
         const data = await res.json();
-        setTournaments(data.length > 0 ? data : localFallbackTournaments);
+        list = data.length > 0 ? data : localFallbackTournaments;
       } else {
-        setTournaments(localFallbackTournaments);
+        list = localFallbackTournaments;
       }
+
+      // Always merge local registration records into the fetched list
+      const regsSaved = localStorage.getItem('novahub_mock_registrations');
+      const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+      const merged = list.map(t => {
+        const matchingRegs = mockRegs.filter(r => r.tournamentId === (t._id || t.id));
+        if (matchingRegs.length > 0) {
+          const currentTeams = t.registeredTeams || [];
+          const localTeams = matchingRegs.map(r => r.team).filter(lt => 
+            !currentTeams.some(ct => ct.teamName === lt.teamName || ct.captainEmail === lt.captainEmail)
+          );
+          return {
+            ...t,
+            registeredTeams: [...currentTeams, ...localTeams]
+          };
+        }
+        return t;
+      });
+      setTournaments(merged);
     } catch (err) {
       console.warn('Error fetching tournaments from backend. Falling back to local data.', err);
-      setTournaments(localFallbackTournaments);
+      // Re-apply local fallback and merge local registrations
+      const hostedSaved = localStorage.getItem('novahub_mock_tournaments');
+      const hostedTournaments = hostedSaved ? JSON.parse(hostedSaved) : [];
+      const regsSaved = localStorage.getItem('novahub_mock_registrations');
+      const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+      const allBase = [...localFallbackTournaments, ...hostedTournaments];
+      const merged = allBase.map(t => {
+        const matchingRegs = mockRegs.filter(r => r.tournamentId === (t._id || t.id));
+        if (matchingRegs.length > 0) {
+          return {
+            ...t,
+            registeredTeams: [...(t.registeredTeams || []), ...matchingRegs.map(r => r.team)]
+          };
+        }
+        return t;
+      });
+      setTournaments(merged);
     }
   }, [apiBaseUrl]);
 
@@ -923,8 +959,12 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
     );
   };
 
-  // Get unique game names for the dropdown filter
-  const uniqueGames = ['All', ...new Set(tournaments.map(t => t.gameName))];
+  // Get unique game names for the dropdown filter, ensuring "Other" is always present
+  const rawGames = tournaments.map(t => t.gameName).filter(Boolean);
+  const uniqueGames = ['All', ...new Set(rawGames)];
+  if (!uniqueGames.includes('Other')) {
+    uniqueGames.push('Other');
+  }
 
   // Process all physical tournaments for their distances (used by map)
   const physicalTournaments = tournaments
@@ -962,7 +1002,14 @@ export const JoinEventPage = ({ setCurrentPage, apiBaseUrl, user }) => {
     if (venueTypeFilter !== 'All' && t.venueType !== venueTypeFilter) return false;
 
     // 3. Game filter
-    if (gameFilter !== 'All' && t.gameName !== gameFilter) return false;
+    if (gameFilter !== 'All') {
+      if (gameFilter === 'Other') {
+        const standardGames = new Set(tournaments.map(x => x.gameName).filter(g => g && g !== 'Other'));
+        if (t.gameName && standardGames.has(t.gameName)) return false;
+      } else if (t.gameName !== gameFilter) {
+        return false;
+      }
+    }
 
     // 4. Platform filter (PC/Console/Mobile)
     if (platformFilter !== 'All' && t.venueDetails?.platform !== platformFilter) return false;

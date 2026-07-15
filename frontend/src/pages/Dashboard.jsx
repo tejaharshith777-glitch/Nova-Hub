@@ -225,19 +225,50 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
     }
     try {
       const res = await fetch(`${apiBaseUrl}/api/tournaments`, { credentials: 'include' });
+      let list = [];
       if (res.ok) {
         const data = await res.json();
-        if (data && data.length > 0) {
-          setTournaments(data);
-        } else {
-          setTournaments(defaultFallbackTournaments);
-        }
+        list = data && data.length > 0 ? data : defaultFallbackTournaments;
       } else {
-        setTournaments(defaultFallbackTournaments);
+        list = defaultFallbackTournaments;
       }
+
+      // Always merge local registration records into the fetched list
+      const regsSaved = localStorage.getItem('novahub_mock_registrations');
+      const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+      const merged = list.map(t => {
+        const matchingRegs = mockRegs.filter(r => r.tournamentId === (t._id || t.id));
+        if (matchingRegs.length > 0) {
+          const currentTeams = t.registeredTeams || [];
+          const localTeams = matchingRegs.map(r => r.team).filter(lt => 
+            !currentTeams.some(ct => ct.teamName === lt.teamName || ct.captainEmail === lt.captainEmail)
+          );
+          return {
+            ...t,
+            registeredTeams: [...currentTeams, ...localTeams]
+          };
+        }
+        return t;
+      });
+      setTournaments(merged);
     } catch (err) {
       console.warn('Backend unavailable, falling back to mock datasets.', err);
-      setTournaments(defaultFallbackTournaments);
+      const hostedSaved = localStorage.getItem('novahub_mock_tournaments');
+      const hostedTournaments = hostedSaved ? JSON.parse(hostedSaved) : [];
+      const regsSaved = localStorage.getItem('novahub_mock_registrations');
+      const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+      const allBase = [...defaultFallbackTournaments, ...hostedTournaments];
+      const merged = allBase.map(t => {
+        const matchingRegs = mockRegs.filter(r => r.tournamentId === (t._id || t.id));
+        if (matchingRegs.length > 0) {
+          return {
+            ...t,
+            registeredTeams: [...(t.registeredTeams || []), ...matchingRegs.map(r => r.team)]
+          };
+        }
+        return t;
+      });
+      setTournaments(merged);
     } finally {
       setLoadingTournaments(false);
     }
