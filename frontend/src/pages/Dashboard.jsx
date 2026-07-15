@@ -561,7 +561,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   };
 
   // Calculate achievements stats
-  const registeredCount = tournaments.filter(t => t.registeredTeams?.some(team => team.captainEmail === currentUserEmail)).length;
+  const registeredCount = tournaments.filter(t => t.registeredTeams?.some(team => team.captainEmail === currentUserEmail || (user?.username && team.captainName?.toLowerCase() === user.username.toLowerCase()))).length;
   const isClanCreated = !!activeTeam;
   const isHighRoller = walletBalance >= 5000;
 
@@ -828,7 +828,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                 {(() => {
                   const myEvents = tournaments.filter(t => {
                     const isHost = t.hostId?._id === user?.id || t.hostId === user?.id || t.hostId?.username === user?.username;
-                    const isPlayer = t.registeredTeams?.some(team => team.captainEmail === currentUserEmail);
+                    const isPlayer = t.registeredTeams?.some(team => team.captainEmail === currentUserEmail || (user?.username && team.captainName?.toLowerCase() === user.username.toLowerCase()));
                     return isHost || isPlayer;
                   });
 
@@ -954,7 +954,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
               <div className="flex-1 flex flex-col gap-8">
                 {(() => {
                   const joinedGames = tournaments.filter(t => 
-                    t.registeredTeams?.some(team => team.captainEmail === currentUserEmail)
+                    t.registeredTeams?.some(team => team.captainEmail === currentUserEmail || (user?.username && team.captainName?.toLowerCase() === user.username.toLowerCase()))
                   );
                   const hostedGames = tournaments.filter(t => 
                     t.hostId?._id === user?.id || t.hostId === user?.id || t.hostId?.username === user?.username

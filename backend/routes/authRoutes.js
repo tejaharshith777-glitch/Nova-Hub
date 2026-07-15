@@ -62,7 +62,7 @@ router.post('/register', async (req, res) => {
 
       return res.status(201).json({
         message: 'Registration successful (MOCK DB MODE)',
-        user: { id: newUser._id, username: newUser.username, role: newUser.role, activeTeam: newUser.activeTeam }
+        user: { id: newUser._id, username: newUser.username, role: newUser.role, email: newUser.email, activeTeam: newUser.activeTeam }
       });
     }
 
@@ -100,7 +100,7 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({
       message: 'Registration successful',
-      user: { id: newUser._id, username: newUser.username, role: newUser.role, activeTeam: newUser.activeTeam }
+      user: { id: newUser._id, username: newUser.username, role: newUser.role, email: newUser.email, activeTeam: newUser.activeTeam }
     });
   } catch (err) {
     res.status(500).json({ message: 'Registration server error', error: err.message });
@@ -148,7 +148,7 @@ router.post('/login', async (req, res) => {
 
       return res.status(200).json({
         message: 'Login successful (MOCK DB MODE)',
-        user: { id: user._id, username: user.username, role: user.role, activeTeam: user.activeTeam || '' }
+        user: { id: user._id, username: user.username, role: user.role, email: user.email, activeTeam: user.activeTeam || '' }
       });
     }
 
@@ -174,7 +174,7 @@ router.post('/login', async (req, res) => {
 
     res.status(200).json({
       message: 'Login successful',
-      user: { id: user._id, username: user.username, role: user.role, activeTeam: user.activeTeam || '' }
+      user: { id: user._id, username: user.username, role: user.role, email: user.email, activeTeam: user.activeTeam || '' }
     });
   } catch (err) {
     res.status(500).json({ message: 'Login server error', error: err.message });
