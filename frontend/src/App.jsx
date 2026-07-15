@@ -171,7 +171,7 @@ export const App = () => {
               }
             />
             <Route path="/tournament/:id" element={<TournamentDetails user={user} />} />
-            <Route path="/radar" element={<TournamentRadar />} />
+            <Route path="/radar" element={<TournamentRadar user={user} />} />
             <Route path="/showdown" element={<PremiumShowdown />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

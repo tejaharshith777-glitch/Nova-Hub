@@ -102,7 +102,7 @@ const MOCK_TOURNAMENTS = [
   }
 ];
 
-export const TournamentRadar = () => {
+export const TournamentRadar = ({ user }) => {
   const navigate = useNavigate();
   const [coords, setCoords] = useState({ latitude: 12.9784, longitude: 77.5960 }); // Default Bangalore
   const [locationName, setLocationName] = useState('Bangalore (Default Coords)');
@@ -149,7 +149,9 @@ export const TournamentRadar = () => {
               prizePool: t.prizePool || 0,
               slotsFilled: t.registeredTeams?.length || 0,
               maxSlots: t.maxTeams,
-              isDynamic: true
+              isDynamic: true,
+              hostId: t.hostId,
+              registeredTeams: t.registeredTeams
             };
           });
           setDbTournaments(mapped);
@@ -214,9 +216,19 @@ export const TournamentRadar = () => {
     return { ...t, distance: dist };
   });
 
-  // Filter tournaments based on radius
+  // Filter tournaments based on radius, but always show user's own hosted/joined tournaments
   const filteredTournaments = processedTournaments.filter((t) => {
     if (t.venueType === 'online') return true; // Online tournaments are always relevant
+    
+    // Check if user is host or player
+    const isUserHost = user && (t.hostId?._id === user.id || t.hostId === user.id || t.hostId?.username === user.username);
+    const isUserPlayer = user && t.registeredTeams?.some(team => 
+      team.captainEmail === user.email || 
+      (user.username && team.captainName?.toLowerCase() === user.username.toLowerCase())
+    );
+    
+    if (isUserHost || isUserPlayer) return true;
+    
     return t.distance !== null && t.distance <= radius;
   });
 
@@ -512,17 +524,43 @@ export const TournamentRadar = () => {
                     </div>
                   )}
 
-                  <button 
-                    disabled={isFull}
-                    onClick={() => navigate(`/tournament/${t.id}`)}
-                    className={`w-full py-2.5 rounded-xl border-[2.5px] border-[#1a1a1a] font-black text-[10px] uppercase shadow-[2.5px_2.5px_0px_rgba(26,26,26,1)] hover:shadow-none hover:translate-x-[2.5px] hover:translate-y-[2.5px] transition-all cursor-pointer ${
-                      isFull 
-                        ? 'bg-[#1a1a1a]/10 text-[#1a1a1a]/30 shadow-none cursor-not-allowed translate-x-[2.5px] translate-y-[2.5px]'
-                        : 'bg-white hover:bg-yellow-200'
-                    }`}
-                  >
-                    {isFull ? 'Roster Slots Full' : 'Register Team'}
-                  </button>
+                  {t.venueType === 'offline' ? (
+                    <div className="flex gap-2.5">
+                      <button
+                        onClick={() => {
+                          setSelectedPin(t);
+                          setMapCenter({ lat: t.latitude, lng: t.longitude });
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="flex-1 py-2.5 rounded-xl border-[2.5px] border-[#1a1a1a] bg-[#cffafe] font-black text-[10px] uppercase shadow-[2.5px_2.5px_0px_rgba(26,26,26,1)] hover:shadow-none hover:translate-x-[2.5px] hover:translate-y-[2.5px] transition-all cursor-pointer text-center"
+                      >
+                        📍 Locate
+                      </button>
+                      <button 
+                        disabled={isFull}
+                        onClick={() => navigate(`/tournament/${t.id}`)}
+                        className={`flex-[1.5] py-2.5 rounded-xl border-[2.5px] border-[#1a1a1a] font-black text-[10px] uppercase shadow-[2.5px_2.5px_0px_rgba(26,26,26,1)] hover:shadow-none hover:translate-x-[2.5px] hover:translate-y-[2.5px] transition-all cursor-pointer ${
+                          isFull 
+                            ? 'bg-[#1a1a1a]/10 text-[#1a1a1a]/30 shadow-none cursor-not-allowed translate-x-[2.5px] translate-y-[2.5px]'
+                            : 'bg-white hover:bg-yellow-200'
+                        }`}
+                      >
+                        {isFull ? 'Full' : 'Register'}
+                      </button>
+                    </div>
+                  ) : (
+                    <button 
+                      disabled={isFull}
+                      onClick={() => navigate(`/tournament/${t.id}`)}
+                      className={`w-full py-2.5 rounded-xl border-[2.5px] border-[#1a1a1a] font-black text-[10px] uppercase shadow-[2.5px_2.5px_0px_rgba(26,26,26,1)] hover:shadow-none hover:translate-x-[2.5px] hover:translate-y-[2.5px] transition-all cursor-pointer ${
+                        isFull 
+                          ? 'bg-[#1a1a1a]/10 text-[#1a1a1a]/30 shadow-none cursor-not-allowed translate-x-[2.5px] translate-y-[2.5px]'
+                          : 'bg-white hover:bg-yellow-200'
+                      }`}
+                    >
+                      {isFull ? 'Roster Slots Full' : 'Register Team'}
+                    </button>
+                  )}
                 </div>
               </div>
             );
