@@ -267,49 +267,49 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
 
         {/* ─── Modern SaaS Glassmorphism Card Overlay ─── */}
         {leafletLoaded && (
-          <div className="absolute bottom-4 left-4 right-4 z-20 bg-white/70 backdrop-blur-md border-2 border-white/20 p-4 rounded-xl shadow-xl flex flex-col gap-3 max-h-[140px] justify-between">
+          <div className="absolute bottom-4 left-4 right-4 z-20 bg-white dark:bg-[#1a1a2e]/95 backdrop-blur-md border-2 border-white/20 dark:border-white/10 p-4 rounded-xl shadow-xl flex flex-col gap-3 max-h-[140px] justify-between">
             <div className="flex items-start gap-2.5 min-h-0">
-              <div className="bg-[#1a1a1a] text-white p-1.5 rounded-lg flex items-center justify-center shrink-0">
-                <MapPin className="w-4 h-4 text-yellow-300" />
+              <div className="bg-[#1a1a1a] dark:bg-yellow-400 text-white dark:text-black p-1.5 rounded-lg flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4 text-yellow-300 dark:text-black" />
               </div>
               <div className="flex-1 min-h-0 overflow-y-auto pr-1">
-                <span className="text-[9px] uppercase font-black text-gray-500 block tracking-widest">
+                <span className="text-[9px] uppercase font-black text-gray-500 dark:text-gray-300 block tracking-widest">
                   {loadingAddress ? 'Resolving street coordinates...' : 'Selected Venue Address'}
                 </span>
                 
                 {loadingAddress ? (
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <Loader2 className="w-3 h-3 animate-spin text-purple-600" />
-                    <span className="text-[10px] italic font-bold">Nominatim Geocoder checking coordinates...</span>
+                    <Loader2 className="w-3 h-3 animate-spin text-purple-600 dark:text-purple-400" />
+                    <span className="text-[10px] italic font-bold text-[#1a1a1a] dark:text-white">Nominatim Geocoder checking coordinates...</span>
                   </div>
                 ) : (
-                  <p className="text-[10px] font-black leading-tight mt-0.5 break-words">
+                  <p className="text-[10px] font-black leading-tight mt-0.5 break-words text-[#1a1a1a] dark:text-white">
                     {address}
                   </p>
                 )}
 
                 {errorMsg && (
-                  <span className="text-[8px] text-red-500 font-bold block mt-1 uppercase">
+                  <span className="text-[8px] text-red-500 dark:text-red-400 font-bold block mt-1 uppercase">
                     ⚠ {errorMsg}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center justify-between border-t border-black/10 pt-2 shrink-0">
+            <div className="flex items-center justify-between border-t border-black/10 dark:border-white/10 pt-2 shrink-0">
               <div className="text-left">
-                <span className="text-[8px] uppercase font-black text-gray-400 block">Total cost</span>
-                <span className="text-xs font-black">₹{ticketPrice}</span>
+                <span className="text-[8px] uppercase font-black text-gray-400 dark:text-gray-300 block">Total cost</span>
+                <span className="text-xs font-black text-[#1a1a1a] dark:text-white">₹{ticketPrice}</span>
               </div>
 
               <button
                 onClick={handleBookingSubmit}
                 disabled={loadingAddress}
                 className={`
-                  border-2 border-black px-4 py-1.5 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all flex items-center gap-1.5
+                  border-2 border-black dark:border-white/30 px-4 py-1.5 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all flex items-center gap-1.5
                   ${loadingAddress 
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none' 
-                    : 'bg-[#baffc9] hover:bg-[#a3f0b2] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]'
+                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed shadow-none' 
+                    : 'bg-[#baffc9] dark:bg-[#22c55e] hover:bg-[#a3f0b2] dark:hover:bg-[#16a34a] text-[#1a1a1a] dark:text-white hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]'
                   }
                 `}
               >
