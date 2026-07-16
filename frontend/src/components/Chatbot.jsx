@@ -1,183 +1,180 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Send, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+// Nova Hub system context for Gemini
+const NOVA_HUB_SYSTEM_CONTEXT = `You are the Nova Hub AI Assistant — a smart, friendly assistant powered by Google Gemini, built into Nova Hub, a sports and esports tournament management platform.
+
+Nova Hub lets users:
+- HOST physical and esports tournaments (Cricket, Football, Basketball, Valorant, BGMI, Free Fire, Chess, Cycling, etc.)
+- JOIN tournaments as a team or solo player, fill out rosters, pay entry fees, get a registration token/pass
+- TRACK brackets, match history, live scores, leaderboards
+- BOOK tickets for offline physical sport events on a map
+- MANAGE teams, invite players, set clan tags
+- USE the wallet to pay entry fees
+
+Key features: bracket automation, anti-cheat checks, offline venue radar, live match leaderboard, dashboard with history/my-tournaments/booking tabs, role switching between Host and Participant.
+
+Locations active in India: Bangalore, Guntur (AP), Mumbai, Delhi, Hyderabad.
+
+Be conversational, helpful, and concise. Format responses with markdown (bold, bullet points). Keep answers focused and relevant. If asked something completely unrelated to Nova Hub, you may still answer helpfully but bring it back to Nova Hub if relevant.`;
+
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+// Smart client-side fallback (when no API key)
+const getSmartFallback = (message) => {
+  const msg = message.toLowerCase().trim();
+  if (/^(hi|hello|hey|sup|yo|namaste)/.test(msg)) {
+    return "Hey there! 👋 I'm your Nova Hub AI Assistant powered by Gemini. Ask me anything about hosting tournaments, joining events, booking tickets, or managing your team!";
+  }
+  if (msg.includes('host') || msg.includes('create') || msg.includes('organize')) {
+    return "To host a tournament, go to **Dashboard → Host Event**. Set your game, venue, rules, entry fee, prize pool, and team slots. Brackets generate automatically! 🏆";
+  }
+  if (msg.includes('join') || msg.includes('register') || msg.includes('participate')) {
+    return "To join a tournament, go to **Join Tournament** in the navbar. Select an event, fill your team roster, pay the entry fee, and you'll get a registration token/pass. 🎫";
+  }
+  if (msg.includes('valorant') || msg.includes('bgmi') || msg.includes('free fire') || msg.includes('chess')) {
+    return "🎮 Nova Hub supports esports like **Valorant** (5v5), **BGMI** (25 squads), **Free Fire** (squad battle royale), and **Chess** (Swiss blitz format). All have automated bracket systems and anti-cheat checks!";
+  }
+  if (/cricket|football|basketball|badminton|cycling|racing/.test(msg)) {
+    return "⚽ Nova Hub supports physical sports like **Cricket, Football, Basketball, Badminton, and Cycling**! Book venue slots, manage rosters, and track match results on our live radar map.";
+  }
+  if (msg.includes('prize') || msg.includes('money') || msg.includes('win') || msg.includes('reward')) {
+    return "💰 Prize pools vary by tournament. Hosts configure entry fees and prize stakes. Free tiers award badges and ranking points. Premium events have real cash payouts distributed to team captains!";
+  }
+  if (msg.includes('history') || msg.includes('registered') || msg.includes('my tournament')) {
+    return "📋 Go to **Dashboard → History** to see all tournaments you've registered for. Click **Enter Lobby** to view your registration pass, rules, venue info, and full team details.";
+  }
+  if (msg.includes('ticket') || msg.includes('book') || msg.includes('venue')) {
+    return "🎟️ Go to **Book Tickets** in your dashboard to select a venue on the map, choose your seat/slot, and confirm booking. Your ticket pass will be saved in your history!";
+  }
+  const fallbacks = [
+    "I can help you with hosting, joining, bracket tracking, team management, and more! What would you like to do on Nova Hub? 🚀",
+    "Nova Hub makes tournament management seamless. Ask me about joining events, hosting a league, or how the bracket system works!",
+    "I'm your Gemini-powered Nova Hub assistant. Ask me about any feature — from wallet payments to offline venue radar! 🌟"
+  ];
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+};
 
 const Chatbot = ({ apiBaseUrl }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hi! I'm Gemini, your Nova Hub assistant. How can I help you explore or host tournaments today?", sender: 'ai' }
+    { id: 1, text: "Hi! I'm your **Nova Hub AI Assistant** powered by Google Gemini ✨\n\nI can help you with:\n• Hosting or joining tournaments\n• Finding active leagues near you\n• Rules, rosters, passes & brackets\n• Booking tickets for offline events\n\nWhat would you like to do today?", sender: 'ai' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const chatHistoryRef = useRef([]); // Gemini multi-turn chat history
 
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const handleSend = async () => {
-    if (!inputValue.trim()) return;
+  const callGeminiDirect = async (userMessage) => {
+    if (!GEMINI_API_KEY) return null;
+    try {
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+        systemInstruction: NOVA_HUB_SYSTEM_CONTEXT,
+      });
 
-    const userMessageText = inputValue;
+      // Build multi-turn history for Gemini
+      const chat = model.startChat({
+        history: chatHistoryRef.current,
+      });
+
+      const result = await chat.sendMessage(userMessage);
+      const responseText = result.response.text();
+
+      // Update our history ref for next turn
+      chatHistoryRef.current = [
+        ...chatHistoryRef.current,
+        { role: 'user', parts: [{ text: userMessage }] },
+        { role: 'model', parts: [{ text: responseText }] },
+      ];
+
+      return responseText;
+    } catch (err) {
+      console.warn('Gemini direct API error:', err.message);
+      return null;
+    }
+  };
+
+  const callBackendChat = async (userMessage) => {
+    if (!apiBaseUrl || !apiBaseUrl.trim()) return null;
+    try {
+      const res = await fetch(`${apiBaseUrl}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.response;
+      }
+    } catch (err) {
+      console.warn('Backend chat failed:', err.message);
+    }
+    return null;
+  };
+
+  const handleSend = async () => {
+    if (!inputValue.trim() || isTyping) return;
+
+    const userMessageText = inputValue.trim();
     const newUserMsg = { id: Date.now(), text: userMessageText, sender: 'user' };
     setMessages(prev => [...prev, newUserMsg]);
     setInputValue('');
     setIsTyping(true);
 
-    if (apiBaseUrl) {
-      try {
-        const res = await fetch(`${apiBaseUrl}/api/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: userMessageText })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setMessages(prev => [...prev, { id: Date.now() + 1, text: data.response, sender: 'ai' }]);
-          setIsTyping(false);
-          return;
-        }
-      } catch (err) {
-        console.warn("Backend chat endpoint failed, running client-side simulation.");
-      }
+    // Priority: 1. Gemini direct, 2. Backend, 3. Smart fallback
+    let aiResponse = await callGeminiDirect(userMessageText);
+    if (!aiResponse) {
+      aiResponse = await callBackendChat(userMessageText);
+    }
+    if (!aiResponse) {
+      // Simulate thinking time for fallback
+      await new Promise(r => setTimeout(r, 600 + Math.random() * 600));
+      aiResponse = getSmartFallback(userMessageText);
     }
 
-    // Client-side Gemini-style simulation fallback
-    const lowerInput = userMessageText.toLowerCase();
-    const delay = 800 + Math.random() * 800;
-
-    setTimeout(() => {
-      let aiResponse;
-
-      // Greetings
-      if (/^(hi|hello|hey|sup|yo|good morning|good evening|namaste)/.test(lowerInput)) {
-        const greetings = [
-          "Hey there! 👋 I'm Gemini, your digital assistant for Nova Hub. Whether you're looking to host a custom tournament, register your team, or explore local turf grids, I'm here to guide you. What's on your mind today?",
-          "Hello! Great to see you in the hub 🎮 I can help you discover active leagues, outline anti-cheat criteria, or coordinate offline access pass issues. Let me know what you'd like to do!",
-          "Hi! 🙌 I'm your Google-aligned assistant for Nova Hub. Ask me anything about tournament scheduling, entry payouts, or bracket synchronization protocols."
-        ];
-        aiResponse = greetings[Math.floor(Math.random() * greetings.length)];
-
-      // Hosting
-      } else if (lowerInput.includes('host') || lowerInput.includes('create') || lowerInput.includes('organize')) {
-        aiResponse = "To host an event, head to the **Dashboard → Host Event** window. You can set up:\n• **Physical Sports** — Football, Cricket, Basketball, or Badminton.\n• **Esports Lobbies** — Valorant, BGMI, Free Fire, or Chess.\n• **Rules & Fees** — Set custom slot size caps, entry fees, and prize stakes.\n• **Brackets Engine** — Double/single elimination brackets generate automatically.";
-
-      // Joining
-      } else if (lowerInput.includes('join') || lowerInput.includes('participate') || lowerInput.includes('sign up for')) {
-        aiResponse = "To join any tournament, navigate to **Dashboard → Join Tournament** and:\n1. Choose your desired sport or esports league.\n2. Fill out your team name and player handles.\n3. Complete the mock payment checklist if there's an entry fee.\n4. Save your generated Nodal verification token and QR code pass.";
-
-      // Valorant
-      } else if (lowerInput.includes('valorant') || lowerInput.includes('valo') || lowerInput.includes('riot')) {
-        aiResponse = "🎯 **Valorant Tournaments on Nova Hub**\n\n• **Format**: 5v5 online competitive brackets (Search & Destroy).\n• **Audits**: Riot Vanguard compliance checked before brackets lock.\n• **Features**: Live map scores sync directly to your player dashboard.\n• **Entry**: Register with a 5-player squad (plus 1 optional sub).";
-
-      // BGMI / PUBG
-      } else if (lowerInput.includes('bgmi') || lowerInput.includes('pubg') || lowerInput.includes('battlegrounds')) {
-        aiResponse = "🔫 **BGMI Battlegrounds on Nova Hub**\n\n• **Format**: 25 Squad lobbies across Erangel and Miramar.\n• **Scoring**: Placement points + kill multipliers synced live.\n• **Rules**: Emulators strictly banned. Mobile device parameters verified.\n• **Seeding**: Prioritized seed rankings based on career KD ratio.";
-
-      // Free Fire
-      } else if (lowerInput.includes('free fire') || lowerInput.includes('freefire') || /\bff\b/.test(lowerInput)) {
-        aiResponse = "🔥 **Garena Free Fire Champions Cup**\n\n• **Format**: Squad check-ins with fast-paced zone matches.\n• **Seeding**: Top-ranked regional squads are automatically seeded.\n• **Anti-Cheat**: Automated device scans and player account audit locks.";
-
-      // Chess
-      } else if (lowerInput.includes('chess')) {
-        aiResponse = "♟️ **Chess Blitz & Bullet Showdowns**\n\n• **Format**: Swiss system over 7 rounds with blitz controls (5+2).\n• **Sync**: Automatic game tracking via verified chess.com API ties.\n• **Brackets**: Automated round generation based on current standings.";
-
-      // Physical sports
-      } else if (/cricket|football|basketball|badminton|tennis|volleyball/.test(lowerInput)) {
-        const sport = lowerInput.includes('cricket') ? 'Cricket' :
-          lowerInput.includes('football') ? 'Football' :
-          lowerInput.includes('basketball') ? 'Basketball' :
-          lowerInput.includes('badminton') ? 'Badminton' :
-          lowerInput.includes('tennis') ? 'Tennis' : 'Volleyball';
-        aiResponse = `🏆 **${sport} Leagues on Nova Hub**\n\nWe provide a full digital engine for physical ${sport} formats:\n• **Radar Booking**: Lock specific turf slots and coordinates.\n• **Rosters check**: Verify captain emails and offline passes on-site.\n• **Leaderboards**: Match scores update dynamically on the local radar.`;
-
-      // Racing
-      } else if (/racing|car race|bike race|cycling|moto|veloce/.test(lowerInput)) {
-        aiResponse = "🏁 **Racing Tournaments on Nova Hub**\n\nWe currently support three major racing leagues:\n• **Veloce GP Series**: Time-trial simulator setups.\n• **Tour de Nova Cycling**: Velodrome races with live GPS coordinates.\n• **MRF Moto GP**: High-speed motorcycle track events in Hyderabad.";
-
-      // Prize / winnings
-      } else if (/prize|money|win|reward|cash|payout/.test(lowerInput)) {
-        aiResponse = "💰 **Prize Pool & Payout Rules**\n\n• **Free Tiers**: Badges, ranking points, and elite radar profile pins.\n• **Premium Tiers**: Cash prize pools distributed securely directly to team captains.\n• **Audit locks**: All match outcomes must be host-verified before payout dispatch.";
-
-      // Passes / membership
-      } else if (/pass|membership|subscribe|rookie|challenger|elite|plan|tier/.test(lowerInput)) {
-        aiResponse = "🎫 **Nova Hub Premium Passes**\n\n• **Rookie Pass (Free)**: Standard brackets, check-in radar visibility.\n• **Challenger Pass (₹499/mo)**: Priority queue matching, free team tags.\n• **Elite Pass (₹1,499/mo)**: 0-ping routing slots, professional match audits, priority support.";
-
-      // Offline hub / offices
-      } else if (/offline|office|hub|location|city|bengaluru|guntur|hyderabad|mumbai/.test(lowerInput)) {
-        aiResponse = "🏢 **Offline Nodal Verification Centers**\n\n• **Services**: Offline roster verification, pass printing, check-in badges.\n• **Locations**: Active offices located in Bengaluru, Hyderabad, Guntur, and Mumbai.\n• **Safety audit**: Physical coordinators verify ID bounds prior to matches.\n• **Note**: Gameplay takes place online or at actual turfs; hubs are strictly administrative.";
-
-      // Dashboard
-      } else if (/dashboard|account|login|profile/.test(lowerInput)) {
-        aiResponse = "🖥️ **Interactive Player Dashboard**\n\n• **Access**: Click 'Sign In' in the navbar to authenticate.\n• **Tabs**: Track joined brackets, schedule matches, or edit hosted settings.\n• **Pass key**: View and share your active registration tokens from your profile.";
-
-      // What is Nova Hub
-      } else if (/what is|who are|about nova|tell me about/.test(lowerInput)) {
-        aiResponse = "🌟 **Nova Hub** is a sports & esports tournament management platform bridging physical turf matches and competitive esports. We supply automated brackets, roster checks, and localized radars to make sports coordination seamless across India.";
-
-      // Help / what can you do
-      } else if (/help|what can you|commands|options|features/.test(lowerInput)) {
-        aiResponse = "🤖 **How can I help you today? Ask me about:**\n\n• **Esports**: Valorant, BGMI, Free Fire, Chess rules.\n• **Sports**: Turf cricket, football coordinates, badminton fixtures.\n• **Hosting**: Setting up entry fees, slots, and brackets.\n• **Passes**: Elite and Challenger benefits, offline verification hubs.";
-
-      // Fallback
-      } else {
-        const fallbacks = [
-          "I don't have that specific data segment in my context yet, but I can help you search active turf leagues, register custom squads, or explore regional node maps. What sport are you interested in?",
-          "That's a good query! I'm constantly syncing my knowledge grid. You can find active brackets for Cricket, Football, and Valorant on the main homepage. What event would you like to explore?",
-          "I'm not entirely sure about that specific coordinate, but I can guide you through hosting a new match, booking entry passes, or reviewing leaderboard standings. Try asking about our tournament rules!"
-        ];
-        aiResponse = fallbacks[Math.floor(Math.random() * fallbacks.length)];
-      }
-
-      setMessages(prev => [...prev, { id: Date.now() + 1, text: aiResponse, sender: 'ai' }]);
-      setIsTyping(false);
-    }, delay);
+    setMessages(prev => [...prev, { id: Date.now() + 1, text: aiResponse, sender: 'ai' }]);
+    setIsTyping(false);
   };
 
-  // Helper to render formatting in messages (bold headers and bullet points)
+  // Render markdown-style text (bold, bullets, line breaks)
   const renderMessageText = (text) => {
     return text.split('\n').map((line, i) => {
-      let content = line;
       const parts = [];
       let lastIdx = 0;
       const boldRegex = /\*\*(.*?)\*\*/g;
       let match;
-
       while ((match = boldRegex.exec(line)) !== null) {
-        if (match.index > lastIdx) {
-          parts.push(line.substring(lastIdx, match.index));
-        }
-        parts.push(
-          <strong key={match.index} className="font-extrabold text-blue-600 dark:text-cyan-400">
-            {match[1]}
-          </strong>
-        );
+        if (match.index > lastIdx) parts.push(line.substring(lastIdx, match.index));
+        parts.push(<strong key={match.index} className="font-extrabold text-blue-600 dark:text-cyan-400">{match[1]}</strong>);
         lastIdx = boldRegex.lastIndex;
       }
-      if (lastIdx < line.length) {
-        parts.push(line.substring(lastIdx));
-      }
+      if (lastIdx < line.length) parts.push(line.substring(lastIdx));
+      const parsedLine = parts.length > 0 ? parts : line;
 
-      const parsedLine = parts.length > 0 ? parts : content;
-
-      if (line.trim().startsWith('•')) {
+      if (line.trim().startsWith('•') || line.trim().startsWith('-') || line.trim().startsWith('*')) {
         return (
-          <li key={i} className="list-disc list-inside ml-2 my-1 text-slate-700 dark:text-slate-300">
-            {typeof parsedLine === 'string' ? parsedLine.replace('•', '').trim() : parsedLine}
+          <li key={i} className="list-disc list-inside ml-2 my-0.5 text-slate-700 dark:text-slate-300">
+            {typeof parsedLine === 'string'
+              ? parsedLine.replace(/^[•\-*]\s*/, '').trim()
+              : parsedLine}
           </li>
         );
       }
-      return <p key={i} className="mb-2 leading-relaxed">{parsedLine}</p>;
+      if (!line.trim()) return <br key={i} />;
+      return <p key={i} className="mb-1.5 leading-relaxed">{parsedLine}</p>;
     });
   };
 
   return (
     <>
-      {/* Custom Styles Injection */}
       <style>{`
         @keyframes gemini-gradient {
           0% { background-position: 0% 50%; }
@@ -198,7 +195,6 @@ const Chatbot = ({ apiBaseUrl }) => {
           background-size: 200% auto;
           animation: gemini-shimmer 1.5s infinite linear;
         }
-        /* Mobile: chat takes full screen */
         @media (max-width: 639px) {
           .chatbot-window {
             inset: 0 !important;
@@ -215,7 +211,7 @@ const Chatbot = ({ apiBaseUrl }) => {
         }
       `}</style>
 
-      {/* Mobile dark backdrop when chat is open */}
+      {/* Mobile backdrop */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -229,7 +225,7 @@ const Chatbot = ({ apiBaseUrl }) => {
         )}
       </AnimatePresence>
 
-      {/* Chat Toggle Button — bottom-right, responsive sizing */}
+      {/* Toggle Button */}
       {!isOpen && (
         <motion.button
           whileHover={{ scale: 1.08 }}
@@ -264,9 +260,9 @@ const Chatbot = ({ apiBaseUrl }) => {
               bottom-0 right-0 left-0
               w-full h-[100dvh]
               sm:bottom-6 sm:right-6 sm:left-auto sm:top-auto
-              sm:w-[400px] sm:h-[520px]
-              md:w-[420px] md:h-[560px]
-              lg:w-[440px] lg:h-[580px]
+              sm:w-[400px] sm:h-[560px]
+              md:w-[430px] md:h-[600px]
+              lg:w-[450px] lg:h-[620px]
             `}
           >
             {/* Header */}
@@ -279,7 +275,9 @@ const Chatbot = ({ apiBaseUrl }) => {
                   <h3 className="font-display font-black text-sm tracking-widest uppercase flex items-center gap-2">
                     Gemini Live
                   </h3>
-                  <p className="text-[10px] text-white/80 font-mono">Nova Hub Assistant</p>
+                  <p className="text-[10px] text-white/80 font-mono">
+                    Nova Hub AI · {GEMINI_API_KEY ? '🟢 Connected' : '🟡 Offline Mode'}
+                  </p>
                 </div>
               </div>
               <button
@@ -291,7 +289,7 @@ const Chatbot = ({ apiBaseUrl }) => {
               </button>
             </div>
 
-            {/* Chat Messages Area */}
+            {/* Messages */}
             <div className="flex-1 bg-gray-50 dark:bg-slate-950 p-3 sm:p-4 overflow-y-auto flex flex-col gap-3 sm:gap-4">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -300,7 +298,7 @@ const Chatbot = ({ apiBaseUrl }) => {
                       <Sparkles className="w-3 h-3 text-white" />
                     </div>
                   )}
-                  <div className={`max-w-[80%] sm:max-w-[75%] p-3 text-xs leading-relaxed ${
+                  <div className={`max-w-[82%] sm:max-w-[78%] p-3 text-xs leading-relaxed ${
                     msg.sender === 'user'
                       ? 'bg-[#c4e4e3] dark:bg-cyan-950/40 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-xl rounded-tr-sm text-[#1a1a1a] dark:text-white font-semibold'
                       : 'bg-white dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-xl rounded-tl-sm text-[#1a1a1a] dark:text-white shadow-sm'
@@ -309,21 +307,40 @@ const Chatbot = ({ apiBaseUrl }) => {
                   </div>
                 </div>
               ))}
+
+              {/* Typing indicator */}
               {isTyping && (
                 <div className="flex justify-start items-start gap-2">
-                  <div className="w-6 h-6 gemini-gradient-bg rounded-full flex items-center justify-center mr-2 mt-1 shrink-0 border border-white/20 shadow-sm">
+                  <div className="w-6 h-6 gemini-gradient-bg rounded-full flex items-center justify-center shrink-0 border border-white/20 shadow-sm mt-1">
                     <Sparkles className="w-3 h-3 text-white animate-spin" />
                   </div>
-                  <div className="bg-white dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 p-3 rounded-xl rounded-tl-sm w-48 shadow-sm">
-                    <div className="flex flex-col gap-1.5 w-full">
-                      <div className="h-2 w-full rounded gemini-shimmer-bg" />
-                      <div className="h-2 w-3/4 rounded gemini-shimmer-bg" />
+                  <div className="bg-white dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 p-3 rounded-xl rounded-tl-sm shadow-sm">
+                    <div className="flex items-center gap-1.5">
+                      {[0, 1, 2].map(i => (
+                        <div key={i} className="w-2 h-2 rounded-full gemini-gradient-bg" style={{ animationDelay: `${i * 0.2}s`, animation: 'gemini-gradient 1s ease infinite' }} />
+                      ))}
+                      <span className="text-[9px] ml-1 opacity-60 uppercase font-black tracking-widest">Gemini thinking...</span>
                     </div>
                   </div>
                 </div>
               )}
               <div ref={messagesEndRef} />
             </div>
+
+            {/* Quick Prompts */}
+            {messages.length <= 2 && (
+              <div className="px-3 sm:px-4 pb-2 flex flex-wrap gap-1.5 bg-gray-50 dark:bg-slate-950 shrink-0">
+                {['How do I host a tournament?', 'How to join a game?', 'What esports are supported?', 'How does the wallet work?'].map(q => (
+                  <button
+                    key={q}
+                    onClick={() => { setInputValue(q); }}
+                    className="text-[9px] font-black uppercase bg-white dark:bg-slate-800 border border-[#1a1a1a]/20 dark:border-white/15 px-2 py-1 rounded-full hover:border-blue-400 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Input Area */}
             <div className="p-3 sm:p-4 bg-white dark:bg-slate-900 border-t-[3px] border-[#1a1a1a] dark:border-white/20 shrink-0">
@@ -332,20 +349,20 @@ const Chatbot = ({ apiBaseUrl }) => {
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Ask Gemini about tournaments..."
+                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+                  placeholder="Ask Gemini about Nova Hub..."
                   className="flex-1 bg-gray-100 dark:bg-slate-800 border-[2px] border-[#1a1a1a] dark:border-white/20 rounded-lg px-3 py-2.5 sm:py-2 text-xs text-[#1a1a1a] dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:bg-slate-700 transition-colors"
                 />
                 <button
                   onClick={handleSend}
                   disabled={!inputValue.trim() || isTyping}
-                  className="bg-[#e86c3f] hover:bg-[#d45b30] disabled:bg-gray-400 border-[2px] border-[#1a1a1a] dark:border-white/20 text-white p-2.5 sm:p-2 rounded-lg transition-colors flex items-center justify-center cursor-pointer"
+                  className="bg-[#e86c3f] hover:bg-[#d45b30] disabled:bg-gray-400 border-[2px] border-[#1a1a1a] dark:border-white/20 text-white p-2.5 sm:p-2 rounded-lg transition-colors flex items-center justify-center cursor-pointer disabled:cursor-not-allowed"
                 >
                   <Send className="w-4 h-4" />
                 </button>
               </div>
               <div className="text-[8px] text-gray-500 dark:text-gray-400 text-center mt-2 font-mono">
-                Gemini can make mistakes. Verify important info.
+                {GEMINI_API_KEY ? 'Powered by Google Gemini 1.5 Flash' : 'Running in offline mode'} · Nova Hub AI
               </div>
             </div>
           </motion.div>
