@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HostForm from '../components/HostForm';
-import JoinEventPage from '../components/JoinEventPage';
+import JoinEventPage, { localFallbackTournaments } from '../components/JoinEventPage';
 import InteractiveLocationPicker from '../components/InteractiveLocationPicker';
 import { 
   Trophy, Zap, Users, CalendarDays, TrendingUp, Activity, Radio, User, 
@@ -34,60 +34,9 @@ const MOCK_REPLIES = {
   ]
 };
 
-// Default fallback tournaments in case backend returns empty
-const defaultFallbackTournaments = [
-  {
-    _id: 'mock-t-cricket',
-    title: 'Guntur Sports Arena Cricket Cup',
-    category: 'sports',
-    gameName: 'Cricket',
-    rules: 'Bring your own kit. Matches start at 7:00 AM Sunday.',
-    venueType: 'offline',
-    venueDetails: { physicalAddress: 'Guntur Sports Complex, Nallapadu, Guntur', pinCode: '522005', stadiumHall: 'Pitch A', latitude: 16.3067, longitude: 80.4365 },
-    format: 'single-elimination',
-    maxTeams: 8,
-    teamSize: 11,
-    prizePool: 35000,
-    entryFee: 300,
-    status: 'open',
-    registeredTeams: []
-  },
-  {
-    _id: 'mock-t-valorant',
-    title: 'Valorant Regional Clash',
-    category: 'esports',
-    gameName: 'Valorant',
-    rules: 'Anti-cheat required. No emulator players allowed.',
-    venueType: 'online',
-    venueDetails: { serverRegion: 'Mumbai', platform: 'PC', lobbyCode: 'VAL-LOBBY-99' },
-    format: 'single-elimination',
-    maxTeams: 4,
-    teamSize: 5,
-    prizePool: 25000,
-    entryFee: 100,
-    status: 'ongoing',
-    registeredTeams: [
-      { teamName: 'Apex Predators', captainEmail: 'apex@novahub.com', roster: [] },
-      { teamName: 'Team Vipers', captainEmail: 'vipers@novahub.com', roster: [] }
-    ]
-  },
-  {
-    _id: 'mock-t-bgmi',
-    title: 'BGMI Battlegrounds Cup',
-    category: 'esports',
-    gameName: 'BGMI',
-    rules: 'Mobile only. Roster submissions are final.',
-    venueType: 'online',
-    venueDetails: { serverRegion: 'Asia', platform: 'Mobile', lobbyCode: 'BGMI-ROOM-22' },
-    format: 'single-elimination',
-    maxTeams: 16,
-    teamSize: 4,
-    prizePool: 15000,
-    entryFee: 50,
-    status: 'open',
-    registeredTeams: []
-  }
-];
+// Use the same shared fallback tournament list as JoinEventPage
+// so that localStorage registrationIds always match what Dashboard loads
+const defaultFallbackTournaments = localFallbackTournaments;
 
 export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   const location = useLocation();

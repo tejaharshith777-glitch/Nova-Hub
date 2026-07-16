@@ -32,7 +32,8 @@ const mockFeedPool = [
 ];
 
 // Local fallback demo datasets so radar works out-of-the-box offline/empty
-const localFallbackTournaments = [
+// Exported so Dashboard can use the same IDs for history matching
+export const localFallbackTournaments = [
   // --- GUNTUR (16.3067, 80.4365) ---
   {
     _id: 'mock-t-0',
