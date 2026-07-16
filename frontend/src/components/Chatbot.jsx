@@ -73,33 +73,71 @@ const Chatbot = ({ apiBaseUrl }) => {
 
   const callGeminiDirect = async (userMessage) => {
     if (!GEMINI_API_KEY) return null;
+
+    // Try REST API directly — works with all Gemini key formats (AIza and AQ. prefix)
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            system_instruction: {
+              parts: [{ text: NOVA_HUB_SYSTEM_CONTEXT }]
+            },
+            contents: [
+              ...chatHistoryRef.current,
+              { role: 'user', parts: [{ text: userMessage }] }
+            ],
+            generationConfig: {
+              temperature: 0.85,
+              maxOutputTokens: 512,
+            }
+          })
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+        if (responseText) {
+          // Update multi-turn history
+          chatHistoryRef.current = [
+            ...chatHistoryRef.current,
+            { role: 'user', parts: [{ text: userMessage }] },
+            { role: 'model', parts: [{ text: responseText }] },
+          ];
+          return responseText;
+        }
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        console.warn('Gemini REST error:', errData?.error?.message || res.status);
+      }
+    } catch (err) {
+      console.warn('Gemini REST API error:', err.message);
+    }
+
+    // Fallback: try SDK (works with AIza keys)
     try {
       const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({
         model: 'gemini-1.5-flash',
         systemInstruction: NOVA_HUB_SYSTEM_CONTEXT,
       });
-
-      // Build multi-turn history for Gemini
-      const chat = model.startChat({
-        history: chatHistoryRef.current,
-      });
-
+      const chat = model.startChat({ history: chatHistoryRef.current });
       const result = await chat.sendMessage(userMessage);
       const responseText = result.response.text();
-
-      // Update our history ref for next turn
       chatHistoryRef.current = [
         ...chatHistoryRef.current,
         { role: 'user', parts: [{ text: userMessage }] },
         { role: 'model', parts: [{ text: responseText }] },
       ];
-
       return responseText;
     } catch (err) {
-      console.warn('Gemini direct API error:', err.message);
-      return null;
+      console.warn('Gemini SDK error:', err.message);
     }
+
+    return null;
   };
 
   const callBackendChat = async (userMessage) => {
