@@ -109,9 +109,14 @@ export const FeaturedCarousel = () => {
         (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
           ? 'http://localhost:5000' 
           : '');
+      // No backend available — skip fetch entirely, use static cards
+      if (!apiBaseUrl || !apiBaseUrl.trim()) {
+        setLoading(false);
+        return;
+      }
       try {
         const res = await fetch(`${apiBaseUrl}/api/tournaments`);
-        if (res.ok) {
+        if (!res.ok) { setLoading(false); return; }
           const tournaments = await res.json();
           // Transform db tournaments to Featured Cards shape
           const categoryColors = {
@@ -155,7 +160,6 @@ export const FeaturedCarousel = () => {
             };
           });
           setLiveCards(dynamicCards);
-        }
       } catch (err) {
         console.warn("Failed to fetch live tournaments for carousel:", err);
       } finally {

@@ -120,42 +120,43 @@ export const TournamentRadar = ({ user }) => {
         (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
           ? 'http://localhost:5000' 
           : '');
+      // No backend available — skip fetch, radar uses local pins only
+      if (!apiBaseUrl || !apiBaseUrl.trim()) return;
       try {
         const res = await fetch(`${apiBaseUrl}/api/tournaments`);
-        if (res.ok) {
-          const data = await res.json();
-          // Transform db tournaments to fit radar pins
-          const mapped = data.map((t) => {
-            // Give them realistic coordinates around Bangalore if not set
-            const baseLat = 12.9784;
-            const baseLng = 77.5960;
-            // Generate deterministic coords based on title hash so they stay in the same place
-            let hash = 0;
-            for (let i = 0; i < t.title.length; i++) {
-              hash = t.title.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const offsetLat = ((hash % 100) / 1000) * (hash > 0 ? 1 : -1);
-            const offsetLng = (((hash >> 4) % 100) / 1000) * (hash > 0 ? -1 : 1);
+        if (!res.ok) return;
+        const data = await res.json();
+        // Transform db tournaments to fit radar pins
+        const mapped = data.map((t) => {
+          // Give them realistic coordinates around Bangalore if not set
+          const baseLat = 12.9784;
+          const baseLng = 77.5960;
+          // Generate deterministic coords based on title hash so they stay in the same place
+          let hash = 0;
+          for (let i = 0; i < t.title.length; i++) {
+            hash = t.title.charCodeAt(i) + ((hash << 5) - hash);
+          }
+          const offsetLat = ((hash % 100) / 1000) * (hash > 0 ? 1 : -1);
+          const offsetLng = (((hash >> 4) % 100) / 1000) * (hash > 0 ? -1 : 1);
 
-            return {
-              id: t._id,
-              title: t.title,
-              gameName: t.gameName,
-              venueType: t.venueType,
-              venueAddress: t.venueType === 'offline' ? (t.venueDetails?.physicalAddress || 'Ground Venue') : 'Online Server',
-              latitude: t.venueType === 'offline' ? (t.venueDetails?.latitude || (baseLat + offsetLat)) : null,
-              longitude: t.venueType === 'offline' ? (t.venueDetails?.longitude || (baseLng + offsetLng)) : null,
-              entryFee: t.entryFee || 0,
-              prizePool: t.prizePool || 0,
-              slotsFilled: t.registeredTeams?.length || 0,
-              maxSlots: t.maxTeams,
-              isDynamic: true,
-              hostId: t.hostId,
-              registeredTeams: t.registeredTeams
-            };
-          });
-          setDbTournaments(mapped);
-        }
+          return {
+            id: t._id,
+            title: t.title,
+            gameName: t.gameName,
+            venueType: t.venueType,
+            venueAddress: t.venueType === 'offline' ? (t.venueDetails?.physicalAddress || 'Ground Venue') : 'Online Server',
+            latitude: t.venueType === 'offline' ? (t.venueDetails?.latitude || (baseLat + offsetLat)) : null,
+            longitude: t.venueType === 'offline' ? (t.venueDetails?.longitude || (baseLng + offsetLng)) : null,
+            entryFee: t.entryFee || 0,
+            prizePool: t.prizePool || 0,
+            slotsFilled: t.registeredTeams?.length || 0,
+            maxSlots: t.maxTeams,
+            isDynamic: true,
+            hostId: t.hostId,
+            registeredTeams: t.registeredTeams
+          };
+        });
+        setDbTournaments(mapped);
       } catch (err) {
         console.warn("Failed to fetch database tournaments for radar:", err);
       }

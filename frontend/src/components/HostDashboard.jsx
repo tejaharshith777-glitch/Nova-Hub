@@ -26,6 +26,7 @@ export const HostDashboard = ({ apiBaseUrl, socket, user }) => {
 
   // Load Host's Tournaments
   const loadTournaments = async () => {
+    if (!apiBaseUrl || !apiBaseUrl.trim()) return;
     try {
       const res = await fetch(`${apiBaseUrl}/api/tournaments`, { credentials: 'include' });
       if (res.ok) {
@@ -45,6 +46,7 @@ export const HostDashboard = ({ apiBaseUrl, socket, user }) => {
   // Load matches for selected tournament
   const loadMatches = async (tourneyId) => {
     if (!tourneyId) return;
+    if (!apiBaseUrl || !apiBaseUrl.trim()) return;
     try {
       const res = await fetch(`${apiBaseUrl}/api/tournaments/${tourneyId}/matches`, { credentials: 'include' });
       if (res.ok) {
