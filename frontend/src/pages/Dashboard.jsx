@@ -146,7 +146,8 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   // Fetch tournaments from backend
   const fetchTournamentsList = useCallback(async () => {
     setLoadingTournaments(true);
-    if (!apiBaseUrl) {
+    // No backend configured — use local data only (no network request)
+    if (!apiBaseUrl || !apiBaseUrl.trim()) {
       const hostedSaved = localStorage.getItem('novahub_mock_tournaments');
       const hostedTournaments = hostedSaved ? JSON.parse(hostedSaved) : [];
       
