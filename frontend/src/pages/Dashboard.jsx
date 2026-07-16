@@ -114,6 +114,9 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
   const [bookedTickets, setBookedTickets] = useState([]);
   const [loadingTickets, setLoadingTickets] = useState(false);
 
+  // Lobby Detail Modal State (Enter Lobby from History tab)
+  const [lobbyTournament, setLobbyTournament] = useState(null);
+
   // Messages / Chat Console State
   const [activeChat, setActiveChat] = useState('admin'); // 'admin' | 'support' | 'referee' | 'liaison'
   const [chatInputs, setChatInputs] = useState({ admin: '', support: '', referee: '', liaison: '' });
@@ -973,6 +976,162 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
               </div>
             )}
 
+            {/* LOBBY DETAIL MODAL */}
+            {lobbyTournament && (
+              <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto py-8 px-4" onClick={() => setLobbyTournament(null)}>
+                <div
+                  className="relative w-full max-w-2xl bg-white dark:bg-[#0d0f1a] border-[3px] border-[#1a1a1a] dark:border-white/15 rounded-2xl shadow-[8px_8px_0px_rgba(0,0,0,1)] dark:shadow-none font-mono text-[#1a1a1a] dark:text-white overflow-hidden"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Header Banner */}
+                  <div className="bg-[#1a1a1a] dark:bg-[#0a0c14] text-white p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-full -translate-y-8 translate-x-8" />
+                    <div className="flex justify-between items-start gap-4">
+                      <div>
+                        <div className="flex gap-2 mb-2 flex-wrap">
+                          <span className="bg-yellow-400 text-black text-[9px] px-2 py-0.5 font-black uppercase">{lobbyTournament.gameName}</span>
+                          <span className="bg-green-400 text-black text-[9px] px-2 py-0.5 font-black uppercase flex items-center gap-1"><Check className="w-3 h-3" /> REGISTERED & PAID</span>
+                          <span className="bg-white/20 text-white text-[9px] px-2 py-0.5 font-black uppercase">{lobbyTournament.venueType === 'online' ? '🌐 ONLINE' : '📍 OFFLINE'}</span>
+                        </div>
+                        <h2 className="text-xl font-black uppercase leading-tight">{lobbyTournament.title}</h2>
+                        <p className="text-xs opacity-60 mt-1 uppercase">{lobbyTournament.format} · {lobbyTournament.category}</p>
+                      </div>
+                      <button onClick={() => setLobbyTournament(null)} className="bg-white/10 hover:bg-white/20 border border-white/20 p-2 rounded-lg transition-colors flex-shrink-0">
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex flex-col gap-6">
+
+                    {/* Pass / Token */}
+                    {lobbyTournament.myRegistration?.registrationToken && (
+                      <div className="bg-yellow-50 dark:bg-yellow-900/20 border-[2px] border-yellow-400 p-4 rounded-xl">
+                        <span className="text-[9px] font-black uppercase tracking-widest text-yellow-700 dark:text-yellow-400 block mb-1">🎫 Your Registration Pass</span>
+                        <div className="flex items-center gap-3 justify-between flex-wrap">
+                          <code className="text-sm font-black tracking-widest text-yellow-800 dark:text-yellow-300 bg-yellow-100 dark:bg-yellow-900/40 px-3 py-1.5 rounded border border-yellow-300">
+                            {lobbyTournament.myRegistration.registrationToken}
+                          </code>
+                          <button
+                            onClick={() => { navigator.clipboard.writeText(lobbyTournament.myRegistration.registrationToken); }}
+                            className="text-[9px] font-black uppercase bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1.5 border-2 border-yellow-600 shadow-[2px_2px_0px_rgba(0,0,0,0.4)] transition-all"
+                          >
+                            Copy Token
+                          </button>
+                        </div>
+                        <p className="text-[9px] opacity-60 mt-2 uppercase">Present this token at check-in. Keep it safe — it's your entry pass.</p>
+                      </div>
+                    )}
+
+                    {/* Venue / Server Info */}
+                    <div className="bg-[#f0fdf4] dark:bg-[#0f1f14]/80 border-[2px] border-green-400 dark:border-green-700 p-4 rounded-xl">
+                      <span className="text-[9px] font-black uppercase tracking-widest text-green-700 dark:text-green-400 block mb-3">
+                        {lobbyTournament.venueType === 'online' ? '🌐 Online Server Details' : '📍 Venue Details'}
+                      </span>
+                      {lobbyTournament.venueType === 'offline' ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold">
+                          <div><span className="opacity-50 uppercase text-[9px] block">Address</span>{lobbyTournament.venueDetails?.physicalAddress || '—'}</div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Pin Code</span>{lobbyTournament.venueDetails?.pinCode || '—'}</div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Hall / Court</span>{lobbyTournament.venueDetails?.stadiumHall || '—'}</div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Check-in</span>30 mins before start</div>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold">
+                          <div><span className="opacity-50 uppercase text-[9px] block">Server Region</span>{lobbyTournament.venueDetails?.serverRegion || 'Asia South'}</div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Platform</span>{lobbyTournament.venueDetails?.platform || 'PC'}</div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Lobby Code</span>
+                            <code className="bg-black text-yellow-300 px-2 py-0.5 text-[10px] font-black rounded">{lobbyTournament.venueDetails?.lobbyCode || 'Check Discord'}</code>
+                          </div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Join Time</span>10 mins before start</div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Tournament Stats */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {[
+                        { label: 'Entry Fee', value: lobbyTournament.entryFee === 0 ? 'FREE' : `₹${lobbyTournament.entryFee}`, color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700' },
+                        { label: 'Prize Pool', value: `₹${lobbyTournament.prizePool || 0}`, color: 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700' },
+                        { label: 'Team Size', value: `${lobbyTournament.teamSize} Players`, color: 'bg-orange-50 dark:bg-orange-900/20 border-orange-300 dark:border-orange-700' },
+                        { label: 'Format', value: (lobbyTournament.format || 'N/A').replace(/-/g,' '), color: 'bg-pink-50 dark:bg-pink-900/20 border-pink-300 dark:border-pink-700' },
+                      ].map(s => (
+                        <div key={s.label} className={`${s.color} border-[2px] p-3 rounded-xl text-center`}>
+                          <span className="text-[8px] font-black uppercase opacity-60 block">{s.label}</span>
+                          <span className="text-sm font-black uppercase">{s.value}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Schedule */}
+                    <div className="bg-[#f5f5ff] dark:bg-[#14102a]/80 border-[2px] border-indigo-300 dark:border-indigo-700 p-4 rounded-xl">
+                      <span className="text-[9px] font-black uppercase tracking-widest text-indigo-700 dark:text-indigo-300 block mb-2">📅 Schedule</span>
+                      <p className="text-sm font-black">{lobbyTournament.startDate ? new Date(lobbyTournament.startDate).toLocaleString() : 'Sunday, 10:00 AM IST'}</p>
+                      <p className="text-[10px] opacity-60 mt-1">Arrive early. Late arrivals may forfeit their slot.</p>
+                    </div>
+
+                    {/* Game Rules */}
+                    <div className="bg-[#fff7f0] dark:bg-[#1a0e00]/80 border-[2px] border-orange-300 dark:border-orange-700 p-4 rounded-xl">
+                      <span className="text-[9px] font-black uppercase tracking-widest text-orange-700 dark:text-orange-400 block mb-2">📋 Game Rules & Regulations</span>
+                      <p className="text-xs font-bold leading-relaxed opacity-90 whitespace-pre-line">{lobbyTournament.rules || 'Standard tournament rules apply. Respect your opponents and referees. Any form of cheating or unsportsmanlike conduct will result in immediate disqualification.'}</p>
+                    </div>
+
+                    {/* My Team / Registration */}
+                    {lobbyTournament.myRegistration && (
+                      <div className="bg-[#f0f9ff] dark:bg-[#001420]/80 border-[2px] border-cyan-300 dark:border-cyan-700 p-4 rounded-xl">
+                        <span className="text-[9px] font-black uppercase tracking-widest text-cyan-700 dark:text-cyan-300 block mb-3">👥 My Registered Team</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3 text-xs font-bold">
+                          <div><span className="opacity-50 uppercase text-[9px] block">Team Name</span>{lobbyTournament.myRegistration.teamName || '—'}</div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Captain</span>{lobbyTournament.myRegistration.captainName || '—'}</div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Captain Email</span>{lobbyTournament.myRegistration.captainEmail || '—'}</div>
+                          <div><span className="opacity-50 uppercase text-[9px] block">Status</span><span className="text-green-600 dark:text-green-400">✓ Confirmed</span></div>
+                        </div>
+                        {lobbyTournament.myRegistration.roster?.length > 0 && (
+                          <div>
+                            <span className="text-[9px] opacity-50 uppercase font-black block mb-1">Roster Members</span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {lobbyTournament.myRegistration.roster.map((m, i) => (
+                                <span key={i} className="bg-black dark:bg-white text-white dark:text-black text-[9px] px-2 py-0.5 font-black uppercase">
+                                  {m.name}{m.gameId ? ` (${m.gameId})` : ''}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* All Registered Teams */}
+                    {lobbyTournament.registeredTeams?.length > 0 && (
+                      <div className="border-[2px] border-[#1a1a1a]/15 dark:border-white/10 p-4 rounded-xl">
+                        <span className="text-[9px] font-black uppercase tracking-widest opacity-60 block mb-3">
+                          🏟 All Registered Teams ({lobbyTournament.registeredTeams.length}/{lobbyTournament.maxTeams})
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {lobbyTournament.registeredTeams.map((team, i) => (
+                            <div key={i} className="bg-[#f9f9f9] dark:bg-white/5 border border-[#1a1a1a]/10 dark:border-white/10 px-3 py-2 rounded-lg flex items-center gap-2">
+                              <span className="text-[10px] font-black opacity-40">#{i + 1}</span>
+                              <div>
+                                <span className="text-[10px] font-black uppercase block">{team.teamName}</span>
+                                <span className="text-[9px] opacity-50">{team.captainName || team.captainEmail}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Close button */}
+                    <button
+                      onClick={() => setLobbyTournament(null)}
+                      className="w-full bg-[#1a1a1a] dark:bg-white text-white dark:text-[#1a1a1a] font-black uppercase text-xs py-3 rounded-xl border-2 border-[#1a1a1a] dark:border-white shadow-[3px_3px_0px_rgba(0,0,0,0.4)] hover:opacity-80 transition-opacity"
+                    >
+                      Close Lobby
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* TAB 4: HISTORY */}
             {activeTab === 'history' && (
               <div className="flex-1 flex flex-col gap-8">
@@ -1025,7 +1184,12 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                                 </div>
 
                                 <button 
-                                  onClick={(e) => { e.stopPropagation(); navigate(`/tournament/${t._id}`); }}
+                                  onClick={(e) => { e.stopPropagation(); 
+                                    const regsSaved = localStorage.getItem('novahub_mock_registrations');
+                                    const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+                                    const myReg = mockRegs.find(r => r.tournamentId === (t._id || t.id));
+                                    setLobbyTournament({ ...t, myRegistration: myReg?.team || null });
+                                  }}
                                   className="bg-yellow-200 hover:bg-yellow-300 border-2 border-[#1a1a1a] px-4 py-2 text-[10px] font-black uppercase shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all interactive-target cursor-pointer text-slate-950"
                                 >
                                   Enter Lobby
