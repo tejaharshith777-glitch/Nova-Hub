@@ -116,22 +116,12 @@ router.post('/login', async (req, res) => {
     if (process.env.USE_MOCK_DB === 'true') {
       let user = usersDb.find(u => u.email === email);
       
-      // Auto-register mock users dynamically if they don't exist yet for smooth demo UX
       if (!user) {
-        const salt = await bcrypt.genSalt(10);
-        const passwordHash = await bcrypt.hash(password, salt);
-        user = {
-          _id: 'mock-user-' + Math.random().toString(36).substring(2, 9),
-          username: email.split('@')[0],
-          email,
-          password: passwordHash,
-          role: 'host' // default to host for full demo access
-        };
-        usersDb.push(user);
-      } else {
-        const validPassword = await bcrypt.compare(password, user.password);
-        if (!validPassword) return res.status(400).json({ message: 'Invalid email or password credentials.' });
+        return res.status(400).json({ message: 'Email address is not registered. Please sign up first.' });
       }
+
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword) return res.status(400).json({ message: 'Invalid email or password credentials.' });
 
       const token = jwt.sign(
         { id: user._id, username: user.username, role: user.role },

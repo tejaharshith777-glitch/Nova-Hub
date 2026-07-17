@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import HostForm from '../components/HostForm';
 import JoinEventPage, { localFallbackTournaments } from '../components/JoinEventPage';
 import InteractiveLocationPicker from '../components/InteractiveLocationPicker';
+import ScrollReveal from '../components/ScrollReveal';
 import { 
   Trophy, Zap, Users, CalendarDays, TrendingUp, Activity, Radio, User, 
   Wallet, Gift, MessageSquare, Settings, Send, Check, X, Award, Shield, 
@@ -705,10 +706,11 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
           
           {/* ─── SIDEBAR CONTAINER (Desktop) ─── */}
-          <aside className={`
-            md:block md:col-span-1 bg-[#0d111b] border-[3px] border-[#1a1a1a] p-5 rounded-2xl shadow-[6px_6px_0px_rgba(26,26,26,1)] text-white font-mono
-            ${mobileMenuOpen ? 'block fixed inset-x-4 top-24 z-40 max-h-[80vh] overflow-y-auto' : 'hidden'}
-          `}>
+          <ScrollReveal direction="left" className="md:col-span-1 w-full" delay={0}>
+            <aside className={`
+              md:block w-full bg-[#0d111b] border-[3px] border-[#1a1a1a] p-5 rounded-2xl shadow-[6px_6px_0px_rgba(26,26,26,1)] text-white font-mono
+              ${mobileMenuOpen ? 'block fixed inset-x-4 top-24 z-40 max-h-[80vh] overflow-y-auto' : 'hidden'}
+            `}>
             {/* Header info */}
             <div className="border-b-2 border-white/10 pb-4 mb-4 flex items-center gap-3">
               <div className="h-10 w-10 bg-yellow-200 border-2 border-black rounded-lg text-black flex items-center justify-center font-black text-lg shadow-[2px_2px_0px_rgba(255,255,255,0.25)]">
@@ -781,9 +783,11 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
               </div>
             </div>
           </aside>
+          </ScrollReveal>
 
           {/* ─── MAIN CONTENT VIEW (Desktop) ─── */}
-          <main className="col-span-1 md:col-span-3 bg-white border-[3px] border-[#1a1a1a] rounded-2xl shadow-[6px_6px_0px_rgba(26,26,26,1)] p-6 min-h-[70vh] flex flex-col gap-6">
+          <ScrollReveal direction="right" className="col-span-1 md:col-span-3 w-full" delay={0.15}>
+            <main className="w-full bg-white border-[3px] border-[#1a1a1a] rounded-2xl shadow-[6px_6px_0px_rgba(26,26,26,1)] p-6 min-h-[70vh] flex flex-col gap-6">
             
             {/* Tab Header Banner */}
             <div className="border-b-[3px] border-[#1a1a1a] pb-4 flex justify-between items-center">
@@ -1877,6 +1881,7 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
             )}
 
           </main>
+          </ScrollReveal>
 
         </div>
       </div>

@@ -29,10 +29,11 @@
   .font-inter    { font-family: 'Inter', sans-serif; }
   .font-playfair { font-family: 'Playfair Display', serif; }
 
-  /* Smooth scrolling */
+  /* Smooth scrolling - disabled for Lenis conflict resolution
   html {
     scroll-behavior: smooth;
   }
+  */
 }
 
 /* ─── Hide Scrollbar ──────────────────────────────────────────────── */

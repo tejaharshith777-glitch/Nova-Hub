@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
 import TournamentRadar from './components/TournamentRadar';
 import ThemeToggle from './components/ThemeToggle';
+import SmoothScroll from './components/SmoothScroll';
 
 // ─── Detect ?auth=true query param and auto-open login modal ─────────────────
 const AuthQueryHandler = ({ setIsAuthOpen }) => {
@@ -175,7 +176,9 @@ const AppInner = () => {
 // ─── Root App (provides BrowserRouter context) ────────────────────────────────
 export const App = () => (
   <BrowserRouter>
-    <AppInner />
+    <SmoothScroll>
+      <AppInner />
+    </SmoothScroll>
   </BrowserRouter>
 );
 

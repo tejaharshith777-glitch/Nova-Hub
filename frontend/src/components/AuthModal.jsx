@@ -18,18 +18,12 @@ const mockLocalAuth = (isLogin, payload) => {
   const users = getUsers();
 
   if (isLogin) {
-    // Find by email — or auto-create for smooth demo UX
     let stored = users.find(u => u.email === payload.email);
     if (!stored) {
-      stored = {
-        id: 'local-' + Date.now(),
-        username: payload.email.split('@')[0],
-        email: payload.email,
-        password: payload.password,
-        role: 'host'
-      };
-      users.push(stored);
-      saveUsers(users);
+      throw new Error('Email address is not registered. Please sign up first.');
+    }
+    if (stored.password !== payload.password) {
+      throw new Error('Invalid email or password credentials.');
     }
     const session = { id: stored.id, username: stored.username, role: stored.role, email: stored.email };
     saveSession(session);

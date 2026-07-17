@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import FeaturedCarousel from '../components/FeaturedCarousel';
+import ScrollReveal from '../components/ScrollReveal';
 
 const ScrollParallaxHeading = ({ children, className, axis = "x", speed = 30, direction = 1 }) => {
   const ref = useRef(null);
@@ -413,67 +414,75 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         </div>
 
         {/* 2x2 Grid - Physical Sports */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 overflow-hidden">
           
           {/* Card 1 - Cricket */}
-          <div onClick={() => navigate('/tournament/cricket')} className="border border-green-300/30 bg-gradient-to-br from-[#112615] to-[#09140b] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-green-400/50 transition-colors cursor-pointer">
-            <img 
-              src="/cricket_card.jpg" 
-              alt="Summer Cricket Cup" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#09140b] via-[#09140b]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Summer Cricket Cup</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">cricket, league, local</span>
+          <ScrollReveal direction="left" delay={0}>
+            <div onClick={() => navigate('/tournament/cricket')} className="border border-green-300/30 bg-gradient-to-br from-[#112615] to-[#09140b] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-green-400/50 transition-colors cursor-pointer">
+              <img 
+                src="/cricket_card.jpg" 
+                alt="Summer Cricket Cup" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#09140b] via-[#09140b]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Summer Cricket Cup</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">cricket, league, local</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 2 - Football */}
-          <div onClick={() => navigate('/tournament/football')} className="border border-emerald-300/30 bg-gradient-to-br from-[#082a17] to-[#03140a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-emerald-400/50 transition-colors cursor-pointer">
-            <img 
-              src="/football_card.jpg" 
-              alt="FIFA World Cup Player Album 2026" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#03140a] via-[#03140a]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">City Football Clash</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">soccer, knockout, fast</span>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div onClick={() => navigate('/tournament/football')} className="border border-emerald-300/30 bg-gradient-to-br from-[#082a17] to-[#03140a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-emerald-400/50 transition-colors cursor-pointer">
+              <img 
+                src="/football_card.jpg" 
+                alt="FIFA World Cup Player Album 2026" 
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#03140a] via-[#03140a]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">City Football Clash</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">soccer, knockout, fast</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 3 - Badminton */}
-          <div onClick={() => navigate('/tournament/badminton')} className="border border-yellow-300/30 bg-gradient-to-br from-[#261f08] to-[#120f04] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/50 transition-colors cursor-pointer">
-            <img 
-              src="/badminton_card.png" 
-              alt="State Badminton" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#120f04] via-[#120f04]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">State Badminton</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">badminton, brackets, pro</span>
+          <ScrollReveal direction="left" delay={0}>
+            <div onClick={() => navigate('/tournament/badminton')} className="border border-yellow-300/30 bg-gradient-to-br from-[#261f08] to-[#120f04] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/50 transition-colors cursor-pointer">
+              <img 
+                src="/badminton_card.png" 
+                alt="State Badminton" 
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#120f04] via-[#120f04]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">State Badminton</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">badminton, brackets, pro</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 4 - Basketball */}
-          <div onClick={() => navigate('/tournament/hoops')} className="border border-cyan-300/30 bg-gradient-to-br from-[#05202e] to-[#021017] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-cyan-400/50 transition-colors cursor-pointer">
-            <img 
-              src="/basketball_card.png" 
-              alt="Downtown Basketball" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#021017] via-[#021017]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Downtown Basketball</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">hoops, groups, local</span>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div onClick={() => navigate('/tournament/hoops')} className="border border-cyan-300/30 bg-gradient-to-br from-[#05202e] to-[#021017] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-cyan-400/50 transition-colors cursor-pointer">
+              <img 
+                src="/basketball_card.png" 
+                alt="Downtown Basketball" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#021017] via-[#021017]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Downtown Basketball</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">hoops, groups, local</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* Online Esports Label */}
@@ -492,68 +501,75 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         </div>
 
         {/* 2x2 Grid - Online Games */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-24 overflow-hidden">
 
           {/* Card 5 - Valorant */}
-          <div onClick={() => navigate('/tournament/valorant')} className="border border-purple-300/50 bg-gradient-to-br from-[#0f0f1a] to-[#1a0a2a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-purple-400/70 transition-colors cursor-pointer">
-            <img 
-              src="/valorant_card.png" 
-              alt="Valorant Showdown" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a0a2a] via-[#1a0a2a]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Valorant Showdown</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">esports, 5v5, online</span>
+          <ScrollReveal direction="left" delay={0}>
+            <div onClick={() => navigate('/tournament/valorant')} className="border border-purple-300/50 bg-gradient-to-br from-[#0f0f1a] to-[#1a0a2a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-purple-400/70 transition-colors cursor-pointer">
+              <img 
+                src="/valorant_card.png" 
+                alt="Valorant Showdown" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1a0a2a] via-[#1a0a2a]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Valorant Showdown</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">esports, 5v5, online</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 6 - BGMI */}
-          <div onClick={() => navigate('/tournament/bgmi')} className="border border-orange-300/30 bg-gradient-to-br from-[#1a1008] to-[#2a1800] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-orange-400/50 transition-colors cursor-pointer">
-            <img 
-              src="/pubg_card.png" 
-              alt="BGMI Battlegrounds" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2a1800] via-[#2a1800]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">BGMI Battlegrounds</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">battle royale, squads, online</span>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div onClick={() => navigate('/tournament/bgmi')} className="border border-orange-300/30 bg-gradient-to-br from-[#1a1008] to-[#2a1800] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-orange-400/50 transition-colors cursor-pointer">
+              <img 
+                src="/pubg_card.png" 
+                alt="BGMI Battlegrounds" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2a1800] via-[#2a1800]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">BGMI Battlegrounds</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">battle royale, squads, online</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 7 - Free Fire */}
-          <div onClick={() => navigate('/tournament/freefire')} className="border border-yellow-300/30 bg-gradient-to-br from-[#0a1a00] to-[#1a2e00] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/50 transition-colors cursor-pointer">
-            <img 
-              src="/freefire_card.jpg" 
-              alt="Free Fire Masters" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a2e00] via-[#1a2e00]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Free Fire Masters</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">free fire, ranked, squads</span>
+          <ScrollReveal direction="left" delay={0}>
+            <div onClick={() => navigate('/tournament/freefire')} className="border border-yellow-300/30 bg-gradient-to-br from-[#0a1a00] to-[#1a2e00] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/50 transition-colors cursor-pointer">
+              <img 
+                src="/freefire_card.jpg" 
+                alt="Free Fire Masters" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1a2e00] via-[#1a2e00]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Free Fire Masters</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">free fire, ranked, squads</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 8 - Chess */}
-          <div onClick={() => navigate('/tournament/chess')} className="border border-gray-300/30 bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-gray-400/50 transition-colors cursor-pointer">
-            <img 
-              src="/chess_card.png" 
-              alt="Online Chess League" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2d2d2d] via-[#2d2d2d]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Online Chess League</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">chess, elo, online blitz</span>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div onClick={() => navigate('/tournament/chess')} className="border border-gray-300/30 bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-gray-400/50 transition-colors cursor-pointer">
+              <img 
+                src="/chess_card.png" 
+                alt="Online Chess League" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2d2d2d] via-[#2d2d2d]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Online Chess League</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">chess, elo, online blitz</span>
+              </div>
             </div>
-          </div>
-
+          </ScrollReveal>
         </div>
 
         {/* Racing Tournaments Label */}
@@ -572,53 +588,58 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         </div>
 
         {/* Racing Grid - 3 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24 overflow-hidden">
 
           {/* Card R1 - Car Racing */}
-          <div onClick={() => navigate('/tournament/car-racing')} className="border border-red-300/40 bg-gradient-to-br from-[#1a0000] to-[#2a0a0a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-red-400/70 transition-colors cursor-pointer">
-            <img 
-              src="/veloce_card.png" 
-              alt="Veloce GP Series" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2a0a0a] via-[#2a0a0a]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Veloce GP Series</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">racing, car, time-trial</span>
+          <ScrollReveal direction="up" delay={0}>
+            <div onClick={() => navigate('/tournament/car-racing')} className="border border-red-300/40 bg-gradient-to-br from-[#1a0000] to-[#2a0a0a] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-red-400/70 transition-colors cursor-pointer">
+              <img 
+                src="/veloce_card.png" 
+                alt="Veloce GP Series" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2a0a0a] via-[#2a0a0a]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Veloce GP Series</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">racing, car, time-trial</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card R2 - Bike Racing */}
-          <div onClick={() => navigate('/tournament/bike-racing')} className="border border-orange-300/40 bg-gradient-to-br from-[#1a0a00] to-[#2a1400] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-orange-400/70 transition-colors cursor-pointer">
-            <img 
-              src="/motogp_card.png" 
-              alt="Moto GP Pro Tour" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2a1400] via-[#2a1400]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Moto GP Pro Tour</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">racing, bike, online</span>
+          <ScrollReveal direction="up" delay={0.12}>
+            <div onClick={() => navigate('/tournament/bike-racing')} className="border border-orange-300/40 bg-gradient-to-br from-[#1a0a00] to-[#2a1400] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-orange-400/70 transition-colors cursor-pointer">
+              <img 
+                src="/motogp_card.png" 
+                alt="Moto GP Pro Tour" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2a1400] via-[#2a1400]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Moto GP Pro Tour</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">racing, bike, online</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card R3 - Cycle Racing */}
-          <div onClick={() => navigate('/tournament/cycle-racing')} className="border border-green-300/40 bg-gradient-to-br from-[#001a08] to-[#002a10] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-green-400/70 transition-colors cursor-pointer">
-            <img 
-              src="/cycle_card.jpg" 
-              alt="Tour de Nova Classic" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#002a10] via-[#002a10]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Tour de Nova Classic</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">cycle, gps, velodrome</span>
+          <ScrollReveal direction="up" delay={0.24}>
+            <div onClick={() => navigate('/tournament/cycle-racing')} className="border border-green-300/40 bg-gradient-to-br from-[#001a08] to-[#002a10] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-green-400/70 transition-colors cursor-pointer">
+              <img 
+                src="/cycle_card.jpg" 
+                alt="Tour de Nova Classic" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#002a10] via-[#002a10]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Tour de Nova Classic</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">cycle, gps, velodrome</span>
+              </div>
             </div>
-          </div>
-
+          </ScrollReveal>
         </div>
 
         {/* School vs School Header */}
@@ -637,36 +658,40 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         </div>
 
         {/* School Grid - 2 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 overflow-hidden">
           {/* Card 1 - School Football */}
-          <div onClick={() => navigate('/tournament/school-football')} className="border border-yellow-300/40 bg-gradient-to-br from-[#1a1708] to-[#2b250c] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/70 transition-colors cursor-pointer text-white">
-            <img 
-              src="/school_football_card.png" 
-              alt="Inter-School Football Cup" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2b250c] via-[#2b250c]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Inter-School Football Cup</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">football, school, junior</span>
+          <ScrollReveal direction="left" delay={0}>
+            <div onClick={() => navigate('/tournament/school-football')} className="border border-yellow-300/40 bg-gradient-to-br from-[#1a1708] to-[#2b250c] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-yellow-400/70 transition-colors cursor-pointer text-white">
+              <img 
+                src="/school_football_card.png" 
+                alt="Inter-School Football Cup" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2b250c] via-[#2b250c]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Inter-School Football Cup</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">football, school, junior</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 2 - School Basketball */}
-          <div onClick={() => navigate('/tournament/school-basketball')} className="border border-amber-300/40 bg-gradient-to-br from-[#1c1208] to-[#2e1c0c] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-amber-400/70 transition-colors cursor-pointer text-white">
-            <img 
-              src="/school_basketball_card.png" 
-              alt="Junior School Basketball Shield" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2e1c0c] via-[#2e1c0c]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Junior School Basketball Shield</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">basketball, school, shield</span>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div onClick={() => navigate('/tournament/school-basketball')} className="border border-amber-300/40 bg-gradient-to-br from-[#1c1208] to-[#2e1c0c] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-amber-400/70 transition-colors cursor-pointer text-white">
+              <img 
+                src="/school_basketball_card.png" 
+                alt="Junior School Basketball Shield" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2e1c0c] via-[#2e1c0c]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Junior School Basketball Shield</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">basketball, school, shield</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* College vs College Header */}
@@ -685,36 +710,40 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         </div>
 
         {/* College Grid - 2 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 overflow-hidden">
           {/* Card 1 - College Cricket */}
-          <div onClick={() => navigate('/tournament/college-cricket')} className="border border-blue-300/40 bg-gradient-to-br from-[#081b2a] to-[#0c2b42] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-blue-400/70 transition-colors cursor-pointer text-white">
-            <div className="absolute inset-0 top-0 left-0 right-0 bottom-20 flex items-center justify-center pointer-events-none">
-              <img 
-                src="/varsity_cricket_card.jpg" 
-                alt="Varsity Cricket Trophy" 
-                className="w-[90%] h-[75%] object-contain rounded-xl border border-white/10 shadow-[0_12px_24px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover:scale-105"
-              />
+          <ScrollReveal direction="left" delay={0}>
+            <div onClick={() => navigate('/tournament/college-cricket')} className="border border-blue-300/40 bg-gradient-to-br from-[#081b2a] to-[#0c2b42] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-blue-400/70 transition-colors cursor-pointer text-white">
+              <div className="absolute inset-0 top-0 left-0 right-0 bottom-20 flex items-center justify-center pointer-events-none">
+                <img 
+                  src="/varsity_cricket_card.jpg" 
+                  alt="Varsity Cricket Trophy" 
+                  className="w-[90%] h-[75%] object-contain rounded-xl border border-white/10 shadow-[0_12px_24px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Varsity Cricket Trophy</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">cricket, college, varsity</span>
+              </div>
             </div>
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Varsity Cricket Trophy</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">cricket, college, varsity</span>
-            </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 2 - College Esports */}
-          <div onClick={() => navigate('/tournament/college-esports')} className="border border-cyan-300/40 bg-gradient-to-br from-[#051e24] to-[#0a2e38] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-cyan-400/70 transition-colors cursor-pointer text-white">
-            <img 
-              src="/college_esports_card.png" 
-              alt="Inter-Collegiate Esports League" 
-              className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
-            />
-            {/* Gradient Overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a2e38] via-[#0a2e38]/20 to-transparent pointer-events-none" />
-            <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
-              <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Inter-Collegiate Esports League</h3>
-              <span className="text-[10px] md:text-xs font-mono text-white/50">esports, college, gaming</span>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div onClick={() => navigate('/tournament/college-esports')} className="border border-cyan-300/40 bg-gradient-to-br from-[#051e24] to-[#0a2e38] rounded-[2rem] p-6 relative flex flex-col justify-end h-80 md:h-96 overflow-hidden group hover:border-cyan-400/70 transition-colors cursor-pointer text-white">
+              <img 
+                src="/college_esports_card.png" 
+                alt="Inter-Collegiate Esports League" 
+                className="absolute inset-0 w-full h-full object-cover scale-[1.08] -translate-y-[3%] group-hover:scale-[1.12] transition-transform duration-500"
+              />
+              {/* Gradient Overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a2e38] via-[#0a2e38]/20 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3 px-2">
+                <h3 className="text-xl md:text-2xl font-display italic font-bold text-white">Inter-Collegiate Esports League</h3>
+                <span className="text-[10px] md:text-xs font-mono text-white/50">esports, college, gaming</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
 
@@ -812,50 +841,56 @@ export const LandingPage = ({ onOpenAuth, user }) => {
       {/* ==========================================
           FRAME 3: ASYMMETRICAL FEATURES OVERLAPS
          ========================================== */}
-      <section id="journey" className="py-24 max-w-6xl mx-auto px-8 relative z-10">
+      <section id="journey" className="py-24 max-w-6xl mx-auto px-8 relative z-10 overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left rotatable title */}
           <div className="lg:col-span-4 flex items-center justify-start lg:justify-center relative h-16 lg:h-80">
-            <ScrollParallaxHeading axis="y" direction={-1} speed={25} className="text-3xl font-extrabold font-display uppercase tracking-wider text-[#1a1a1a] lg:-rotate-90 lg:origin-center lg:absolute lg:-translate-x-8">
-              Start your journey
-            </ScrollParallaxHeading>
+            <ScrollReveal direction="left" delay={0}>
+              <ScrollParallaxHeading axis="y" direction={-1} speed={25} className="text-3xl font-extrabold font-display uppercase tracking-wider text-[#1a1a1a] lg:-rotate-90 lg:origin-center lg:absolute lg:-translate-x-8">
+                Start your journey
+              </ScrollParallaxHeading>
+            </ScrollReveal>
           </div>
 
           {/* Right overlapping cards deck */}
           <div className="lg:col-span-8 flex flex-col md:flex-row gap-8 relative items-center justify-center">
             {/* Card 1 */}
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              onClick={() => user ? navigate('/dashboard?tab=host') : onOpenAuth()}
-              className="bg-yellow-100 border-[3px] border-[#1a1a1a] p-8 rounded-2xl w-full md:w-80 shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] relative z-20 md:-rotate-3 interactive-target cursor-pointer"
-            >
-              <div className="bg-[#cffafe] border-2 border-[#1a1a1a] p-2 w-max rounded-lg mb-4 shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)]">
-                <Sparkles className="w-5 h-5 text-[#1a1a1a]" />
-              </div>
-              <h3 className="text-lg font-bold font-display uppercase text-[#1a1a1a] mb-3">
-                Host Events
-              </h3>
-              <p className="text-[10px] text-[#1a1a1a]/85 leading-relaxed font-semibold">
-                Set up local matches. Capture physical ground coordinates, specify entry slots, verify list stakes, set referee payouts, and issue private address passes to captain check-ins.
-              </p>
-            </motion.div>
+            <ScrollReveal direction="up" delay={0.1}>
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                onClick={() => user ? navigate('/dashboard?tab=host') : onOpenAuth()}
+                className="bg-yellow-100 border-[3px] border-[#1a1a1a] p-8 rounded-2xl w-full md:w-80 shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] relative z-20 md:-rotate-3 interactive-target cursor-pointer"
+              >
+                <div className="bg-[#cffafe] border-2 border-[#1a1a1a] p-2 w-max rounded-lg mb-4 shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)]">
+                  <Sparkles className="w-5 h-5 text-[#1a1a1a]" />
+                </div>
+                <h3 className="text-lg font-bold font-display uppercase text-[#1a1a1a] mb-3">
+                  Host Events
+                </h3>
+                <p className="text-[10px] text-[#1a1a1a]/85 leading-relaxed font-semibold">
+                  Set up local matches. Capture physical ground coordinates, specify entry slots, verify list stakes, set referee payouts, and issue private address passes to captain check-ins.
+                </p>
+              </motion.div>
+            </ScrollReveal>
 
             {/* Card 2 */}
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              onClick={() => user ? navigate('/dashboard?tab=join') : onOpenAuth()}
-              className="bg-[#dcfce7] border-[3px] border-[#1a1a1a] p-8 rounded-2xl w-full md:w-80 shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] relative z-10 md:rotate-3 md:-translate-x-4 interactive-target cursor-pointer"
-            >
-              <div className="bg-yellow-200 border-2 border-[#1a1a1a] p-2 w-max rounded-lg mb-4 shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)]">
-                <Pin className="w-5 h-5 text-[#1a1a1a]" />
-              </div>
-              <h3 className="text-lg font-bold font-display uppercase text-[#1a1a1a] mb-3">
-                Join Teams
-              </h3>
-              <p className="text-[10px] text-[#1a1a1a]/85 leading-relaxed font-semibold">
-                Submit team rosters. Provide details for up to 6 players, verify age bounds, accept guidelines, and check private coordinate lobby access immediately.
-              </p>
-            </motion.div>
+            <ScrollReveal direction="up" delay={0.25}>
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                onClick={() => user ? navigate('/dashboard?tab=join') : onOpenAuth()}
+                className="bg-[#dcfce7] border-[3px] border-[#1a1a1a] p-8 rounded-2xl w-full md:w-80 shadow-[6px_6px_0px_0px_rgba(26,26,26,1)] relative z-10 md:rotate-3 md:-translate-x-4 interactive-target cursor-pointer"
+              >
+                <div className="bg-yellow-200 border-2 border-[#1a1a1a] p-2 w-max rounded-lg mb-4 shadow-[1.5px_1.5px_0px_rgba(26,26,26,1)]">
+                  <Pin className="w-5 h-5 text-[#1a1a1a]" />
+                </div>
+                <h3 className="text-lg font-bold font-display uppercase text-[#1a1a1a] mb-3">
+                  Join Teams
+                </h3>
+                <p className="text-[10px] text-[#1a1a1a]/85 leading-relaxed font-semibold">
+                  Submit team rosters. Provide details for up to 6 players, verify age bounds, accept guidelines, and check private coordinate lobby access immediately.
+                </p>
+              </motion.div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -876,53 +911,57 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-start overflow-hidden">
           {/* Left Column */}
-          <div className="space-y-20 relative">
-            {/* Mock Polaroid Cluster */}
-            <div className="relative w-full h-64 flex justify-center items-center group">
-              <div className="absolute inset-0 bg-[#bde3fb]/20 rounded-xl" style={{ backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-              {/* Photo 1 */}
-              <div className="w-32 h-40 bg-white p-2 shadow-xl -rotate-[15deg] absolute left-12 top-4 group-hover:-rotate-[25deg] transition-transform duration-500 rounded-sm">
-                <div className="w-full h-28 bg-[#dcfce7] rounded-sm overflow-hidden flex items-center justify-center text-4xl">⚽</div>
-                <div className="absolute -bottom-3 -right-3 w-8 h-8 rounded-full border-2 border-white shadow-md bg-blue-500 flex items-center justify-center text-white font-bold text-[10px]">NL</div>
+          <ScrollReveal direction="left" delay={0}>
+            <div className="space-y-20 relative">
+              {/* Mock Polaroid Cluster */}
+              <div className="relative w-full h-64 flex justify-center items-center group">
+                <div className="absolute inset-0 bg-[#bde3fb]/20 rounded-xl" style={{ backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                {/* Photo 1 */}
+                <div className="w-32 h-40 bg-white p-2 shadow-xl -rotate-[15deg] absolute left-12 top-4 group-hover:-rotate-[25deg] transition-transform duration-500 rounded-sm">
+                  <div className="w-full h-28 bg-[#dcfce7] rounded-sm overflow-hidden flex items-center justify-center text-4xl">⚽</div>
+                  <div className="absolute -bottom-3 -right-3 w-8 h-8 rounded-full border-2 border-white shadow-md bg-blue-500 flex items-center justify-center text-white font-bold text-[10px]">NL</div>
+                </div>
+                {/* Photo 2 */}
+                <div className="w-36 h-44 bg-white p-2 shadow-2xl rotate-[5deg] absolute left-1/3 top-2 group-hover:rotate-[10deg] group-hover:scale-110 transition-transform duration-500 rounded-sm z-10">
+                  <div className="w-full h-32 bg-[#cffafe] rounded-sm overflow-hidden flex items-center justify-center text-5xl">🏆</div>
+                  <div className="absolute -bottom-3 -left-3 w-8 h-8 rounded-full border-2 border-white shadow-md bg-red-500 flex items-center justify-center text-white font-bold text-[10px]">PL</div>
+                </div>
+                {/* Dashed Line SVG simulating the one in the image */}
+                <svg className="absolute top-0 right-10 w-32 h-32 text-[#1a1a1a]/20" fill="none" viewBox="0 0 100 100">
+                  <path d="M10,90 Q50,10 90,50" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
+                  <polygon points="90,50 85,45 85,55" fill="currentColor" />
+                </svg>
               </div>
-              {/* Photo 2 */}
-              <div className="w-36 h-44 bg-white p-2 shadow-2xl rotate-[5deg] absolute left-1/3 top-2 group-hover:rotate-[10deg] group-hover:scale-110 transition-transform duration-500 rounded-sm z-10">
-                <div className="w-full h-32 bg-[#cffafe] rounded-sm overflow-hidden flex items-center justify-center text-5xl">🏆</div>
-                <div className="absolute -bottom-3 -left-3 w-8 h-8 rounded-full border-2 border-white shadow-md bg-red-500 flex items-center justify-center text-white font-bold text-[10px]">PL</div>
-              </div>
-              {/* Dashed Line SVG simulating the one in the image */}
-              <svg className="absolute top-0 right-10 w-32 h-32 text-[#1a1a1a]/20" fill="none" viewBox="0 0 100 100">
-                <path d="M10,90 Q50,10 90,50" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
-                <polygon points="90,50 85,45 85,55" fill="currentColor" />
-              </svg>
-            </div>
 
-            <div className="font-mono text-xs text-[#1a1a1a]/80 leading-relaxed space-y-4">
-              <p>Tournaments have always been our thing - from chaotic WhatsApp groups to organizing local ground slots. When we're not designing, you'll find us coordinating new leagues, chasing weekend trophies, or vibing with our running club.</p>
-              <p>Because, at the core of it all, we love helping local sports move faster, cleaner, and with fewer misfires. When things click, your tournament becomes undeniable.</p>
+              <div className="font-mono text-xs text-[#1a1a1a]/80 leading-relaxed space-y-4">
+                <p>Tournaments have always been our thing - from chaotic WhatsApp groups to organizing local ground slots. When we're not designing, you'll find us coordinating new leagues, chasing weekend trophies, or vibing with our running club.</p>
+                <p>Because, at the core of it all, we love helping local sports move faster, cleaner, and with fewer misfires. When things click, your tournament becomes undeniable.</p>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column */}
-          <div className="space-y-20 relative pt-12 md:pt-32">
-            <div className="font-mono text-xs text-[#1a1a1a]/80 leading-relaxed space-y-4">
-              <p>We're a strategic team who works hands-on with fast-moving organizers. Driven by clarity, simplicity, and love for action. We've built brackets, interfaces, and systems for physical sports across the country.</p>
-              <p>That same drive to communicate clearly and explore new perspectives shows up in how we work, and how we live. We speak code, sports, and community - slowly but surely, one match at a time.</p>
-            </div>
+          <ScrollReveal direction="right" delay={0.2}>
+            <div className="space-y-20 relative pt-12 md:pt-32">
+              <div className="font-mono text-xs text-[#1a1a1a]/80 leading-relaxed space-y-4">
+                <p>We're a strategic team who works hands-on with fast-moving organizers. Driven by clarity, simplicity, and love for action. We've built brackets, interfaces, and systems for physical sports across the country.</p>
+                <p>That same drive to communicate clearly and explore new perspectives shows up in how we work, and how we live. We speak code, sports, and community - slowly but surely, one match at a time.</p>
+              </div>
 
-            {/* Mock Polaroid Cluster */}
-            <div className="relative w-full h-64 flex justify-center items-center group">
-              <div className="absolute inset-0 bg-[#bde3fb]/20 rounded-xl" style={{ backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-              <div className="w-28 h-36 bg-white p-1.5 shadow-lg rotate-[12deg] absolute right-12 bottom-4 group-hover:rotate-[20deg] transition-transform duration-500 rounded-sm">
-                <div className="w-full h-28 bg-[#ffedd5] rounded-sm overflow-hidden flex items-center justify-center text-3xl">🏏</div>
-              </div>
-              <div className="w-28 h-36 bg-white p-1.5 shadow-xl -rotate-[8deg] absolute right-1/3 bottom-8 group-hover:-rotate-[15deg] group-hover:scale-110 transition-transform duration-500 rounded-sm z-10">
-                <div className="w-full h-28 bg-[#fef08a] rounded-sm overflow-hidden flex items-center justify-center text-3xl">🏀</div>
+              {/* Mock Polaroid Cluster */}
+              <div className="relative w-full h-64 flex justify-center items-center group">
+                <div className="absolute inset-0 bg-[#bde3fb]/20 rounded-xl" style={{ backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                <div className="w-28 h-36 bg-white p-1.5 shadow-lg rotate-[12deg] absolute right-12 bottom-4 group-hover:rotate-[20deg] transition-transform duration-500 rounded-sm">
+                  <div className="w-full h-28 bg-[#ffedd5] rounded-sm overflow-hidden flex items-center justify-center text-3xl">🏏</div>
+                </div>
+                <div className="w-28 h-36 bg-white p-1.5 shadow-xl -rotate-[8deg] absolute right-1/3 bottom-8 group-hover:-rotate-[15deg] group-hover:scale-110 transition-transform duration-500 rounded-sm z-10">
+                  <div className="w-full h-28 bg-[#fef08a] rounded-sm overflow-hidden flex items-center justify-center text-3xl">🏀</div>
+                </div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -948,89 +987,103 @@ export const LandingPage = ({ onOpenAuth, user }) => {
         </div>
 
         {/* Two-Column Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow">
-            <div>
-              <h3 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-4">Overview</h3>
-              <p className="text-xs font-mono text-[#1a1a1a]/70 leading-relaxed mb-6">
-                Team: Andreas (Full-stack), Andres (Product/Manager), Sam (Design System Lead), Tom (Arena concepts), Copywriter, and Will (Dev)
-              </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 overflow-hidden">
+          <ScrollReveal direction="up" delay={0}>
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow h-full">
+              <div>
+                <h3 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-4">Overview</h3>
+                <p className="text-xs font-mono text-[#1a1a1a]/70 leading-relaxed mb-6">
+                  Team: Andreas (Full-stack), Andres (Product/Manager), Sam (Design System Lead), Tom (Arena concepts), Copywriter, and Will (Dev)
+                </p>
+              </div>
+              <p className="text-[10px] font-mono text-[#1a1a1a]/40">Created at: https://novahub.com/</p>
             </div>
-            <p className="text-[10px] font-mono text-[#1a1a1a]/40">Created at: https://novahub.com/</p>
-          </div>
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow">
-            <div>
-              <h3 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-4">What I worked on</h3>
-              <p className="text-xs font-mono text-[#1a1a1a]/70 leading-relaxed">
-                Design system theming, UI layout across tournament pages, bracket translation, copy to layout structuring, QA support, and live score update templates.
-              </p>
+          </ScrollReveal>
+          
+          <ScrollReveal direction="up" delay={0.15}>
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow h-full">
+              <div>
+                <h3 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-4">What I worked on</h3>
+                <p className="text-xs font-mono text-[#1a1a1a]/70 leading-relaxed">
+                  Design system theming, UI layout across tournament pages, bracket translation, copy to layout structuring, QA support, and live score update templates.
+                </p>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* Hero Image Mockup */}
-        <div className="w-full h-80 md:h-[32rem] bg-gradient-to-br from-[#2b3a20] to-[#1e2a15] rounded-[2rem] mb-6 overflow-hidden relative flex flex-col shadow-xl group cursor-pointer" onClick={() => user ? navigate('/dashboard') : onOpenAuth()}>
-          {/* Top Bar simulating a browser/website */}
-          <div className="w-full h-16 border-b border-white/10 flex items-center justify-between px-8 text-white text-[10px] md:text-xs font-bold font-mono">
-            <div className="hidden md:flex gap-6">
-              <span className="hover:text-yellow-400 cursor-pointer transition-colors">Home</span>
-              <span className="hover:text-yellow-400 cursor-pointer transition-colors">About Us</span>
-              <span className="hover:text-yellow-400 cursor-pointer transition-colors">Leagues</span>
-              <span className="hover:text-yellow-400 cursor-pointer transition-colors">News</span>
+        <ScrollReveal direction="up" delay={0.1}>
+          <div className="w-full h-80 md:h-[32rem] bg-gradient-to-br from-[#2b3a20] to-[#1e2a15] rounded-[2rem] mb-6 overflow-hidden relative flex flex-col shadow-xl group cursor-pointer" onClick={() => user ? navigate('/dashboard') : onOpenAuth()}>
+            {/* Top Bar simulating a browser/website */}
+            <div className="w-full h-16 border-b border-white/10 flex items-center justify-between px-8 text-white text-[10px] md:text-xs font-bold font-mono">
+              <div className="hidden md:flex gap-6">
+                <span className="hover:text-yellow-400 cursor-pointer transition-colors">Home</span>
+                <span className="hover:text-yellow-400 cursor-pointer transition-colors">About Us</span>
+                <span className="hover:text-yellow-400 cursor-pointer transition-colors">Leagues</span>
+                <span className="hover:text-yellow-400 cursor-pointer transition-colors">News</span>
+              </div>
+              <div className="text-xl font-bold font-display uppercase tracking-widest text-[#facc15] mx-auto md:mx-0">
+                <span className="text-white opacity-80 mr-2 text-lg">⚡</span>NOVA PRO
+              </div>
+              <div className="hidden md:block border border-white/30 rounded-full px-6 py-2 hover:bg-white/10 cursor-pointer transition-colors">Contact</div>
             </div>
-            <div className="text-xl font-bold font-display uppercase tracking-widest text-[#facc15] mx-auto md:mx-0">
-              <span className="text-white opacity-80 mr-2 text-lg">⚡</span>NOVA PRO
+            
+            {/* Huge abstract background shapes simulating the image */}
+            <div className="absolute inset-0 top-16 opacity-30 flex justify-center items-center overflow-hidden pointer-events-none group-hover:scale-105 transition-transform duration-700">
+              {/* Massive angled bars */}
+              <div className="w-32 h-[150%] bg-[#405430] absolute -rotate-[30deg] -left-10 shadow-2xl"></div>
+              <div className="w-32 h-[150%] bg-[#405430] absolute -rotate-[30deg] left-40 shadow-2xl"></div>
+              <div className="w-32 h-[150%] bg-[#405430] absolute -rotate-[30deg] left-96 shadow-2xl"></div>
+              <div className="w-48 h-[150%] bg-[#405430] absolute rotate-[45deg] right-0 shadow-2xl"></div>
+              <div className="w-48 h-[150%] bg-[#405430] absolute rotate-[45deg] -right-48 shadow-2xl"></div>
             </div>
-            <div className="hidden md:block border border-white/30 rounded-full px-6 py-2 hover:bg-white/10 cursor-pointer transition-colors">Contact</div>
-          </div>
-          
-          {/* Huge abstract background shapes simulating the image */}
-          <div className="absolute inset-0 top-16 opacity-30 flex justify-center items-center overflow-hidden pointer-events-none group-hover:scale-105 transition-transform duration-700">
-            {/* Massive angled bars */}
-            <div className="w-32 h-[150%] bg-[#405430] absolute -rotate-[30deg] -left-10 shadow-2xl"></div>
-            <div className="w-32 h-[150%] bg-[#405430] absolute -rotate-[30deg] left-40 shadow-2xl"></div>
-            <div className="w-32 h-[150%] bg-[#405430] absolute -rotate-[30deg] left-96 shadow-2xl"></div>
-            <div className="w-48 h-[150%] bg-[#405430] absolute rotate-[45deg] right-0 shadow-2xl"></div>
-            <div className="w-48 h-[150%] bg-[#405430] absolute rotate-[45deg] -right-48 shadow-2xl"></div>
-          </div>
 
-          <div className="relative z-10 flex-1 flex flex-col justify-end p-8 md:p-12 text-white">
-            <ScrollParallaxHeading axis="x" direction={-1} speed={35} className="text-4xl md:text-6xl font-display font-black leading-tight mb-4">
-              Experience you can <span className="text-[#e86c3f]">rely on</span>
-            </ScrollParallaxHeading>
-            <p className="text-[10px] font-mono max-w-sm leading-relaxed text-white/70 mb-6 font-semibold">
-              Nova Hub operates across Weekend Leagues, International Qualifiers, and Corporate Cups, with a focus on mid-market physical arenas. We provide local managers with decisive bracket generation and technical depth where it matters most.
-            </p>
-            <button className="bg-[#e86c3f] text-white px-5 py-2.5 rounded-full font-bold font-mono text-[10px] w-max hover:bg-[#d45b30] transition-colors shadow-lg">
-              Discover our platform
-            </button>
+            <div className="relative z-10 flex-1 flex flex-col justify-end p-8 md:p-12 text-white">
+              <ScrollParallaxHeading axis="x" direction={-1} speed={35} className="text-4xl md:text-6xl font-display font-black leading-tight mb-4">
+                Experience you can <span className="text-[#e86c3f]">rely on</span>
+              </ScrollParallaxHeading>
+              <p className="text-[10px] font-mono max-w-sm leading-relaxed text-white/70 mb-6 font-semibold">
+                Nova Hub operates across Weekend Leagues, International Qualifiers, and Corporate Cups, with a focus on mid-market physical arenas. We provide local managers with decisive bracket generation and technical depth where it matters most.
+              </p>
+              <button className="bg-[#e86c3f] text-white px-5 py-2.5 rounded-full font-bold font-mono text-[10px] w-max hover:bg-[#d45b30] transition-colors shadow-lg">
+                Discover our platform
+              </button>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Bottom Two Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between h-48 md:h-56 hover:shadow-md transition-shadow">
-            <p className="text-xs font-mono text-[#1a1a1a]/80 leading-relaxed max-w-xs">
-              Helped ship multiple league instances by adapting a modular design system to new sports identities and turning basic texts into structured, on-brand match layouts.
-            </p>
-            <h3 className="text-lg font-display italic font-bold text-[#1a1a1a]">Mission: Sports conglomerate</h3>
-          </div>
-          <div className="bg-[#bde3fb]/40 rounded-3xl p-8 flex flex-col justify-center items-center h-48 md:h-56 border border-[#bde3fb] overflow-hidden relative group cursor-pointer" onClick={() => user ? navigate('/dashboard') : onOpenAuth()}>
-            <div className="absolute inset-0 bg-[#bde3fb]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="text-white text-5xl md:text-6xl drop-shadow-md mb-2 group-hover:-translate-y-1 transition-transform">⚡</div>
-            <h3 className="text-xl md:text-3xl font-display uppercase font-black text-[#1a1a1a] tracking-[0.1em] drop-shadow-md text-center group-hover:scale-105 transition-transform">
-              NOVA PRO
-            </h3>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 overflow-hidden">
+          <ScrollReveal direction="left" delay={0}>
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between h-48 md:h-56 hover:shadow-md transition-shadow">
+              <p className="text-xs font-mono text-[#1a1a1a]/80 leading-relaxed max-w-xs">
+                Helped ship multiple league instances by adapting a modular design system to new sports identities and turning basic texts into structured, on-brand match layouts.
+              </p>
+              <h3 className="text-lg font-display italic font-bold text-[#1a1a1a]">Mission: Sports conglomerate</h3>
+            </div>
+          </ScrollReveal>
+          
+          <ScrollReveal direction="right" delay={0.15}>
+            <div className="bg-[#bde3fb]/40 rounded-3xl p-8 flex flex-col justify-center items-center h-48 md:h-56 border border-[#bde3fb] overflow-hidden relative group cursor-pointer" onClick={() => user ? navigate('/dashboard') : onOpenAuth()}>
+              <div className="absolute inset-0 bg-[#bde3fb]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="text-white text-5xl md:text-6xl drop-shadow-md mb-2 group-hover:-translate-y-1 transition-transform">⚡</div>
+              <h3 className="text-xl md:text-3xl font-display uppercase font-black text-[#1a1a1a] tracking-[0.1em] drop-shadow-md text-center group-hover:scale-105 transition-transform">
+                NOVA PRO
+              </h3>
+            </div>
+          </ScrollReveal>
         </div>
 
         {/* Footer Challenge text */}
-        <div className="max-w-3xl">
-          <h3 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-4">The challenge:</h3>
-          <p className="text-xs font-mono text-[#1a1a1a]/80 leading-relaxed text-justify">
-            Local arenas launch multiple weekend tournaments quickly. Branding comes from different organizers, but the brackets must be built fast, consistently, and within tight timelines. Inputs were often incomplete (WhatsApp texts, basic guidelines) that didn't always fit components, so the real work was making everything "snap" into a cohesive system without reinventing the rules each time.
-          </p>
-        </div>
+        <ScrollReveal direction="up" delay={0}>
+          <div className="max-w-3xl">
+            <h3 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-4">The challenge:</h3>
+            <p className="text-xs font-mono text-[#1a1a1a]/80 leading-relaxed text-justify">
+              Local arenas launch multiple weekend tournaments quickly. Branding comes from different organizers, but the brackets must be built fast, consistently, and within tight timelines. Inputs were often incomplete (WhatsApp texts, basic guidelines) that didn't always fit components, so the real work was making everything "snap" into a cohesive system without reinventing the rules each time.
+            </p>
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* ==========================================
@@ -1054,60 +1107,64 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 overflow-hidden">
           {/* Column 1 */}
-          <div className="space-y-4">
-            {FAQ_ITEMS.slice(0, 6).map((item) => (
-              <div 
-                key={item.id} 
-                className="bg-white dark:bg-[#121420] border-[3px] border-[#1a1a1a] dark:border-white/20 rounded-2xl p-5 shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_rgba(26,26,26,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,0.15)] cursor-pointer"
-                onClick={() => toggleFaq(item.id)}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 shrink-0 rounded-md bg-[#1a1a1a] dark:bg-white/10 text-white flex items-center justify-center font-bold text-xs select-none">
-                    <span className={`transition-transform duration-300 inline-block font-sans font-bold text-base ${openFaq[item.id] ? 'rotate-[135deg] text-yellow-400' : 'rotate-0'}`}>
-                      +
-                    </span>
+          <ScrollReveal direction="left" delay={0}>
+            <div className="space-y-4">
+              {FAQ_ITEMS.slice(0, 6).map((item) => (
+                <div 
+                  key={item.id} 
+                  className="bg-white dark:bg-[#121420] border-[3px] border-[#1a1a1a] dark:border-white/20 rounded-2xl p-5 shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_rgba(26,26,26,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,0.15)] cursor-pointer"
+                  onClick={() => toggleFaq(item.id)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 shrink-0 rounded-md bg-[#1a1a1a] dark:bg-white/10 text-white flex items-center justify-center font-bold text-xs select-none">
+                      <span className={`transition-transform duration-300 inline-block font-sans font-bold text-base ${openFaq[item.id] ? 'rotate-[135deg] text-yellow-400' : 'rotate-0'}`}>
+                        +
+                      </span>
+                    </div>
+                    <h3 className="font-display font-bold text-sm md:text-base text-[#1a1a1a] dark:text-white select-none">
+                      {item.question}
+                    </h3>
                   </div>
-                  <h3 className="font-display font-bold text-sm md:text-base text-[#1a1a1a] dark:text-white select-none">
-                    {item.question}
-                  </h3>
+                  {openFaq[item.id] && (
+                    <p className="mt-4 text-xs md:text-sm font-mono text-[#1a1a1a]/85 dark:text-white/85 border-t border-[#1a1a1a]/10 dark:border-white/10 pt-4 leading-relaxed animate-slide-in">
+                      {item.answer}
+                    </p>
+                  )}
                 </div>
-                {openFaq[item.id] && (
-                  <p className="mt-4 text-xs md:text-sm font-mono text-[#1a1a1a]/85 dark:text-white/85 border-t border-[#1a1a1a]/10 dark:border-white/10 pt-4 leading-relaxed animate-slide-in">
-                    {item.answer}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </ScrollReveal>
 
           {/* Column 2 */}
-          <div className="space-y-4">
-            {FAQ_ITEMS.slice(6).map((item) => (
-              <div 
-                key={item.id} 
-                className="bg-white dark:bg-[#121420] border-[3px] border-[#1a1a1a] dark:border-white/20 rounded-2xl p-5 shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_rgba(26,26,26,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,0.15)] cursor-pointer"
-                onClick={() => toggleFaq(item.id)}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 shrink-0 rounded-md bg-[#1a1a1a] dark:bg-white/10 text-white flex items-center justify-center font-bold text-xs select-none">
-                    <span className={`transition-transform duration-300 inline-block font-sans font-bold text-base ${openFaq[item.id] ? 'rotate-[135deg] text-yellow-400' : 'rotate-0'}`}>
-                      +
-                    </span>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div className="space-y-4">
+              {FAQ_ITEMS.slice(6).map((item) => (
+                <div 
+                  key={item.id} 
+                  className="bg-white dark:bg-[#121420] border-[3px] border-[#1a1a1a] dark:border-white/20 rounded-2xl p-5 shadow-[4px_4px_0px_rgba(26,26,26,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_rgba(26,26,26,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,0.15)] cursor-pointer"
+                  onClick={() => toggleFaq(item.id)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 shrink-0 rounded-md bg-[#1a1a1a] dark:bg-white/10 text-white flex items-center justify-center font-bold text-xs select-none">
+                      <span className={`transition-transform duration-300 inline-block font-sans font-bold text-base ${openFaq[item.id] ? 'rotate-[135deg] text-yellow-400' : 'rotate-0'}`}>
+                        +
+                      </span>
+                    </div>
+                    <h3 className="font-display font-bold text-sm md:text-base text-[#1a1a1a] dark:text-white select-none">
+                      {item.question}
+                    </h3>
                   </div>
-                  <h3 className="font-display font-bold text-sm md:text-base text-[#1a1a1a] dark:text-white select-none">
-                    {item.question}
-                  </h3>
+                  {openFaq[item.id] && (
+                    <p className="mt-4 text-xs md:text-sm font-mono text-[#1a1a1a]/85 dark:text-white/85 border-t border-[#1a1a1a]/10 dark:border-white/10 pt-4 leading-relaxed animate-slide-in">
+                      {item.answer}
+                    </p>
+                  )}
                 </div>
-                {openFaq[item.id] && (
-                  <p className="mt-4 text-xs md:text-sm font-mono text-[#1a1a1a]/85 dark:text-white/85 border-t border-[#1a1a1a]/10 dark:border-white/10 pt-4 leading-relaxed animate-slide-in">
-                    {item.answer}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -1127,64 +1184,72 @@ export const LandingPage = ({ onOpenAuth, user }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden">
           {/* Large Photo Card 1 */}
-          <div className="h-[28rem] md:h-[36rem] bg-[#222] rounded-[2rem] p-8 flex flex-col justify-end relative overflow-hidden group cursor-pointer shadow-[0_20px_40px_rgba(0,0,0,0.2)]">
-            <img 
-              src="/david.png" 
-              alt="David Van Den Bosch" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-            
-            <div className="relative z-10 text-white">
-              <div className="w-10 h-10 bg-white rounded-md mb-4 flex items-center justify-center shadow-lg"><span className="text-xl">⚽</span></div>
-              <h3 className="text-2xl font-display italic font-bold mb-1">David Van Den Bosch</h3>
-              <p className="text-[10px] font-mono uppercase tracking-wider mb-6 text-white/70">Captain of City Strikers</p>
-              <p className="text-xs md:text-sm font-bold font-mono leading-relaxed text-white/90">
-                "Nova Hub took responsibility at every stage of the tournament. Exceeding expectations, and delivering outstanding ground management."
-              </p>
+          <ScrollReveal direction="left" delay={0}>
+            <div className="h-[28rem] md:h-[36rem] bg-[#222] rounded-[2rem] p-8 flex flex-col justify-end relative overflow-hidden group cursor-pointer shadow-[0_20px_40px_rgba(0,0,0,0.2)]">
+              <img 
+                src="/david.png" 
+                alt="David Van Den Bosch" 
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              
+              <div className="relative z-10 text-white">
+                <div className="w-10 h-10 bg-white rounded-md mb-4 flex items-center justify-center shadow-lg"><span className="text-xl">⚽</span></div>
+                <h3 className="text-2xl font-display italic font-bold mb-1">David Van Den Bosch</h3>
+                <p className="text-[10px] font-mono uppercase tracking-wider mb-6 text-white/70">Captain of City Strikers</p>
+                <p className="text-xs md:text-sm font-bold font-mono leading-relaxed text-white/90">
+                  "Nova Hub took responsibility at every stage of the tournament. Exceeding expectations, and delivering outstanding ground management."
+                </p>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Large Photo Card 2 */}
-          <div className="h-[28rem] md:h-[36rem] bg-[#222] rounded-[2rem] p-8 flex flex-col justify-end relative overflow-hidden group cursor-pointer shadow-[0_20px_40px_rgba(0,0,0,0.2)]">
-            <img 
-              src="/rik.png" 
-              alt="Rik Van Wieren" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-            
-            <div className="relative z-10 text-white">
-              <div className="w-10 h-10 bg-[#1a1a1a] border border-white/20 rounded-md mb-4 flex items-center justify-center shadow-lg"><span className="text-xl font-bold">NH</span></div>
-              <h3 className="text-2xl font-display italic font-bold mb-1">Rik Van Wieren</h3>
-              <p className="text-[10px] font-mono uppercase tracking-wider mb-6 text-white/70">Tournament Organizer</p>
-              <p className="text-xs md:text-sm font-bold font-mono leading-relaxed text-white/90">
-                "We set up our summer cricket league through them. The automated brackets and player check-ins saved us hours of chaos."
-              </p>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div className="h-[28rem] md:h-[36rem] bg-[#222] rounded-[2rem] p-8 flex flex-col justify-end relative overflow-hidden group cursor-pointer shadow-[0_20px_40px_rgba(0,0,0,0.2)]">
+              <img 
+                src="/rik.png" 
+                alt="Rik Van Wieren" 
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              
+              <div className="relative z-10 text-white">
+                <div className="w-10 h-10 bg-[#1a1a1a] border border-white/20 rounded-md mb-4 flex items-center justify-center shadow-lg"><span className="text-xl font-bold">NH</span></div>
+                <h3 className="text-2xl font-display italic font-bold mb-1">Rik Van Wieren</h3>
+                <p className="text-[10px] font-mono uppercase tracking-wider mb-6 text-white/70">Tournament Organizer</p>
+                <p className="text-xs md:text-sm font-bold font-mono leading-relaxed text-white/90">
+                  "We set up our summer cricket league through them. The automated brackets and player check-ins saved us hours of chaos."
+                </p>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Small Quote Card 1 */}
-          <div className="bg-white rounded-3xl p-8 shadow-xl hover:-translate-y-2 transition-transform duration-300">
-            <div className="w-12 h-12 bg-gray-200 rounded-full mb-6 overflow-hidden flex items-center justify-center"><span className="text-2xl">👨</span></div>
-            <p className="text-xs font-mono text-[#1a1a1a]/80 leading-relaxed font-semibold mb-8">
-              "The team is very polite and hardworking. They bring energy to every tournament. I am particularly impressed with their ability to provide high attention to detail without compromising speed."
-            </p>
-            <h4 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-1">Robin Schildmeijer</h4>
-            <p className="text-[9px] font-mono uppercase tracking-widest text-[#1a1a1a]/50">Arena Manager</p>
-          </div>
+          <ScrollReveal direction="left" delay={0}>
+            <div className="bg-white rounded-3xl p-8 shadow-xl hover:-translate-y-2 transition-transform duration-300 h-full">
+              <div className="w-12 h-12 bg-gray-200 rounded-full mb-6 overflow-hidden flex items-center justify-center"><span className="text-2xl">👨</span></div>
+              <p className="text-xs font-mono text-[#1a1a1a]/80 leading-relaxed font-semibold mb-8">
+                "The team is very polite and hardworking. They bring energy to every tournament. I am particularly impressed with their ability to provide high attention to detail without compromising speed."
+              </p>
+              <h4 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-1">Robin Schildmeijer</h4>
+              <p className="text-[9px] font-mono uppercase tracking-widest text-[#1a1a1a]/50">Arena Manager</p>
+            </div>
+          </ScrollReveal>
 
           {/* Small Quote Card 2 */}
-          <div className="bg-white rounded-3xl p-8 shadow-xl hover:-translate-y-2 transition-transform duration-300">
-            <div className="w-12 h-12 bg-gray-200 rounded-full mb-6 overflow-hidden flex items-center justify-center"><span className="text-2xl">👩‍🏫</span></div>
-            <p className="text-xs font-mono text-[#1a1a1a]/80 leading-relaxed font-semibold mb-8">
-              "They are very analytical organizers. They take the challenge and process very seriously, and that shows in their league platform. Every detail is meticulously considered."
-            </p>
-            <h4 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-1">Mitchell Jacobs</h4>
-            <p className="text-[9px] font-mono uppercase tracking-widest text-[#1a1a1a]/50">Founder of Turf Masters</p>
-          </div>
+          <ScrollReveal direction="right" delay={0.15}>
+            <div className="bg-white rounded-3xl p-8 shadow-xl hover:-translate-y-2 transition-transform duration-300 h-full">
+              <div className="w-12 h-12 bg-gray-200 rounded-full mb-6 overflow-hidden flex items-center justify-center"><span className="text-2xl">👩‍🏫</span></div>
+              <p className="text-xs font-mono text-[#1a1a1a]/80 leading-relaxed font-semibold mb-8">
+                "They are very analytical organizers. They take the challenge and process very seriously, and that shows in their league platform. Every detail is meticulously considered."
+              </p>
+              <h4 className="text-xl font-display italic font-bold text-[#1a1a1a] mb-1">Mitchell Jacobs</h4>
+              <p className="text-[9px] font-mono uppercase tracking-widest text-[#1a1a1a]/50">Founder of Turf Masters</p>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
