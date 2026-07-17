@@ -20,15 +20,8 @@ export const useVirtualCursor = () => {
       if (!target) return;
 
       const isInteractive = 
-        target.closest('button') || 
-        target.closest('a') || 
-        target.closest('.interactive-target') || 
-        target.closest('[role="button"]') ||
-        target.closest('.cursor-pointer') ||
-        (target instanceof Element && window.getComputedStyle(target).cursor === 'pointer') ||
-        target.tagName === 'INPUT' || 
-        target.tagName === 'SELECT' || 
-        target.tagName === 'TEXTAREA';
+        target.closest('button, a, input, select, textarea, [role="button"], .cursor-pointer, .interactive-target') ||
+        (target instanceof HTMLElement && (target.style.cursor === 'pointer' || target.closest('[style*="cursor: pointer"], [style*="cursor:pointer"]')));
 
       if (isInteractive) {
         setHovered(true);
