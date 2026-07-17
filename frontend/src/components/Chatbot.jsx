@@ -109,12 +109,9 @@ const Chatbot = ({ apiBaseUrl }) => {
           ];
           return responseText;
         }
-      } else {
-        const errData = await res.json().catch(() => ({}));
-        console.debug('Gemini REST error:', errData?.error?.message || res.status);
       }
     } catch (err) {
-      console.debug('Gemini REST API error:', err.message);
+      // Fall through silently to SDK
     }
 
     // Fallback: try SDK (works with AIza keys)
@@ -134,7 +131,7 @@ const Chatbot = ({ apiBaseUrl }) => {
       ];
       return responseText;
     } catch (err) {
-      console.debug('Gemini SDK error:', err.message);
+      // Fall through silently to backend / smart fallback
     }
 
     return null;
