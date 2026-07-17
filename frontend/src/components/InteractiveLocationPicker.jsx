@@ -6,6 +6,7 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
   const mapInstanceRef = useRef(null);
   const markerInstanceRef = useRef(null);
   const debounceTimeoutRef = useRef(null);
+  const tileLayerInstanceRef = useRef(null);
 
   const [coords, setCoords] = useState(defaultCoords);
   const [address, setAddress] = useState('Resolving starting coordinates...');
@@ -14,6 +15,20 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
   const [leafletLoaded, setLeafletLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // 1. Dynamically load Leaflet resources via CDN to avoid Vite asset resolution bugs
   useEffect(() => {
@@ -152,19 +167,17 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
     }).setView([coords.lat, coords.lng], 13);
     mapInstanceRef.current = map;
 
-    // Load OpenStreetMap Tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Setup custom icon to bypass Vite image-path compilation bugs
-    const markerIcon = L.icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
+    // Setup custom div icon to avoid network requests & support offline mode beautifully
+    const markerIcon = L.divIcon({
+      className: 'div-map-pin',
+      html: `<div class="relative flex items-center justify-center w-8 h-8">
+               <div class="absolute w-8 h-8 bg-yellow-400/30 rounded-full animate-ping border border-yellow-500"></div>
+               <div class="absolute w-5 h-5 bg-[#1a1a1a] border-2 border-yellow-400 rounded-full flex items-center justify-center shadow-md">
+                 <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+               </div>
+             </div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16]
     });
 
     // Create marker
@@ -202,6 +215,25 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
       map.remove();
     };
   }, [leafletLoaded]);
+
+  // Reactive Map Tile layer toggle based on online/offline status
+  useEffect(() => {
+    if (!mapInstanceRef.current || !window.L) return;
+    const L = window.L;
+
+    if (isOnline) {
+      if (!tileLayerInstanceRef.current) {
+        tileLayerInstanceRef.current = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+      }
+      tileLayerInstanceRef.current.addTo(mapInstanceRef.current);
+    } else {
+      if (tileLayerInstanceRef.current) {
+        mapInstanceRef.current.removeLayer(tileLayerInstanceRef.current);
+      }
+    }
+  }, [isOnline, leafletLoaded]);
 
   const handleBookingSubmit = () => {
     if (loadingAddress) {
@@ -256,6 +288,17 @@ export const InteractiveLocationPicker = ({ onConfirmBooking, defaultCoords = { 
         
         {/* Leaflet canvas div */}
         <div ref={mapContainerRef} className="w-full h-full z-10" />
+
+        {/* Offline Overlay */}
+        {!isOnline && (
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center text-center p-6 text-white font-mono gap-3 animate-fade-in">
+            <span className="text-3xl animate-pulse">🌐</span>
+            <span className="text-xs uppercase font-black tracking-wider text-yellow-300">Map Interface Offline</span>
+            <span className="text-[10px] opacity-80 max-w-xs leading-relaxed">
+              OpenStreetMap tile layers and search nodes require an internet connection to load.
+            </span>
+          </div>
+        )}
 
         {/* Loading Overlay */}
         {!leafletLoaded && (

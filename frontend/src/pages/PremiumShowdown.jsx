@@ -204,6 +204,21 @@ export const PremiumShowdown = ({ user }) => {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
   const tileLayerRef = useRef(null);
 
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   // Falling blue/cyan particle snow animation loop
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -360,6 +375,10 @@ export const PremiumShowdown = ({ user }) => {
       mapInstance.current.removeLayer(tileLayerRef.current);
     }
 
+    if (!isOnline) {
+      return;
+    }
+
     const url = isDark 
       ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' 
       : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
@@ -372,7 +391,7 @@ export const PremiumShowdown = ({ user }) => {
 
     tiles.addTo(mapInstance.current);
     tileLayerRef.current = tiles;
-  }, [isDark, map]);
+  }, [isDark, map, isOnline]);
 
   // 6. Reactive Map Pan & Marker update on city change
   useEffect(() => {
@@ -648,12 +667,21 @@ export const PremiumShowdown = ({ user }) => {
           </div>
 
           {/* Right panel (Interactive Leaflet Map) */}
-          <div className="lg:col-span-5 flex flex-col p-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-white/10 rounded-3xl shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300">
+          <div className="lg:col-span-5 flex flex-col p-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border-[3px] border-[#1a1a1a] dark:border-white/10 rounded-3xl shadow-[8px_8px_0px_#1a1a1a] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300 relative">
             <div 
               ref={mapContainerRef} 
               className="flex-1 min-h-[350px] w-full rounded-2xl border border-black/10 dark:border-white/10 overflow-hidden relative z-10"
               style={{ background: isDark ? '#0a0a14' : '#e4f4f3' }}
             />
+            {!isOnline && (
+              <div className="absolute inset-3 rounded-2xl bg-black/60 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-6 text-white font-mono gap-3">
+                <span className="text-3xl animate-pulse">🌐</span>
+                <span className="text-xs uppercase font-black tracking-wider text-yellow-300">Map Preview Offline</span>
+                <span className="text-[10px] opacity-80 max-w-xs leading-relaxed">
+                  An active internet connection is required to fetch real-time geographic arena coordinates.
+                </span>
+              </div>
+            )}
           </div>
 
         </div>
