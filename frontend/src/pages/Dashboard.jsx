@@ -989,8 +989,8 @@ export const Dashboard = ({ apiBaseUrl, user, onRoleToggle }) => {
                 >
                   {/* Header Banner */}
                   <div className="bg-[#1a1a1a] dark:bg-[#0a0c14] text-white p-6 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-full -translate-y-8 translate-x-8" />
-                    <div className="flex justify-between items-start gap-4">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-full -translate-y-8 translate-x-8 pointer-events-none" />
+                    <div className="flex justify-between items-start gap-4 relative z-10">
                       <div>
                         <div className="flex gap-2 mb-2 flex-wrap">
                           <span className="bg-yellow-400 text-black text-[9px] px-2 py-0.5 font-black uppercase">{lobbyTournament.gameName}</span>
