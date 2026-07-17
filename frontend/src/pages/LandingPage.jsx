@@ -9,15 +9,11 @@ import FeaturedCarousel from '../components/FeaturedCarousel';
 import ScrollReveal from '../components/ScrollReveal';
 
 const ScrollParallaxHeading = ({ children, className, axis = "x", speed = 30, direction = 1 }) => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
+  const { scrollY } = useScroll();
 
-  const transformValue = useTransform(scrollYProgress, [0, 1], [direction * -speed, direction * speed]);
+  // Map global scroll position directly to translation offsets, avoiding forced reflow measurements
+  const transformValue = useTransform(scrollY, [0, 6000], [0, direction * speed * 2.5]);
   
-  // Smooth out the scroll motion using a spring transition (inertia takes ~1 second to settle)
   const smoothTransform = useSpring(transformValue, {
     stiffness: 60,
     damping: 25,
@@ -27,7 +23,7 @@ const ScrollParallaxHeading = ({ children, className, axis = "x", speed = 30, di
   const style = axis === "y" ? { y: smoothTransform } : { x: smoothTransform };
 
   return (
-    <motion.h2 ref={ref} style={style} className={className}>
+    <motion.h2 style={style} className={className}>
       {children}
     </motion.h2>
   );
