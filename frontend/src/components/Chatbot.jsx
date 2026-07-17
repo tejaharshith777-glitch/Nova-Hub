@@ -111,10 +111,10 @@ const Chatbot = ({ apiBaseUrl }) => {
         }
       } else {
         const errData = await res.json().catch(() => ({}));
-        console.warn('Gemini REST error:', errData?.error?.message || res.status);
+        console.debug('Gemini REST error:', errData?.error?.message || res.status);
       }
     } catch (err) {
-      console.warn('Gemini REST API error:', err.message);
+      console.debug('Gemini REST API error:', err.message);
     }
 
     // Fallback: try SDK (works with AIza keys)
@@ -134,7 +134,7 @@ const Chatbot = ({ apiBaseUrl }) => {
       ];
       return responseText;
     } catch (err) {
-      console.warn('Gemini SDK error:', err.message);
+      console.debug('Gemini SDK error:', err.message);
     }
 
     return null;
@@ -384,6 +384,9 @@ const Chatbot = ({ apiBaseUrl }) => {
             <div className="p-3 sm:p-4 bg-white dark:bg-slate-900 border-t-[3px] border-[#1a1a1a] dark:border-white/20 shrink-0">
               <div className="flex gap-2">
                 <input
+                  id="chatbot-input"
+                  name="chatbotInput"
+                  aria-label="Ask Gemini about Nova Hub"
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
@@ -400,7 +403,7 @@ const Chatbot = ({ apiBaseUrl }) => {
                 </button>
               </div>
               <div className="text-[8px] text-gray-500 dark:text-gray-400 text-center mt-2 font-mono">
-                {GEMINI_API_KEY ? 'Powered by Google Gemini 1.5 Flash' : 'Running in offline mode'} · Nova Hub AI
+                {GEMINI_API_KEY ? 'Powered by Google Gemini 3.5 Flash' : 'Running in offline mode'} · Nova Hub AI
               </div>
             </div>
           </motion.div>

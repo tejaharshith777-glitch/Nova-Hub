@@ -182,6 +182,9 @@ export const ParticipantDashboard = ({ apiBaseUrl, socket, user }) => {
             {/* Search */}
             <div className="relative col-span-2">
               <input
+                id="search-tournaments"
+                name="searchTournaments"
+                aria-label="Search tournaments or games"
                 type="text"
                 placeholder="Search tournaments or games..."
                 value={searchTerm}
@@ -194,6 +197,9 @@ export const ParticipantDashboard = ({ apiBaseUrl, socket, user }) => {
             {/* Game filter */}
             <div>
               <select
+                id="game-filter"
+                name="gameFilter"
+                aria-label="Filter by game"
                 value={gameFilter}
                 onChange={(e) => setGameFilter(e.target.value)}
                 className="w-full bg-gaming-slate border border-white/10 rounded-lg py-2 px-3 text-xs focus:border-gaming-cyan outline-none text-white"

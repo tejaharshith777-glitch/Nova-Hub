@@ -374,11 +374,13 @@ export const HostDashboard = ({ apiBaseUrl, socket, user }) => {
           {/* Tournament selection */}
           <div className="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <span className="text-[10px] uppercase font-bold text-gaming-muted block">Select Listing to Control</span>
+              <label htmlFor="listing-select" className="text-[10px] uppercase font-bold text-gaming-muted block">Select Listing to Control</label>
               {tournaments.length === 0 ? (
                 <span className="text-sm font-semibold text-white mt-1">No active listings created yet</span>
               ) : (
                 <select
+                  id="listing-select"
+                  name="listingSelect"
                   value={selectedTournament?._id || ''}
                   onChange={(e) => {
                     const select = tournaments.find(t => t._id === e.target.value);
