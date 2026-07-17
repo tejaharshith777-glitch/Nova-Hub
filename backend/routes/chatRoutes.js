@@ -122,7 +122,7 @@ router.post('/', async (req, res) => {
         } else {
           // Google Gemini API endpoint
           const genAI = new GoogleGenerativeAI(apiKey);
-          const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+          const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
           
           const systemPrompt = `You are the Nova Assistant, a friendly and smart AI agent for Nova Hub, a sports and esports tournament platform.
 User is asking: "${message}".

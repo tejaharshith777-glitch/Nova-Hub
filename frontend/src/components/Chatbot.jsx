@@ -77,7 +77,7 @@ const Chatbot = ({ apiBaseUrl }) => {
     // Try REST API directly — works with all Gemini key formats (AIza and AQ. prefix)
     try {
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -121,7 +121,7 @@ const Chatbot = ({ apiBaseUrl }) => {
     try {
       const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
+        model: 'gemini-3.5-flash',
         systemInstruction: NOVA_HUB_SYSTEM_CONTEXT,
       });
       const chat = model.startChat({ history: chatHistoryRef.current });
