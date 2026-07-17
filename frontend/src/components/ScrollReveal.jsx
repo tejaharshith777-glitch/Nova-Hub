@@ -42,13 +42,10 @@ export const ScrollReveal = ({
     y: 0,
     scale: 1,
     transition: {
-      duration: duration,
-      delay: delay,
+      type: 'tween',
       ease: [0.16, 1, 0.3, 1], // Custom premium easeOutExpo curve
-      type: 'spring',
-      stiffness: 80,
-      damping: 18,
-      mass: 0.8
+      duration: duration,
+      delay: delay
     }
   };
 
