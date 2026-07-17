@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Activity, Trophy, CalendarDays, Users, Globe, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { localFallbackTournaments } from '../components/JoinEventPage';
 
 const tournamentData = {
   cricket: {
@@ -242,25 +243,107 @@ const tournamentData = {
   }
 };
 
+const mapLocalTournament = (t) => {
+  if (!t) return null;
+  if (t.tags) return t;
+
+  const categoryColors = {
+    esports: { bg: 'bg-[#ff4655]', text: 'text-[#ff4655]', emoji: '🎮' },
+    sports: { bg: 'bg-[#3cc85a]', text: 'text-[#3cc85a]', emoji: '⚽' },
+    racing: { bg: 'bg-[#ef4444]', text: 'text-[#ef4444]', emoji: '🏎️' },
+    academic: { bg: 'bg-[#cffafe]', text: 'text-blue-600', emoji: '🎓' }
+  };
+  const activeDesign = categoryColors[t.category] || { bg: 'bg-[#4ade80]', text: 'text-green-600', emoji: '🏆' };
+
+  let registeredTeams = t.registeredTeams || [];
+  try {
+    const regsSaved = localStorage.getItem('novahub_mock_registrations');
+    const mockRegs = regsSaved ? JSON.parse(regsSaved) : [];
+    const matchingRegs = mockRegs.filter(r => r.tournamentId === (t._id || t.id));
+    if (matchingRegs.length > 0) {
+      registeredTeams = [
+        ...registeredTeams,
+        ...matchingRegs.map(r => r.team)
+      ];
+    }
+  } catch (err) {
+    console.error("Error reading mock registrations:", err);
+  }
+
+  const uniqueTeams = [];
+  const teamIds = new Set();
+  for (const team of registeredTeams) {
+    const teamId = team._id || team.id || JSON.stringify(team);
+    if (!teamIds.has(teamId)) {
+      teamIds.add(teamId);
+      uniqueTeams.push(team);
+    }
+  }
+
+  return {
+    title: t.title,
+    tags: [t.category || '', t.gameName || '', t.venueType || ''],
+    color: activeDesign.bg,
+    textColor: activeDesign.text,
+    emoji: activeDesign.emoji,
+    gameDetails: t.rules || 'No rules specified by the organizer.',
+    liveTournaments: [
+      { name: 'Initial Registration', status: (t.status || 'open').toUpperCase(), team1: 'Registrations', team2: 'Open', score: `${uniqueTeams.length}/${t.maxTeams || 4}`, time: 'Slots Filled' }
+    ],
+    pastTournaments: []
+  };
+};
+
+const getLocalTournamentData = (id) => {
+  if (!id) return null;
+  const staticData = tournamentData[id];
+  if (staticData) return staticData;
+
+  const foundFallback = localFallbackTournaments.find(t => (t._id === id || t.id === id));
+  if (foundFallback) {
+    return mapLocalTournament(foundFallback);
+  }
+
+  try {
+    const hostedSaved = localStorage.getItem('novahub_mock_tournaments');
+    const hostedTournaments = hostedSaved ? JSON.parse(hostedSaved) : [];
+    const foundHosted = hostedTournaments.find(t => (t._id === id || t.id === id));
+    if (foundHosted) {
+      return mapLocalTournament(foundHosted);
+    }
+  } catch (err) {
+    console.error("Error reading mock tournaments:", err);
+  }
+
+  return null;
+};
+
 const TournamentDetails = ({ user }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  // Try static mock data first
-  const staticData = tournamentData[id];
+  // Try static or local mock data first
+  const initialData = getLocalTournamentData(id);
   
-  const [data, setData] = useState(staticData || null);
-  const [loading, setLoading] = useState(!staticData);
+  const [data, setData] = useState(initialData);
+  const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // If it's in the static mock list, just use that and don't load from API
-    if (staticData) {
-      setData(staticData);
+    // If it's a local or static mock tournament, use it directly
+    if (initialData) {
+      setData(initialData);
       setLoading(false);
       setError(null);
+      return;
+    }
+
+    // Prevent querying api for mock IDs that weren't found locally
+    if (id && id.startsWith('mock-t-')) {
+      setError('Tournament not found.');
+      setLoading(false);
       return;
     }
 
@@ -339,7 +422,7 @@ const TournamentDetails = ({ user }) => {
     };
 
     fetchTournament();
-  }, [id, staticData]);
+  }, [id, initialData]);
 
   if (loading) {
     return (
